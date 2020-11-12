@@ -21,7 +21,7 @@ class LoginPage extends React.Component {
             loginBtnLabel: "Log In",
             showLookUpAccountDialog: false,
             showSecurityQuestionDialog: false,
-            showResetPaswordDialog: false,
+            showResetPasswordPage: false,
             githubIcon: "fa fa-github",
             githubLabel: "Sign in with GitHub",
             loginMsg: "",
@@ -82,7 +82,7 @@ class LoginPage extends React.Component {
         this.setState({
             showLookUpAccountDialog: false,
             showSecurityQuestionDialog: false,
-            showResetPaswordDialog: false
+            showResetPasswordPage: false
         });
     }
 
@@ -121,7 +121,7 @@ class LoginPage extends React.Component {
     getNewPassword = () => {
         this.setState({
             showSecurityQuestionDialog: false,
-            showResetPaswordDialog: true
+            showResetPasswordPage: true
         });
     }
 
@@ -139,7 +139,7 @@ class LoginPage extends React.Component {
         method: 'PUT',
         body: JSON.stringify({password: pw})}); 
     if (res.status == 200) { //successful update creation!
-        this.setState({showResetPaswordDialog: false,
+        this.setState({showResetPasswordPage: false,
                        statusMsg: "Password successfully reset!"});
     } else { //Unsuccessful account creation
         //Grab textual error message
@@ -201,7 +201,7 @@ reset = ()=>{
                                     answer={this.resetA}
                                     getNewPassword={this.getNewPassword} /> : null}
                             {this.state.showResetPaswordDialog ?
-                                <ResetPasswordDialog cancelResetPassword={this.cancelResetPassword}
+                                <ResetPasswordPage cancelResetPassword={this.cancelResetPassword}
                                     resetPassword={this.resetPassword} /> : null}
                             <form id="loginInterface" onSubmit={this.handleLoginSubmit}>
                                 <label htmlFor="emailInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
