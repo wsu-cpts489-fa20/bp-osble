@@ -78,6 +78,32 @@ const User = mongoose.model("User", userSchema);
 //The following code sets up the app with OAuth authentication using
 //the 'github' strategy in passport.js.
 //////////////////////////////////////////////////////////////////////////
+
+// passport.use(new GithubStrategy({
+//     clientID: process.env.GH_CLIENT_ID,
+//     clientSecret: process.env.GH_CLIENT_SECRET,
+//     callbackURL: DEPLOY_URL + "/auth/github/callback"
+//   },
+//   //The following function is called after user authenticates with github
+//   async (accessToken, refreshToken, profile, done) => {
+//     console.log("User authenticated through GitHub! In passport callback.");
+//     //Our convention is to build userId from displayName and provider
+//     const userId = `${profile.username}@${profile.provider}`;
+//     //See if document with this unique userId exists in database 
+//     let currentUser = await User.findOne({id: userId});
+//     if (!currentUser) { //Add this user to the database
+//         currentUser = await new User({
+//         id: userId,
+//         displayName: profile.displayName,
+//         authStrategy: profile.provider,
+//         profilePicURL: profile.photos[0].value,
+//         rounds: []
+//       }).save();
+//   }
+//   return done(null,currentUser);
+// }));
+
+passport.use(new LocalStrategy({passReqToCallback: true},
 /*
 passport.use(new GithubStrategy({
     clientID: process.env.GH_CLIENT_ID,
@@ -183,6 +209,20 @@ app
 //AUTHENTICATE route: Uses passport to authenticate with GitHub.
 //Should be accessed when user clicks on 'Login with GitHub' button on 
 //Log In page.
+
+// app.get('/auth/github', passport.authenticate('github'));
+
+// //CALLBACK route:  GitHub will call this route after the
+// //OAuth authentication process is complete.
+// //req.isAuthenticated() tells us whether authentication was successful.
+// app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }),
+//   (req, res) => {
+//     console.log("auth/github/callback reached.")
+//     res.redirect('/'); //sends user back to login screen; 
+//                        //req.isAuthenticated() indicates status
+//   }
+// );
+
 /*
 app.get('/auth/github', passport.authenticate('github'));
 //CALLBACK route:  GitHub will call this route after the
@@ -466,5 +506,6 @@ app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status(400).send("Unexpected error occurred when deleting round from database: " + err);
+
   }
 });

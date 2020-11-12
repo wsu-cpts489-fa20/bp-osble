@@ -1,6 +1,6 @@
 import React from 'react';
 import CreateEditAccountDialog from './CreateEditAccountDialog.js';
-import ResetPasswordDialog from './ResetPasswordDialog.js';
+import ResetPasswordPage from './ResetPasswordPage.js';
 import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
 import './LoginPage.css';
@@ -135,24 +135,21 @@ class LoginPage extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method: 'PUT',
-            body: JSON.stringify({ password: pw })
-        });
-        if (res.status == 200) { //successful update creation!
-            this.setState({
-                showResetPaswordDialog: false,
-                statusMsg: "Password successfully reset!"
-            });
-        } else { //Unsuccessful account creation
-            //Grab textual error message
-            const resText = await res.text();
-            this.setState({
-                showResetPasswordDialog: false,
-                statusMsg: resText
-            });
-        }
 
+        method: 'PUT',
+        body: JSON.stringify({password: pw})}); 
+    if (res.status == 200) { //successful update creation!
+        this.setState({showResetPaswordDialog: false,
+                       statusMsg: "Password successfully reset!"});
+    } else { //Unsuccessful account creation
+        //Grab textual error message
+        const resText = await res.text();
+        this.setState({showResetPasswordPage: false,
+                      statusMsg: resText});
     }
+    
+}
+
 
 
     //newAccountCreated -- Called after successful creation of a new account
@@ -170,6 +167,11 @@ class LoginPage extends React.Component {
         this.setState({ statusMsg: "" });
     }
 
+reset = ()=>{
+    this.props.changeMode(AppMode.RESET)
+}
+
+ 
     //cancelCreateAccount -- called to hide Create Account dialog without creating acct
     cancelCreateAccount = () => {
         this.setState({ showCreateAccountDialog: false });
@@ -178,8 +180,6 @@ class LoginPage extends React.Component {
     signUp = () =>{
         this.props.changeMode(AppMode.REGISTER);
     }
-
-
 
     render() {
         return (
@@ -205,7 +205,7 @@ class LoginPage extends React.Component {
                                     resetPassword={this.resetPassword} /> : null}
                             <form id="loginInterface" onSubmit={this.handleLoginSubmit}>
                                 <label htmlFor="emailInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
-                                    
+                                   
                 <input
                                         style={{ backgroundColor: "white" }}
                                         ref={this.emailInputRef}
@@ -244,22 +244,27 @@ class LoginPage extends React.Component {
                                         onClick={this.signUp}>
                                         Create an account</button> |
                 <button type="button" className="btn btn-link login-link"
-                                        onClick={() => { this.setState({ showLookUpAccountDialog: true }); }}>
-                                        Reset your password</button>
-                                </p>
+                        onClick= {this.reset}>
+                Reset your password</button>
+            </p>  
+            <button type="button" className="btn btn-github"
+               onClick={() => this.handleOAuthLoginClick("github")}>
+              <span className={this.state.githubIcon}></span>&nbsp;
+                {this.state.githubLabel}
+            </button>
+            <p>
+                <i>Version CptS 489</i>
+            </p>
+            </form>
+            {this.state.showCreateAccountDialog ? 
+              <CreateEditAccountDialog
+                create={true} 
+                done={this.accountCreateDone}
+                cancel={this.cancelCreateAccount} /> : null}
+            {this.state.showResetPasswordPage ? <ResetPasswordPage /> : null}
+        </center>
+        </div>
 
-                            </form>
-                            {this.state.showCreateAccountDialog ?
-                                <CreateEditAccountDialog
-                                    create={true}
-                                    done={this.accountCreateDone}
-                                    cancel={this.cancelCreateAccount} /> : null}
-                            {this.state.showResetPasswordDialog ? <ResetPasswordDialog /> : null}
-                        </center>
-                    </div>
-                </center>
-
-            </div>
         )
     }
 }
