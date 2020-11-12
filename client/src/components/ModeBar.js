@@ -5,9 +5,9 @@ import AppMode from '../AppMode.js';
 class ModeBar extends React.Component {
     render() {
       return(
-        <div className={"modebar" + (this.props.mode === AppMode.LOGIN ? 
+        <div className={"modebar" + (this.props.mode === AppMode.LOGIN ||  this.props.mode === AppMode.REGISTER? 
           " invisible" : (this.props.menuOpen ? " ignore-click visible" : " visible"))}>
-        <a className={(this.props.mode === AppMode.FEED ? " item-selected" : null)}
+        <a className={(this.props.mode === AppMode.FEED  || this.props.mode === AppMode.REGISTER? " item-selected" : null)}
             onClick={()=>this.props.changeMode(AppMode.FEED)}>
           <span className="modebaricon fa fa-th-list"></span>
           <span className="modebar-text">Feed</span>
