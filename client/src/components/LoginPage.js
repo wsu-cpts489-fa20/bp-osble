@@ -4,6 +4,7 @@ import ResetPasswordDialog from './ResetPasswordDialog.js';
 import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
 import './LoginPage.css';
+import AppMode from '../AppMode.js';
 class LoginPage extends React.Component {
 
     constructor() {
@@ -153,6 +154,7 @@ class LoginPage extends React.Component {
 
     }
 
+
     //newAccountCreated -- Called after successful creation of a new account
     accountCreateDone = (msg, deleted) => {
         this.setState({
@@ -160,6 +162,8 @@ class LoginPage extends React.Component {
             showCreateAccountDialog: false
         });
     }
+
+
 
     //closeStatusMsg -- Called when user clicks on "x" to dismiss status message
     closeStatusMsg = () => {
@@ -171,9 +175,15 @@ class LoginPage extends React.Component {
         this.setState({ showCreateAccountDialog: false });
     }
 
+    signUp = () =>{
+        this.props.changeMode(AppMode.REGISTER);
+    }
+
+
+
     render() {
         return (
-            <div className="wholepage">
+            <div className="osblepage">
                 <center>
                     <div className="wrapper">
                         <center>
@@ -231,7 +241,7 @@ class LoginPage extends React.Component {
                                 <br></br>
                                 <p>
                                     <button type="button" className="btn btn-link login-link"
-                                        onClick={() => { this.setState({ showCreateAccountDialog: true }); }}>
+                                        onClick={this.signUp}>
                                         Create an account</button> |
                 <button type="button" className="btn btn-link login-link"
                                         onClick={() => { this.setState({ showLookUpAccountDialog: true }); }}>

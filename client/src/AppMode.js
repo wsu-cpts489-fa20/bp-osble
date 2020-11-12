@@ -2,6 +2,7 @@
 
 const AppMode = {
     LOGIN: "LoginMode",
+    REGISTER : "RegisterMode",
     FEED: "FeedMode",
     ROUNDS: "RoundsMode",
     ROUNDS_LOGROUND: "RoundsMode-LogRound",
