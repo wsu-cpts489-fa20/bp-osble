@@ -136,7 +136,6 @@ class LoginPage extends React.Component {
                 'Content-Type': 'application/json'
             },
 
-<<<<<<< HEAD
             method: 'PUT',
             body: JSON.stringify({ password: pw })
         });
@@ -154,18 +153,6 @@ class LoginPage extends React.Component {
             });
         }
 
-=======
-        method: 'PUT',
-        body: JSON.stringify({password: pw})}); 
-    if (res.status == 200) { //successful update creation!
-        this.setState({showResetPasswordPage: false,
-                       statusMsg: "Password successfully reset!"});
-    } else { //Unsuccessful account creation
-        //Grab textual error message
-        const resText = await res.text();
-        this.setState({showResetPasswordPage: false,
-                      statusMsg: resText});
->>>>>>> 3fac200196707a9f10d4247f613c0f320697ea7c
     }
 
 
