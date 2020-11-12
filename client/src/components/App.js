@@ -12,6 +12,7 @@ import AboutBox from './AboutBox.js';
 import Register from './RegisterPage'
 import ResetPassword from './ResetPasswordPage'
 
+
 const modeTitle = {};
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
 modeTitle[AppMode.FEED] = "Activity Feed";
