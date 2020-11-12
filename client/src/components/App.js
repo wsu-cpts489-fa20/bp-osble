@@ -31,7 +31,7 @@ modeToPage[AppMode.ROUNDS] = Rounds;
 modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
 modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 modeToPage[AppMode.COURSES] = CoursesPage;
-modeToPage[AppMode.RESET] = ResetPasswordPage;
+modeToPage[AppMode.RESET] = ResetPassword;
 
 
 class App extends React.Component {

@@ -136,19 +136,24 @@ class LoginPage extends React.Component {
                 'Content-Type': 'application/json'
             },
 
-        method: 'PUT',
-        body: JSON.stringify({password: pw})}); 
-    if (res.status == 200) { //successful update creation!
-        this.setState({showResetPaswordDialog: false,
-                       statusMsg: "Password successfully reset!"});
-    } else { //Unsuccessful account creation
-        //Grab textual error message
-        const resText = await res.text();
-        this.setState({showResetPasswordPage: false,
-                      statusMsg: resText});
+            method: 'PUT',
+            body: JSON.stringify({ password: pw })
+        });
+        if (res.status == 200) { //successful update creation!
+            this.setState({
+                showResetPaswordDialog: false,
+                statusMsg: "Password successfully reset!"
+            });
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            this.setState({
+                showResetPasswordPage: false,
+                statusMsg: resText
+            });
+        }
+
     }
-    
-}
 
 
 
@@ -167,17 +172,17 @@ class LoginPage extends React.Component {
         this.setState({ statusMsg: "" });
     }
 
-reset = ()=>{
-    this.props.changeMode(AppMode.RESET)
-}
+    reset = () => {
+        this.props.changeMode(AppMode.RESET)
+    }
 
- 
+
     //cancelCreateAccount -- called to hide Create Account dialog without creating acct
     cancelCreateAccount = () => {
         this.setState({ showCreateAccountDialog: false });
     }
 
-    signUp = () =>{
+    signUp = () => {
         this.props.changeMode(AppMode.REGISTER);
     }
 
@@ -186,8 +191,8 @@ reset = ()=>{
             <div className="osblepage">
                 <center>
                     <div className="wrapper">
-                        <center>
-                            <img src="https://i.imgur.com/lBOwYfO.png" style={{position:"relative",right:".7rem"}}></img>
+                        
+                            <img src="https://i.imgur.com/lBOwYfO.png" style={{ position: "relative", right: ".7rem" }}></img>
                             {this.state.statusMsg != "" ? <div className="status-msg"><span>{this.state.statusMsg}</span>
                                 <button className="modal-close" onClick={this.closeStatusMsg}>
                                     <span className="fa fa-times"></span>
@@ -201,12 +206,12 @@ reset = ()=>{
                                     answer={this.resetA}
                                     getNewPassword={this.getNewPassword} /> : null}
                             {this.state.showResetPaswordDialog ?
-                                <ResetPasswordDialog cancelResetPassword={this.cancelResetPassword}
+                                <ResetPasswordPage cancelResetPassword={this.cancelResetPassword}
                                     resetPassword={this.resetPassword} /> : null}
                             <form id="loginInterface" onSubmit={this.handleLoginSubmit}>
                                 <label htmlFor="emailInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
-                                   
-                <input
+
+                                    <input
                                         style={{ backgroundColor: "white" }}
                                         ref={this.emailInputRef}
                                         className="form-control enterEmail"
@@ -217,10 +222,10 @@ reset = ()=>{
                                         required={true}
                                     />
                                 </label>
-                                
+
                                 <label htmlFor="passwordInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
-                                    
-                <input
+
+                                    <input
                                         ref={this.passwordInputRef}
                                         className="form-control enterPassword"
                                         type="password"
@@ -231,7 +236,7 @@ reset = ()=>{
                                 </label>
 
                                 <p className="bg-danger" id="feedback" style={{ fontSize: 16 }} />
-                                
+
                                 <button
                                     type="submit"
                                     className=" btn btn-primary btn-block LoginButton">
@@ -244,26 +249,23 @@ reset = ()=>{
                                         onClick={this.signUp}>
                                         Create an account</button> |
                 <button type="button" className="btn btn-link login-link"
-                        onClick= {this.reset}>
-                Reset your password</button>
-            </p>  
-            <button type="button" className="btn btn-github"
-               onClick={() => this.handleOAuthLoginClick("github")}>
-              <span className={this.state.githubIcon}></span>&nbsp;
-                {this.state.githubLabel}
-            </button>
-            <p>
-                <i>Version CptS 489</i>
-            </p>
-            </form>
-            {this.state.showCreateAccountDialog ? 
-              <CreateEditAccountDialog
-                create={true} 
-                done={this.accountCreateDone}
-                cancel={this.cancelCreateAccount} /> : null}
-            {this.state.showResetPasswordPage ? <ResetPasswordPage /> : null}
-        </center>
-        </div>
+                                        onClick={this.reset}>
+                                        Reset your password</button>
+                                </p>
+                                <p>
+                                    <i>Version developed by CptS 489 students</i>
+                                </p>
+                            </form>
+                            {this.state.showCreateAccountDialog ?
+                                <CreateEditAccountDialog
+                                    create={true}
+                                    done={this.accountCreateDone}
+                                    cancel={this.cancelCreateAccount} /> : null}
+                            {this.state.showResetPasswordPage ? <ResetPasswordPage /> : null}
+                            </div>
+                </center>
+            </div>
+           
 
         )
     }

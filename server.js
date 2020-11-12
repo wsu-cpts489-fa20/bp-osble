@@ -103,7 +103,7 @@ const User = mongoose.model("User", userSchema);
 //   return done(null,currentUser);
 // }));
 
-passport.use(new LocalStrategy({passReqToCallback: true},
+//passport.use(new LocalStrategy({passReqToCallback: true},
 /*
 passport.use(new GithubStrategy({
     clientID: process.env.GH_CLIENT_ID,
