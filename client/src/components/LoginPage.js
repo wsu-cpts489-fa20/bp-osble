@@ -225,6 +225,7 @@ class LoginPage extends React.Component {
                                         className="form-control enterPassword"
                                         type="password"
                                         placeholder="Password"
+                                        id="passwordInput"
                                         pattern="[A-Za-z0-9!@#$%^&*()_+\-]+"
                                         required={true}
                                     />
@@ -240,7 +241,7 @@ class LoginPage extends React.Component {
                                 </button>
                                 <br></br>
                                 <p>
-                                    <button type="button" className="btn btn-link login-link"
+                                    <button type="button" className="btn btn-link login-link" id="createAccountBtn"
                                         onClick={this.signUp}>
                                         Create an account</button> |
                 <button type="button" className="btn btn-link login-link"
