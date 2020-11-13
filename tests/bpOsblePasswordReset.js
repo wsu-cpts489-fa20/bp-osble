@@ -12,8 +12,8 @@ test ('LoginPagetoResetPassword', async t =>{
     const confirmNewPasswordBtn = Selector('button').withAttribute('role', 'submit', 'class', 'btn btn-primary btn-color-theme form-submit-btn');
 
     await t
-        .click(resetPasswordBtn)
+        .click('#resetBtn')
         .typeText(newPassword, "123#abc;")
-        .typeText(newPasswordComf, "123#abc;")
+        .typeText('repeatPassword', "123#abc;")
         .click(confirmNewPasswordBtn);
 });

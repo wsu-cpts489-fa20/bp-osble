@@ -58,10 +58,12 @@ class ResetPasswordPage extends React.Component {
                                 ref={this.resetPasswordRef}
                                 />
                             </label>
+                            <br></br>
                             <label>
                                 Repeat New Password: 
                                 <input
                                 type="password"
+                                id="repeatPassword"
                                 placeholder="Repeat new password"
                                 className="form-control form-text"
                                 onKeyUp={this.checkForSubmit}

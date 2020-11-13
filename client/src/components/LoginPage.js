@@ -249,7 +249,7 @@ class LoginPage extends React.Component {
                                     <button type="button" className="btn btn-link login-link" id="createAccountBtn"
                                         onClick={this.signUp}>
                                         Create an account</button> |
-                <button type="button" className="btn btn-link login-link"
+                <button type="button" className="btn btn-link login-link" id="resetBtn"
                                         onClick={this.reset}>
                                         Reset your password</button>
                                 </p>

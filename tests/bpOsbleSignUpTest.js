@@ -23,10 +23,10 @@ test('LoginPageGoesToSignUpPage', async t => {
 
     await t
         .click(accountBtn)
-        .typeText(emailSignUp,'joshua.stallworth@wsu.edu')
-        .typeText(emailComf,'joshua.stallworth@wsu.edu')
-        .typeText(passwordSignUp,'password123#abc;')
-        .typeText(passwordComf,'password123#abc;')
+        .typeText(emailSignUp,'hermes_esono@hotmail.es')
+        .typeText(emailComf,'hermes_esono@hotmail.es')
+        .typeText('#passwordReg','Password123abc')
+        .typeText(passwordComf,'Password123abc')
         .typeText(firstName,'Josh')
         .typeText(lastName,'Stallworth')
         .typeText(lastNameComf,'Stallworth')
