@@ -133,6 +133,7 @@ class RegisterPage extends React.Component {
                  className="form-control form-text form-center"
                  name="password"
                  type="password"
+                 id="passwordReg"
                  size="35"
                  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"
                  required={true}
@@ -186,6 +187,7 @@ class RegisterPage extends React.Component {
                  autocomplete="off"
                  className="form-control form-text form-center"
                  name="confirm_last_name"
+                 id="confirm_last_name"
                  type="text"
                  size="35"
                  required={true}

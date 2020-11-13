@@ -34,4 +34,5 @@ test('LoginPageGoesToSignUpPage', async t => {
         .typeText(schoolID,'1234567890')
         .typeText(schoolIDComf,'1234567890')
         .click(registerBtn);
+        //.expect();
 });
