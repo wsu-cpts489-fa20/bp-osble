@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import AppMode from '../client/src/AppMode';
 
 
 fixture `bp-osble`
@@ -33,6 +34,6 @@ test('LoginPageGoesToSignUpPage', async t => {
         .typeText(firstNameComf,'Josh')
         .typeText(schoolID,'1234567890')
         .typeText(schoolIDComf,'1234567890')
-        .click(registerBtn);
-        //.expect();
+        .click(registerBtn)
+        //.expect(registerBtn.click).ok();
 });
