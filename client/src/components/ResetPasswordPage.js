@@ -70,6 +70,7 @@ class ResetPasswordPage extends React.Component {
                                 ref={this.resetPasswordRepeatRef}
                                 />
                             </label>
+                            <br></br>
                             <button role="submit" 
                             className="btn btn-primary btn-color-theme form-submit-btn">
                                 <span className="fa fa-key"></span>&nbsp;Reset Password

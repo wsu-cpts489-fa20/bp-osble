@@ -14,6 +14,6 @@ test ('LoginPagetoResetPassword', async t =>{
     await t
         .click('#resetBtn')
         .typeText(newPassword, "123#abc;")
-        .typeText('repeatPassword', "123#abc;")
+        .typeText('#repeatPassword', "123#abc;")
         .click(confirmNewPasswordBtn);
 });
