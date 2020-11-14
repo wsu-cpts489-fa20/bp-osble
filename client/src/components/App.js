@@ -9,22 +9,29 @@ import FeedPage from './FeedPage.js';
 import Rounds from './Rounds.js';
 import CoursesPage from './CoursesPage.js';
 import AboutBox from './AboutBox.js';
+import Register from './RegisterPage'
+import ResetPassword from './ResetPasswordPage'
+
 
 const modeTitle = {};
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
 modeTitle[AppMode.FEED] = "Activity Feed";
+modeTitle[AppMode.REGISTER] = "Register";
 modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
+modeTitle[AppMode.RESET] = "Reset Password";
 
 const modeToPage = {};
 modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.FEED] = FeedPage;
+modeToPage[AppMode.REGISTER] = Register;
 modeToPage[AppMode.ROUNDS] = Rounds;
 modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
 modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 modeToPage[AppMode.COURSES] = CoursesPage;
+modeToPage[AppMode.RESET] = ResetPassword;
 
 
 class App extends React.Component {
@@ -137,18 +144,18 @@ class App extends React.Component {
               <span>{this.state.statusMsg}</span>
               <button className="modal-close" onClick={this.closeStatusMsg}>
                   <span className="fa fa-times"></span></button></div> : null}
-        {this.state.showEditAccountDialog ? 
+        {/* {this.state.showEditAccountDialog ? 
             <CreateEditAccountDialog 
               create={false} 
               userId={this.state.userObj.id} 
               done={this.editAccountDone} 
-              cancel={this.cancelEditAccount}/> : null}
-        <NavBar 
+              cancel={this.cancelEditAccount}/> : null} */}
+        {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null:<NavBar 
           title={modeTitle[this.state.mode]} 
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
           menuOpen={this.state.menuOpen}
-          toggleMenuOpen={this.toggleMenuOpen}/>
+          toggleMenuOpen={this.toggleMenuOpen}/>}
           <SideMenu 
             menuOpen = {this.state.menuOpen}
             mode={this.state.mode}
@@ -159,10 +166,10 @@ class App extends React.Component {
             editAccount={this.showEditAccount}
             logOut={() => this.handleChangeMode(AppMode.LOGIN)}
             showAbout={() => {this.setState({showAboutDialog: true})}}/>
-          <ModeBar 
+          {/* <ModeBar 
             mode={this.state.mode} 
             changeMode={this.handleChangeMode}
-            menuOpen={this.state.menuOpen}/>
+            menuOpen={this.state.menuOpen}/> */}
           <ModePage 
             menuOpen={this.state.menuOpen}
             mode={this.state.mode}

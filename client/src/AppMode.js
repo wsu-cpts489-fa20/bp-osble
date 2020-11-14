@@ -2,6 +2,8 @@
 
 const AppMode = {
     LOGIN: "LoginMode",
+    RESET: "ResetMode",
+    REGISTER : "RegisterMode",
     FEED: "FeedMode",
     ROUNDS: "RoundsMode",
     ROUNDS_LOGROUND: "RoundsMode-LogRound",
