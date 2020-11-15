@@ -5,28 +5,24 @@ import Dropdown from './Dropdown'
 class NavBar extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      displayMenu: false,
+      type: ""
+    };
   }
 
-  getMenuBtnIcon = () => {
-      if (this.props.mode === AppMode.ROUNDS_LOGROUND || 
-          this.props.mode === AppMode.ROUNDS_EDITROUND)
-          return "fa fa-arrow-left";
-      if (this.props.menuOpen)
-        return "fa fa-times";
-      return "fa fa-bars";
-  }
 
-  handleMenuBtnClick = () => {
-    if (this.props.mode === AppMode.ROUNDS_LOGROUND ||
-        this.props.mode === AppMode.ROUNDS_EDITROUND) {
-      this.props.changeMode(AppMode.ROUNDS);
-    } else if (this.props.mode != AppMode.LOGIN) {
-      this.props.toggleMenuOpen();
-    }
+  toggleShowDropdown = (newType) => {
+    this.setState(prevState => ({displayMenu: !prevState.displayMenu}));
+    this.setType(newType);
   }
 
   switchMode = (newMode) =>{
     this.props.changeMode(newMode);
+  }
+
+  setType = (newType) =>{
+    this.setState({type: newType});
   }
 
   renderStudentMode = () =>{
@@ -90,6 +86,41 @@ class NavBar extends React.Component {
     );
   }
 
+  renderRightItems = () =>{
+
+    return (
+      <div>
+        
+        {/* <span className="navbar-title">&nbsp; <Dropdown/>&nbsp;</span> */}
+        <span className="navbar-title" onClick= {() =>this.toggleShowDropdown("course")}>&nbsp;CptS 489
+        <Dropdown 
+          displayMenu={this.state.displayMenu}
+          type={this.state.type}
+          changeMode={this.props.changeMode}/>&nbsp;</span>
+        <span className="navbar-title fa fa-angle-down">&nbsp;</span>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <img src="osble2.png" height='60' width='60' className="navbar-items"/>
+        <span className="navbar-title" onClick= {() =>this.toggleShowDropdown("profile")}>Hermes Obiang 
+        <Dropdown 
+          displayMenu={this.state.displayMenu}
+          type={this.state.type}
+          changeMode={this.props.changeMode}/>&nbsp;</span>
+        <span className="navbar-title fa fa-angle-down">&nbsp;&nbsp;</span>
+
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span className="navbar-title fa fa-envelope" onClick={() =>this.switchMode(AppMode.MAIL)}>&nbsp;Mail(0)&nbsp;</span>
+
+        <span>&nbsp;&nbsp;&nbsp;</span>
+
+        <span className="navbar-title fa fa-question-circle" onClick={() =>this.switchMode(AppMode.HELP)}>&nbsp;Help&nbsp;&nbsp;</span>
+      </div>
+    );
+  }
+
+  renderDropdown = () =>{
+    return(<Dropdown/>);
+  }
+
     
   render() {
     return (
@@ -100,15 +131,7 @@ class NavBar extends React.Component {
       {this.renderInstructorMode()}
     </span>
     <span className="navbar-items-right">
-    <span className="navbar-title">
-        &nbsp;Help
-      </span>
-      <Dropdown/>
-      <span className="navbar-title">
-        &nbsp;Help
-      </span>
-      
-  
+      {this.renderRightItems()}
     </span>
   </div>
 ); 

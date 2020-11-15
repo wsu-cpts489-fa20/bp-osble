@@ -16,6 +16,13 @@ import Assignments from './AssignmentsPage'
 import Analytics from './AnalyticsPage'
 import CourseSettings from './CourseSettingsPage'
 import Users from './UsersPage'
+import Help from './HelpPage'
+import Mail from './MailPage'
+import Profile from './ProfilePage'
+import DeleteCourse from './DeleteCoursePage'
+import FindCourse from './FindCoursePage'
+import UserSettings from './UserSettingsPage'
+
 
 
 const modeTitle = {};
@@ -32,6 +39,12 @@ modeTitle[AppMode.USERS] = "Users";
 modeTitle[AppMode.ANALYTICS] = "Analytics";
 modeTitle[AppMode.ASSIGNMENTS] = "Assignments";
 modeTitle[AppMode.COURSE_SETTINGS] = "Course Settings";
+modeTitle[AppMode.HELP] = "Help";
+modeTitle[AppMode.MAIL] = "Mail";
+modeTitle[AppMode.PROFILE] = "Profile";
+modeTitle[AppMode.DELETE_COURSE] = "Delete Course";
+modeTitle[AppMode.FIND_COURSE] = "Find Course";
+modeTitle[AppMode.USER_SETTINGS] = "User Settings";
 
 const modeToPage = {};
 modeToPage[AppMode.LOGIN] = LoginPage;
@@ -47,6 +60,13 @@ modeToPage[AppMode.USERS] = Users;
 modeToPage[AppMode.ANALYTICS] = Analytics;
 modeToPage[AppMode.ASSIGNMENTS] = Assignments;
 modeToPage[AppMode.COURSE_SETTINGS] = CourseSettings;
+modeToPage[AppMode.HELP] = Help;
+modeToPage[AppMode.MAIL] = Mail;
+modeToPage[AppMode.PROFILE] = Profile;
+modeToPage[AppMode.DELETE_COURSE] = DeleteCourse;
+modeToPage[AppMode.FIND_COURSE] = FindCourse;
+modeToPage[AppMode.USER_SETTINGS] = UserSettings;
+
 
 
 class App extends React.Component {
