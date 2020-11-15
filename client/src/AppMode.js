@@ -1,8 +1,14 @@
 /* AppMode: The enumerated type for AppMode. */
 
+
 const AppMode = {
     LOGIN: "LoginMode",
     RESET: "ResetMode",
+    ASSIGNMENTS: "AssignmentsMode",
+    GRADES: "GradesMode",
+    COURSE_SETTINGS : "CourseSettingsMode",
+    ANALYTICS: "AnalyticsMode",
+    USERS: "UsersMode",
     REGISTER : "RegisterMode",
     FEED: "FeedMode",
     ROUNDS: "RoundsMode",
