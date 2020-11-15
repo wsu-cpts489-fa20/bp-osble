@@ -25,7 +25,8 @@ font-size: 18px;
 .navbar-items {
 display: inline-flex; 
 align-items: center; 
-padding-top: 5px; 
+padding-top: 5px;
+cursor: pointer; 
 padding-bottom: 5px;
 }
 
@@ -301,10 +302,10 @@ text-align: center;
 /* Styles selected side menu items and bottom bar buttons */
 .item-selected {
   pointer-events: none;
-  cursor: default;
   text-decoration: none;
   color: #13294E !important;
   background-color: #F0F0F0;
+  border-color: #13294E;
 }
 
 /* Forces element to ignore pointer events like clicks */
@@ -411,3 +412,91 @@ text-align: center;
    color: white;
    font-weight: bold;
   }
+  .feedpage{
+    background-color: white	;
+    height: 100vh;
+    padding-top: 5rem;
+    overflow: auto; /* Enable scroll if needed */
+  }
+
+  .navbar-items-right {
+    display: inline-flex; 
+    align-items: center; 
+    float: right;
+    padding-top: 5px;
+    padding-right: 5px;
+    cursor: pointer; 
+    padding-bottom: 5px;
+    right:6px;
+    top:18px;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      z-index: 1;
+ }
+ .modal-dropdown {
+  display: block;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-left: 20px;
+ 
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+ 
+}
+  ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      top: 5px;
+      right:0px;
+      width: 200px;
+      background-color: skyblue;
+      font-weight:bold;
+      position: absolute;
+ 
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+ }
+  li a {
+      color: #000;
+      text-decoration: none;
+ }
+  li {
+      padding: 8px 16px;
+      border-bottom: 1px solid #e5e5e5;
+ }
+  li:last-child {
+      border-bottom: none;
+ }
+  li:hover {
+      background-color: #e5e5e5;
+      color: white;
+ }
+  .button{
+    width:120px;
+    height:18px;
+    /* background-color:white ; */
+    /* border-radius:10px; */
+    color:white;
+    font-size: 85%;
+    display: inline-flex; 
+    align-items: center; 
+    padding-top: 20px;
+ }
+  /* .button:before{
+      content:"";
+      position:absolute;
+      width:0px;
+      height:0px;
+      border: 10px solid;
+      border-color: white transparent transparent transparent;
+      right:2px;
+     
+      top:18px;
+ } */
+
+ 

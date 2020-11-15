@@ -41,19 +41,21 @@ class LoginPage extends React.Component {
             loginBtnIcon: "fa fa-spin fa-spinner",
             loginBtnLabel: ""
         });
-        const url = "auth/login?username=" + this.emailInputRef.current.value +
-            "&password=" + this.passwordInputRef.current.value;
-        const res = await fetch(url, { method: 'POST' });
-        if (res.status == 200) { //successful login!
-            window.open("/", "_self");
-        } else { //Unsuccessful login
-            const resText = await res.text();
-            this.setState({
-                loginBtnIcon: "fa fa-sign-in",
-                loginBtnLabel: "Log In",
-                statusMsg: resText
-            });
-        }
+
+        this.props.changeMode(AppMode.FEED);
+        // const url = "auth/login?username=" + this.emailInputRef.current.value +
+        //     "&password=" + this.passwordInputRef.current.value;
+        // const res = await fetch(url, { method: 'POST' });
+        // if (res.status == 200) { //successful login!
+        //     window.open("/", "_self");
+        // } else { //Unsuccessful login
+        //     const resText = await res.text();
+        //     this.setState({
+        //         loginBtnIcon: "fa fa-sign-in",
+        //         loginBtnLabel: "Log In",
+        //         statusMsg: resText
+        //     });
+        // }
     }
 
     //accountCreateDone -- Called by child CreateAccountDialog component when 
