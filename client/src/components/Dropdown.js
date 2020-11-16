@@ -21,7 +21,8 @@ logOut = () =>{
 
           { this.props.displayMenu ?  this.props.type == "profile" ? (
         <ul>
-         <li><a className="active" href="#View Profile" onClick={() =>this.props.changeMode(AppMode.PROFILE)}>View Profile</a></li>
+         <li><a className="active" href="#View Profile" onClick={() =>this.props.changeMode(AppMode.MAIL)}>Mail(0)</a></li>
+         <li><a href="#Settings" onClick={() =>this.props.changeMode(AppMode.PROFILE)}>View Profile</a></li>
          <li><a href="#Settings" onClick={() =>this.props.changeMode(AppMode.USER_SETTINGS)}>Settings</a></li>
          <li onClick={this.logOut}><a href="#Log Out">Log Out </a></li>
           </ul>
