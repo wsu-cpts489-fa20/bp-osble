@@ -1,0 +1,33 @@
+.flexwrapper{
+
+    display: flex;
+    flex-direction: row;
+}
+.notifications{
+    margin: .5rem;
+    width: 30vw;
+    height: 90vh;
+    
+}
+.feed{
+    margin: .5rem;
+    width: 100%;
+    height: 90vh;
+    
+}
+.files{
+    margin: .5rem;
+    width: 30vw;
+    height: 90vh;
+}
+.postinput{
+    margin: .5rem;
+    width: 98%;
+    height: 8rem;
+}
+.mydropdown{
+    z-index: 1000;
+    position: absolute;
+    width: 5rem;
+    margin-left: 4.5rem;
+}

@@ -447,35 +447,7 @@ text-align: center;
   overflow: auto; /* Enable scroll if needed */
  
 }
-  ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      top: 5px;
-      right:0px;
-      width: 200px;
-      background-color: skyblue;
-      font-weight:bold;
-      position: absolute;
- 
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
- }
-  li a {
-      color: #000;
-      text-decoration: none;
- }
-  li {
-      padding: 8px 16px;
-      border-bottom: 1px solid #e5e5e5;
- }
-  li:last-child {
-      border-bottom: none;
- }
-  li:hover {
-      background-color: #e5e5e5;
-      color: white;
- }
+  
   .button{
     width:120px;
     height:18px;
