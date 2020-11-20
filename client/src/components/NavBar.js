@@ -182,7 +182,7 @@ class NavBar extends React.Component {
         <span className="navbar-title fa fa-angle-down">&nbsp;</span>
         <span>&nbsp;&nbsp;&nbsp;</span>
         <img src="osble2.png" height='60' width='60' className="navbar-items"/>
-        <span id="profile" className="navbar-title" onClick= {() =>this.toggleShowDropdown("profile")}>Hermes Obiang 
+        <span className="navbar-title" onClick= {() =>this.toggleShowDropdown("profile")}>Hermes Obiang 
         <Dropdown 
           displayMenu={this.state.displayMenu}
           type={this.state.type}
