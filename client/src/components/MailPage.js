@@ -14,8 +14,8 @@ class MailPage extends React.Component {
                     </div>
                     <div class="MailContent">
 
-                        <table class="inbox_table">
-                            <thead>
+                        <table class="inbox_table table table-hover">
+                            <thead className="thead-light">
                                 <tr>
                                     <th style={{textAlign: 'center'}} id="checkAll" class="inbox_checkbox_header"><input id="checkAllBox" type="checkbox" /></th>
                                     <th class="inbox_attachments_header"></th>
@@ -35,10 +35,10 @@ class MailPage extends React.Component {
                                     <time class="course-local-time" datetime="1510173928" data-original-date="11/8/17 08:45 PM" data-date-format="MM/DD/YYYY hh:mm A">11/08/2017 12:45 PM</time>
                                 </td>
                                 <td class="inbox_context">
-                                    <small>CPTS 121</small>
+                                    CPTS 121
                                 </td>
                                 <td class="inbox_from">
-                                    <small>Eli Forbes</small>
+                                    Eli Forbes
                                 </td>
                                 <td class="inbox_subject">
                                     <a href="/Mail/View/7417">Exam 2 Graded</a>

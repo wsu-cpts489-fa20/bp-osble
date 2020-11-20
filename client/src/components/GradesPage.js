@@ -1,7 +1,20 @@
 import React from 'react';
+import GradeTable from './GradeTable'
 
 class GradesPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data : [
+                {'ID':'Total:', 'Student': '', 'Assignment 1': 100, 'Assignment 2': 100},
+                {'ID': '11645278', 'Student': 'Sean', 'Assignment 1': 100, 'Assignment 2': 95},
+                {'ID': '11111111', 'Student': 'John', 'Assignment 1': 95, 'Assignment 2': 95}
+                
+            ],
+            hasGradebook : true
 
+        }
+    }
     render() {
         return (
             <div className="feedpage">
@@ -59,12 +72,13 @@ class GradesPage extends React.Component {
                         </div>
                     </div>
  */}
-                    <h3>No Gradebook Uploaded.</h3>
+                    {/* <h3>No Gradebook Uploaded.</h3> */}
                     {/* <h1 >Grades</h1>
             <h2>This page is under construction.</h2>
             <img src="osble2.png" 
              height="200" width="200"/>
             <p style={{fontStyle: "italic"}}>Version CptS 489 React Demo</p> */}
+                <GradeTable data={this.state.data}/>
                 </center>
             </div>
         );
