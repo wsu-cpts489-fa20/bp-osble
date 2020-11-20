@@ -3,16 +3,19 @@
 
 /* Styling of the fixed top bar in the app */
 .navbar {
-  overflow: hidden; /* Don't allow scrolling */
+  /*overflow: hidden;  Don't allow scrolling */
   display: block; /* Occupies its own horizontal space */
   background-color: #13294E;
-  position: fixed; /* Doesn't move */
+  
   top: 0;
   width: 100%; /* 100% of width of screen */
   align-content: center;
-  border-radius: 0px;
+  
   padding: 0px;
   z-index: 100; /* Force it to be on top */
+  
+  
+  border-radius: 5px;
 }
 
 .navbar-title {
@@ -25,9 +28,9 @@ font-size: 18px;
 .navbar-items {
 display: inline-flex; 
 align-items: center; 
-padding-top: 5px;
+
 cursor: pointer; 
-padding-bottom: 5px;
+
 }
 
 /* sidemenu -- Styling of the side navigation menu */
@@ -415,7 +418,7 @@ text-align: center;
   .feedpage{
     background-color: white	;
     height: 100vh;
-    padding-top: 5rem;
+    
     overflow: auto; /* Enable scroll if needed */
   }
 
@@ -423,7 +426,7 @@ text-align: center;
     display: inline-flex; 
     align-items: center; 
     float: right;
-    padding-top: 5px;
+    
     padding-right: 5px;
     cursor: pointer; 
     padding-bottom: 5px;

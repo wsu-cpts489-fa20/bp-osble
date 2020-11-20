@@ -72,6 +72,7 @@ modeToPage[AppMode.USER_SETTINGS] = UserSettings;
 class App extends React.Component {
 
   constructor() {
+    
     super();
     this.state = {mode: AppMode.LOGIN,
                   menuOpen: false,
