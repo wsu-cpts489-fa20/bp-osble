@@ -1,0 +1,32 @@
+.mydropdownnav{
+    z-index: 1000;
+    position: absolute;
+    width: 5rem;
+    
+}
+.navdropdown{
+    font-size: 13.5px;
+}
+.navbutton{
+    background-color: rgba(0,0,0,0);
+    border-color: rgba(0,0,0,0);
+    color: lightgray;
+    border-radius: 0;
+    height: 3.8rem;
+    
+}
+.navbutton:hover{
+    color:white;
+    background-color: #00ffff;
+}
+.navbutton:focus{
+    box-shadow:none !important;
+    
+}
+.moveright{
+    margin-left: 7.5rem;
+}
+.selected{
+    background-color: #007bff;
+    color: white;
+}

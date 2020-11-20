@@ -11,17 +11,40 @@ import CoursesPage from './CoursesPage.js';
 import AboutBox from './AboutBox.js';
 import Register from './RegisterPage'
 import ResetPassword from './ResetPasswordPage'
+import Grades from './GradesPage'
+import Assignments from './AssignmentsPage'
+import Analytics from './AnalyticsPage'
+import CourseSettings from './CourseSettingsPage'
+import Users from './UsersPage'
+import Help from './HelpPage'
+import Mail from './MailPage'
+import Profile from './ProfilePage'
+import DeleteCourse from './DeleteCoursePage'
+import FindCourse from './FindCoursePage'
+import UserSettings from './UserSettingsPage'
+
 
 
 const modeTitle = {};
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
-modeTitle[AppMode.FEED] = "Activity Feed";
+modeTitle[AppMode.FEED] = "Dashboard";
 modeTitle[AppMode.REGISTER] = "Register";
 modeTitle[AppMode.ROUNDS] = "My Rounds";
 modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
 modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 modeTitle[AppMode.RESET] = "Reset Password";
+modeTitle[AppMode.GRADES] = "Grades";
+modeTitle[AppMode.USERS] = "Users";
+modeTitle[AppMode.ANALYTICS] = "Analytics";
+modeTitle[AppMode.ASSIGNMENTS] = "Assignments";
+modeTitle[AppMode.COURSE_SETTINGS] = "Course Settings";
+modeTitle[AppMode.HELP] = "Help";
+modeTitle[AppMode.MAIL] = "Mail";
+modeTitle[AppMode.PROFILE] = "Profile";
+modeTitle[AppMode.DELETE_COURSE] = "Delete Course";
+modeTitle[AppMode.FIND_COURSE] = "Find Course";
+modeTitle[AppMode.USER_SETTINGS] = "User Settings";
 
 const modeToPage = {};
 modeToPage[AppMode.LOGIN] = LoginPage;
@@ -32,11 +55,24 @@ modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
 modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
 modeToPage[AppMode.COURSES] = CoursesPage;
 modeToPage[AppMode.RESET] = ResetPassword;
+modeToPage[AppMode.GRADES] = Grades;
+modeToPage[AppMode.USERS] = Users;
+modeToPage[AppMode.ANALYTICS] = Analytics;
+modeToPage[AppMode.ASSIGNMENTS] = Assignments;
+modeToPage[AppMode.COURSE_SETTINGS] = CourseSettings;
+modeToPage[AppMode.HELP] = Help;
+modeToPage[AppMode.MAIL] = Mail;
+modeToPage[AppMode.PROFILE] = Profile;
+modeToPage[AppMode.DELETE_COURSE] = DeleteCourse;
+modeToPage[AppMode.FIND_COURSE] = FindCourse;
+modeToPage[AppMode.USER_SETTINGS] = UserSettings;
+
 
 
 class App extends React.Component {
 
   constructor() {
+    
     super();
     this.state = {mode: AppMode.LOGIN,
                   menuOpen: false,
@@ -151,7 +187,12 @@ class App extends React.Component {
               done={this.editAccountDone} 
               cancel={this.cancelEditAccount}/> : null} */}
         {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null:<NavBar 
-          title={modeTitle[this.state.mode]} 
+          dashboard={modeTitle[this.state.mode]}
+          grades={modeTitle[AppMode.GRADES]} 
+          assignments={modeTitle[AppMode.ASSIGNMENTS]}
+          users={modeTitle[AppMode.USERS]}
+          analytics={modeTitle[AppMode.ANALYTICS]}
+          settings={modeTitle[AppMode.COURSE_SETTINGS]}   
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
           menuOpen={this.state.menuOpen}

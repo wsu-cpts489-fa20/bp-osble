@@ -3,16 +3,19 @@
 
 /* Styling of the fixed top bar in the app */
 .navbar {
-  overflow: hidden; /* Don't allow scrolling */
+  /*overflow: hidden;  Don't allow scrolling */
   display: block; /* Occupies its own horizontal space */
   background-color: #13294E;
-  position: fixed; /* Doesn't move */
+  
   top: 0;
   width: 100%; /* 100% of width of screen */
   align-content: center;
-  border-radius: 0px;
+  
   padding: 0px;
   z-index: 100; /* Force it to be on top */
+  
+  
+  border-radius: 5px;
 }
 
 .navbar-title {
@@ -25,8 +28,9 @@ font-size: 18px;
 .navbar-items {
 display: inline-flex; 
 align-items: center; 
-padding-top: 5px; 
-padding-bottom: 5px;
+
+cursor: pointer; 
+
 }
 
 /* sidemenu -- Styling of the side navigation menu */
@@ -301,10 +305,10 @@ text-align: center;
 /* Styles selected side menu items and bottom bar buttons */
 .item-selected {
   pointer-events: none;
-  cursor: default;
   text-decoration: none;
   color: #13294E !important;
   background-color: #F0F0F0;
+  border-color: #13294E;
 }
 
 /* Forces element to ignore pointer events like clicks */
@@ -411,3 +415,63 @@ text-align: center;
    color: white;
    font-weight: bold;
   }
+  .feedpage{
+    background-color: white	;
+    height: 100vh;
+    
+    overflow: auto; /* Enable scroll if needed */
+  }
+
+  .navbar-items-right {
+    display: inline-flex; 
+    align-items: center; 
+    float: right;
+    
+    padding-right: 5px;
+    cursor: pointer; 
+    padding-bottom: 5px;
+    right:6px;
+    top:18px;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      z-index: 1;
+ }
+ .modal-dropdown {
+  display: block;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-left: 20px;
+ 
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+ 
+}
+  
+  .button{
+    width:120px;
+    height:18px;
+    /* background-color:white ; */
+    /* border-radius:10px; */
+    color:white;
+    font-size: 85%;
+    display: inline-flex; 
+    align-items: center; 
+    padding-top: 20px;
+ }
+  /* .button:before{
+      content:"";
+      position:absolute;
+      width:0px;
+      height:0px;
+      border: 10px solid;
+      border-color: white transparent transparent transparent;
+      right:2px;
+     
+      top:18px;
+ } */
+
+ 
