@@ -47,7 +47,7 @@ class FeedPage extends React.Component {
         var JSONposts = this.state.posts;
         var JSXposts = JSONposts.map(this.createntries)
         return (
-            <div className="feedpage">
+            <div className="feedpage" id="feedPage">
                 <div className="flexwrapper">
                     <div className="notifications">
                         <h1 style={{ margin: ".7rem" ,fontSize:"30px"}}>Notifications</h1>

@@ -241,7 +241,7 @@ class LoginPage extends React.Component {
                                 <p className="bg-danger" id="feedback" style={{ fontSize: 16 }} />
 
                                 <button
-                                    type="submit"
+                                    type="submit" id="login"
                                     className=" btn btn-primary btn-block LoginButton">
                                     <span id="login-btn-icon" className={this.state.loginBtnIcon} />
                 &nbsp;{this.state.loginBtnLabel}

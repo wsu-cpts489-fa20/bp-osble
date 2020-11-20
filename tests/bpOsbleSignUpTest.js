@@ -5,7 +5,7 @@ import AppMode from '../client/src/AppMode';
 fixture `bp-osble`
 .page `http://localhost:8081`;
 
-test('LoginPageGoesToSignUpPage', async t => {
+test('TestSignUpPage', async t => {
 
     //testing variables
     const accountBtn = Selector('button').withAttribute('type', 'button', 'class', 'btn btn-link login-link', 'Create an account');

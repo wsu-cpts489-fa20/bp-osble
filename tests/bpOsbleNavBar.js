@@ -12,7 +12,7 @@ fixture `bp-osble`
 
 //This test performs a simple check to see if we are on the
 //login page
-test('TestFeedPage', async t => {
+test('TestNavBar', async t => {
 
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
@@ -21,17 +21,18 @@ test('TestFeedPage', async t => {
         .typeText(passwordInput, 'MongoDB240')
         .click('#login-btn-icon')
         .expect(Selector('#feedPage').visible).eql(true)
-        .typeText('#FeedPostBox', 'Hey Osble Team. Are you testing me?')
-        .click('#FeedPostButton')
-        .expect(Selector('#postItem').innerText).eql("Hey Osble Team. Are you testing me?")
-        .click('#FeedReplyButton1')
-        .typeText('#FeedReplyBox', 'I am glad to see you testing me')
-        .click('#FeedReplyButton')
-        .expect(Selector('#replyItem').innerText).eql("I am glad to see you testing me")
-        .click('#FeedHide-Show-Reply')
-        .expect(Selector('#replyItem').visible).eql(false)
-        .click('#FeedHide-Show-Reply')
-        .expect(Selector('#replyItem').visible).eql(true)
+        .click('#NavBarAssignments')
+        .expect(Selector('#assignmentPage').visible).eql(true)
+        .click('#NavBarGrades')
+        .expect(Selector('#gradePage').visible).eql(true)
+        .click('#NavBarUsers')
+        .expect(Selector('#userPage').visible).eql(true)
+        .click('#NavBarCourseSettings')
+        .expect(Selector('#courseSettingsPage').visible).eql(true)
+        .click('#NavBarAnalytics')
+        .expect(Selector('#analyticsPage').visible).eql(true)
+        //.expect(Selector('NavBarFeed').className).eql("btn btn-primary navbutton selected")
+        
         
         
 });

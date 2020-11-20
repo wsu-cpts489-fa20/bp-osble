@@ -17,7 +17,7 @@ class GradesPage extends React.Component {
     }
     render() {
         return (
-            <div className="feedpage">
+            <div className="feedpage" id="gradePage">
                 <center>
                     <h1>Gradebook </h1>
                     <button id="gbOptions" class="btn btn-primary" data-toggle="modal" data-target="#gbOptionsModal">Gradebook Options</button>

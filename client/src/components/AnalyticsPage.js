@@ -4,7 +4,7 @@ class AnalyticsPage extends React.Component {
 
     render() {
         return (
-        <div className="feedpage">
+        <div className="feedpage" id="analyticsPage">
             <center>
             <h1 >Analytics</h1>
             <h2>This page is under construction.</h2>
