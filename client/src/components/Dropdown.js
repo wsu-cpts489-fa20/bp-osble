@@ -31,7 +31,7 @@ logOut = () =>{
           <ul>
            <li><a className="active" href="#Create Page" onClick={() =>this.props.changeMode(AppMode.FIND_COURSE)}>Find Course</a></li>
            <li><a href="#Create Course" onClick={() =>this.props.changeMode(AppMode.COURSE_SETTINGS)}>Create Course</a></li>
-           <li><a href="#Delete Course" onClick={() =>this.props.changeMode(AppMode.DELETE_COURSE)}>Delete Course </a></li>
+           <li><a id="Course_Deletion" href="#Delete Course" onClick={() =>this.props.changeMode(AppMode.DELETE_COURSE)}>Delete Course </a></li>
             </ul>
           )
         :
