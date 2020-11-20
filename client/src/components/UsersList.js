@@ -51,6 +51,10 @@ const RenderListItem = (props) => {
         return <tr key={props.key} name = {boxName}>
             <td>{props.userName}</td>
             <td>{props.uID}</td>
+            <td><button class="btn btn-primary">Change Role</button>
+            <button class="btn btn-primary">Message</button>
+            <button class="btn btn-primary">Remove</button>
+            </td>
         </tr>
 
 }
