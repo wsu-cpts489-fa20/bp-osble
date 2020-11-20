@@ -17,7 +17,7 @@
 }
 .navbutton:hover{
     color:white;
-    background-color: #00ffff;
+    background-color: #00b7ff;
 }
 .navbutton:focus{
     box-shadow:none !important;
@@ -27,6 +27,6 @@
     margin-left: 7.5rem;
 }
 .selected{
-    background-color: #007bff;
+    background-color: #007bffe0;
     color: white;
 }
