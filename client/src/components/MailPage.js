@@ -7,9 +7,9 @@ class MailPage extends React.Component {
                 <center>
                     <h1 >Inbox</h1>
                     <div class="btn-group" id="mail_menu">
-                        <a class="btn btn-primary" href="/Mail/Create">Compose</a>
-                        <a class="btn btn-primary" href="/Mail/Index">Inbox</a>
-                        <a class="btn btn-primary" href="/Mail/Outbox">Outbox</a>
+                        <a class="btn btn-primary" >Compose</a>
+                        <a class="btn btn-primary" >Inbox</a>
+                        <a class="btn btn-primary" > Outbox</a>
                         <input id="FormSubmitButton" type="submit" class="btn btn-primary" disabled="disabled" value="Delete" />
                     </div>
                     <div class="MailContent">
@@ -19,10 +19,10 @@ class MailPage extends React.Component {
                                 <tr>
                                     <th style={{textAlign: 'center'}} id="checkAll" class="inbox_checkbox_header"><input id="checkAllBox" type="checkbox" /></th>
                                     <th class="inbox_attachments_header"></th>
-                                    <th class="inbox_time_header"><a href="/Mail?sortBy=EarliestDate">Date:</a></th>
-                                    <th class="inbox_context_header"><a href="/Mail?sortBy=Context">Context:</a></th>
-                                    <th class="inbox_from_header"><a href="/Mail?sortBy=From">From:</a></th>
-                                    <th class="inbox_subject_header"><a href="/Mail?sortBy=Subject">Subject:</a></th>
+                                    <th class="inbox_time_header"><a >Date:</a></th>
+                                    <th class="inbox_context_header"><a >Context:</a></th>
+                                    <th class="inbox_from_header"><a >From:</a></th>
+                                    <th class="inbox_subject_header"><a >Subject:</a></th>
                                 </tr>
 
                             </thead>
@@ -41,7 +41,7 @@ class MailPage extends React.Component {
                                     Eli Forbes
                                 </td>
                                 <td class="inbox_subject">
-                                    <a href="/Mail/View/7417">Exam 2 Graded</a>
+                                    <a >Exam 2 Graded</a>
                                 </td>
                             </tr>
 
