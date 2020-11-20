@@ -144,10 +144,9 @@ class UserSettingsPage extends React.Component {
                 
                 <h2 className="setting-header">Change Profile Picture<span className="fa fa-question-circle"></span></h2>
                 <label>
-                    Profile Picture:
-                    <img src="osble2.png" 
-                              height="60" width="60" 
-                    />Current Profile Picture
+                    <p></p>
+                    Current Profile Picture:
+                    <img src="osble2.png" height="60" width="60"/>
                     <input
                      className="form-control form-text form-center"
                      name="profilePic"
