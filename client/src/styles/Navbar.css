@@ -17,7 +17,7 @@
 }
 .navbutton:hover{
     color:white;
-    background-color: #007bff;
+    background-color: #00ffff;
 }
 .navbutton:focus{
     box-shadow:none !important;
