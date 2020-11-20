@@ -47,7 +47,6 @@ class FeedPage extends React.Component {
         var JSONposts = this.state.posts;
         var JSXposts = JSONposts.map(this.createntries)
         return (
-
             <div className="feedpage">
                 <div className="flexwrapper">
                     <div className="notifications">
@@ -97,7 +96,6 @@ class FeedPage extends React.Component {
 
                 </div>
             </div>
-
         );
     }
 }
