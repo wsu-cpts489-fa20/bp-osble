@@ -41,8 +41,7 @@ var app = (0, _express["default"])(); //////////////////////////////////////////
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
 
-//const connectStr = process.env.MONGO_STR;
-var connectStr = "mongodb+srv://dbAdmin:6fA6jUxdLrblwpDP@cluster0.pgycn.mongodb.net/appdb?authSource=admin&replicaSet=atlas-135vv0-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true";
+var connectStr = process.env.MONGO_STR;
 
 _mongoose["default"].connect(connectStr, {
   useNewUrlParser: true,

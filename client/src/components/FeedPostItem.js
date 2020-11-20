@@ -53,7 +53,7 @@ export default class FeedpostItem extends React.Component {
                         {
                             this.state.showReply ?
                                 <div >
-                                    <textarea required={true} ref={(a) => this._inputElement = a} className="postinput" placeholder="Enter Reply Here..." style={{ marginBottom: "0px" }}></textarea>
+                                    <textarea required={true} ref={(a) => this._inputElement = a} className="postinput" id="FeedReplyBox" placeholder="Enter Reply Here..." style={{ marginBottom: "0px" }}></textarea>
 
                                 </div>
                                 :
@@ -72,7 +72,7 @@ export default class FeedpostItem extends React.Component {
                             <button type="button" className="postitembutton" onClick={this.seeReplies} style={{ width: "8rem" }}>{this.state.seeReplies ? "Hide Replies" : "Show Replies "}{this.state.seeReplies ? "" : "(" + this.state.replies.length + ")"}</button>
                             {
                                 this.state.showReply ?
-                                    <button className="postitembutton" style={{ width: "4rem" }}>Submit</button>
+                                    <button className="postitembutton" id="FeedReplyButton" style={{ width: "4rem" }}>Submit</button>
                                     :
                                     null
                             }
