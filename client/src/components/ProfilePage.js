@@ -8,7 +8,7 @@ class ProfilePage extends React.Component {
 
     render() {
         return (
-        <div className="feedpage">
+        <div id="profilePage" className="feedpage">
             <div className="profile-area">
                 {/* The image and userID will be changed once we have a database set up */}
                 <div class="left-profile">
@@ -24,7 +24,7 @@ class ProfilePage extends React.Component {
                                 <td style={{fontSize:"20px"}}><strong>0</strong> comment(s)</td>
                             </tr>
                             <tr>
-                                <button className="profile-btn-icon" onClick={this.switchToEdit}>Edit<span class="fa fa-pencil"></span></button>
+                                <button id="edit" className="profile-btn-icon" onClick={this.switchToEdit}>Edit<span class="fa fa-pencil"></span></button>
                             </tr>
                         </table>
                     </h1>

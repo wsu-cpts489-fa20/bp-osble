@@ -6,7 +6,7 @@ class UserSettingsPage extends React.Component {
     }
     render() {
         return (
-        <div className="feedpage">
+        <div id='settingPage' className="feedpage">
             <center>
             <h2 className="setting-header">User Settings<span className="fa fa-question-circle"></span></h2>
             </center>
