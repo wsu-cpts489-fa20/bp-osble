@@ -1,0 +1,11 @@
+.postitembutton{
+    width: 3.5rem;
+    height:2rem;
+    margin:.7rem;
+    font-size: 15px;
+    border: 0px;
+    border-radius: 3px;
+    background-color: #007bff;
+    margin-top: .5rem;
+    color:white;
+}
