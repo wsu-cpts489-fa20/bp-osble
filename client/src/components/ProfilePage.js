@@ -23,11 +23,11 @@ class ProfilePage extends React.Component {
                             <tr>
                                 <td style={{fontSize:"20px"}}><strong>0</strong> comment(s)</td>
                             </tr>
-                            <tr>
-                                <button id="edit" className="profile-btn-icon" onClick={this.switchToEdit}>Edit<span class="fa fa-pencil"></span></button>
-                            </tr>
                         </table>
                     </h1>
+                </div>
+                <div class="profile-button-area">
+                    <button id="edit" className="profile-btn-icon" onClick={this.switchToEdit}>Edit<span class="fa fa-pencil"></span></button>
                 </div>
             </div>
             <p></p>
