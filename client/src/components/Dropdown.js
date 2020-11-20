@@ -20,6 +20,7 @@ logOut = () =>{
         <div  className="modal-dropdown" role="dialog" style = {{width:"200px"}} >
 
           { this.props.displayMenu ?  this.props.type == "profile" ? (
+
         <ul className = "maindropdown">
          <li className = "dropitem"><a className="active" href="#View Profile" onClick={() =>this.props.changeMode(AppMode.MAIL)}>Mail(0)</a></li>
          <li className = "dropitem"><a href="#Settings" onClick={() =>this.props.changeMode(AppMode.PROFILE)}>View Profile</a></li>
