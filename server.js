@@ -18,6 +18,7 @@ const PORT = process.env.HTTP_PORT || LOCAL_PORT;
 const GithubStrategy = passportGithub.Strategy;
 const LocalStrategy = passportLocal.Strategy;
 const app = express();
+const server = required('./server')
 
 //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
@@ -510,3 +511,5 @@ app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
 
   }
 });
+
+app.use("",server);
