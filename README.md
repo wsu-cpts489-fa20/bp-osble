@@ -15,6 +15,7 @@ We have also created two new test cases to test the dropdown menu and
 logout functionality.
 Links: will be post later
 
+Milestone 3 tests: https://drive.google.com/file/d/1YvekurPYVMLVsi5SJ30VBzy8c1w300D-/view?usp=sharing
 
 # Osble Web App
 
