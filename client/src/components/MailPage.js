@@ -3,7 +3,7 @@ class MailPage extends React.Component {
 
     render() {
         return (
-            <div className="feedpage">
+            <div id ="mailpage" className="feedpage">
                 <center>
                     <h1 >Inbox</h1>
                     <div class="btn-group" id="mail_menu">

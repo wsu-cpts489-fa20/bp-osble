@@ -190,7 +190,7 @@ class LoginPage extends React.Component {
 
     render() {
         return (
-            <div className="osblepage">
+            <div className="osblepage" id="loginPage">
                 <center>
                     <div className="wrapper">
                         
