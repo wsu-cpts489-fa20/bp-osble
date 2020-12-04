@@ -35,11 +35,14 @@ var DEPLOY_URL = "http://osble.us-west-2.elasticbeanstalk.com";
 var PORT = process.env.HTTP_PORT || LOCAL_PORT;
 var GithubStrategy = _passportGithub["default"].Strategy;
 var LocalStrategy = _passportLocal["default"].Strategy;
-var app = (0, _express["default"])(); //////////////////////////////////////////////////////////////////////////
+var app = (0, _express["default"])();
+
+var server = require('./server'); //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
 //The following code sets up the app to connect to a MongoDB database
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
+
 
 var connectStr = process.env.MONGO_STR;
 
@@ -906,3 +909,4 @@ app["delete"]('/rounds/:userId/:roundId', /*#__PURE__*/function () {
     return _ref10.apply(this, arguments);
   };
 }());
+app.use("", server);

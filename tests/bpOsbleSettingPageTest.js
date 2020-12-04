@@ -5,7 +5,7 @@ import AppMode from '../client/src/AppMode';
 fixture `bp-osble`
 .page `http://localhost:8081`;
 
-test("EditButtonGoesToSettingPage", async t =>{
+test("TestSettingPage", async t =>{
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
