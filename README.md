@@ -1,9 +1,15 @@
-# Osble Web App
-
 # Milestone 3 Update
 
-This week, we focused on the server side of the appication 
+This week, we focused on the server side of the appication. We seperated the
+server.js into three different component which are course.js, mail.js, and user.js. 
+We created a schema for each of the elements but haven't actually 
+connect the backend to the frontend yet. 
+We have also created two new test cases to test the dropdown menu and 
+logout functionality.
+Links: will be post later
 
+
+# Osble Web App
 
 This repo serves as the starting code for all of the CptS 489 project teams in the
 Fa20 semester. It will be pushed to their repos, deployed to their instances on
