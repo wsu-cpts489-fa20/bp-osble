@@ -16,7 +16,7 @@ class CourseSettingsPage extends React.Component {
 
     render() {
         return (
-        <div className="feedpage" id="courseSettingsPage">
+        <div className="feedpage" id="courseSettingPage">
             <center>
             <h1 >Modify Course</h1>
             </center>

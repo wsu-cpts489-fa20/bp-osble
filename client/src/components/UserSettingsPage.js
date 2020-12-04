@@ -36,7 +36,7 @@ class UserSettingsPage extends React.Component {
                     />
                 </label>
                 <p></p>
-                <button className="profileSubmitButton" onClick={this.handleSubmit}>Change Name</button>
+                <button id = "changeNameButton" className="profileSubmitButton" onClick={this.handleSubmit}>Change Name</button>
                 <br/>
 
                 <h2 className="setting-header">Reset Email<span className="fa fa-question-circle"></span></h2>

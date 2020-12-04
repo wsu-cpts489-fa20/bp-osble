@@ -113,7 +113,7 @@ class NavBar extends React.Component {
         &nbsp;
         <span className={this.state.userdropdown == true ? "navbar-title fa fa-angle-left" : "navbar-title fa fa-angle-down"}></span></button>
         <button className="btn btn-primary navbutton" onClick={() => this.switchMode(AppMode.MAIL)}>Mail</button>
-        <button className="btn btn-primary navbutton" onClick={() => this.switchMode(AppMode.HELP)}>Help</button>
+        <button className="btn btn-primary navbutton" id = "viewHelp"onClick={() => this.switchMode(AppMode.HELP)}>Help</button>
 
         {this.state.coursedropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav">
@@ -127,10 +127,10 @@ class NavBar extends React.Component {
 
         {this.state.userdropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav moveright">
-            <button className="btn btn-primary navdropdown" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("mail")}>Mail</button>
+            <button className="btn btn-primary navdropdown" id="viewMail" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("mail")}>Mail</button>
             <button className="btn btn-primary navdropdown" id="viewProfile" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("profile")}>Profile</button>
-            <button className="btn btn-primary navdropdown" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("settings")}>Settings</button>
-            <button className="btn btn-primary navdropdown" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("logout")}>Log Out</button>
+            <button className="btn btn-primary navdropdown" id="viewSettings" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("settings")}>Settings</button>
+            <button className="btn btn-primary navdropdown" id="logoutButton" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("logout")}>Log Out</button>
           </div>
           :
           null
