@@ -8,23 +8,25 @@ require('dotenv').config();
 
 
 const userSchema = new Schema({
-    id: String, // unique identifier
-    password: String,
-    displayName: String,
-    //↓ Need to discuss about this later ↓//
-    //userType: String, 
-    //↑ Need to discuss about this later ↑//
-    profilePicURL: String, //link to profile image
-    email: String,
-    securityQuestion: String,
-    securityAnswer:{
-        type:String, required: function(){return this.securityQuestion ? true: false }
-    },
-    courses: [coueseSchema]
-                // CourseName
-                                //assignment -> [status: submitted
-                                                 //grade: null]
-                                                 //submission: 
+  id: String, // unique identifier
+  password: String,
+  displayName: String,
+  //↓ Need to discuss about this later ↓//
+  //userType: String, 
+  //↑ Need to discuss about this later ↑//
+  profilePicURL: String, //link to profile image
+  email: String,
+  securityQuestion: String,
+  securityAnswer: {
+    type: String, required: function () { return this.securityQuestion ? true : false }
+  },
+  courses: [courseSchema],
+  // CourseName
+  //assignment -> [status: submitted
+  //grade: null]
+  //submission: 
+  inbox: [mailboxSchema],
+  outbox: [mailboxSchema]
 })
 const User = mongoose.model("User", userSchema);
 
@@ -62,9 +64,9 @@ passport.serializeUser((user, done) => {
   console.log("Contents of user param: " + JSON.stringify(user));
   done(null, user.id);
 });
-  
-  //Deserialize the current user from the session
-  //to persistent storage.
+
+//Deserialize the current user from the session
+//to persistent storage.
 passport.deserializeUser(async (userId, done) => {
   console.log("In deserializeUser.");
   console.log("Contents of userId param: " + userId);
@@ -98,7 +100,7 @@ app
   .use(express.json({ limit: '20mb' }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-  /////////////////////////////////
+/////////////////////////////////
 //USER ACCOUNT MANAGEMENT ROUTES
 ////////////////////////////////
 
@@ -150,7 +152,9 @@ app.post('/users/:userId', async (req, res, next) => {
         profilePicURL: req.body.profilePicURL,
         securityQuestion: req.body.securityQuestion,
         securityAnswer: req.body.securityAnswer,
-        courses: []
+        courses: [],
+        inbox: [],
+        outbox: []
       }).save();
       return res.status(201).send("New account for '" +
         req.params.userId + "' successfully created.");
