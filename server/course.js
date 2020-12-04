@@ -2,8 +2,9 @@
 const courseSchema = new Schema({
     courseName: String, // unique identifier
     post: [],
-    instructor: String,
+    userType: String,
     Assignments: []
-                
+    //listofUsers:{userType: Student: names
+    //                        Instructor: names}
 })
 
