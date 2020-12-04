@@ -2,11 +2,13 @@
 
 This week, we focused on the server side of the appication. We seperated the
 server.js into three different component which are 
+
 course.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/master/server/course.js
 
 mail.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/master/server/mail.js
 
 user.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/leonard/server/user.js. 
+
 We created a schema for each of the elements but haven't actually 
 connect the backend to the frontend yet. 
 We have also created two new test cases to test the dropdown menu and 
