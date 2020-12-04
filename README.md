@@ -1,5 +1,9 @@
 # Osble Web App
 
+# Milestone 3 Update
+
+This week, we focused on the server side of the appication 
+
 
 This repo serves as the starting code for all of the CptS 489 project teams in the
 Fa20 semester. It will be pushed to their repos, deployed to their instances on
