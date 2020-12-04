@@ -7,8 +7,8 @@ import { Selector } from 'testcafe';
 //Test Case Forgot Password Page
 //Test Case Forgot Username Page
 
-fixture `bp-osble`
-.page `http://localhost:8081`;
+fixture`bp-osble`
+    .page`http://localhost:8081`;
 
 //This test performs a simple check to see if we are on the
 //login page
@@ -31,8 +31,8 @@ test('TestNavBar', async t => {
         .expect(Selector('#courseSettingsPage').visible).eql(true)
         .click('#NavBarAnalytics')
         .expect(Selector('#analyticsPage').visible).eql(true)
-        //.expect(Selector('NavBarFeed').className).eql("btn btn-primary navbutton selected")
-        
-        
-        
+    //.expect(Selector('NavBarFeed').className).eql("btn btn-primary navbutton selected")
+
+
+
 });
