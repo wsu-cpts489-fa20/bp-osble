@@ -36,11 +36,13 @@ var PORT = process.env.HTTP_PORT || LOCAL_PORT;
 var GithubStrategy = _passportGithub["default"].Strategy;
 var LocalStrategy = _passportLocal["default"].Strategy;
 var app = (0, _express["default"])();
-var server = required('./server'); //////////////////////////////////////////////////////////////////////////
+
+var server = require('./server'); //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
 //The following code sets up the app to connect to a MongoDB database
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
+
 
 var connectStr = process.env.MONGO_STR;
 
