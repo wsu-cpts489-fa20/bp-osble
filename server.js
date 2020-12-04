@@ -18,7 +18,7 @@ const PORT = process.env.HTTP_PORT || LOCAL_PORT;
 const GithubStrategy = passportGithub.Strategy;
 const LocalStrategy = passportLocal.Strategy;
 const app = express();
-const server = required('./server')
+const server = require('./server')
 
 //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
