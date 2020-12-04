@@ -18,6 +18,7 @@ const PORT = process.env.HTTP_PORT || LOCAL_PORT;
 const GithubStrategy = passportGithub.Strategy;
 const LocalStrategy = passportLocal.Strategy;
 const app = express();
+const server = required('./server')
 
 //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
@@ -27,6 +28,7 @@ const app = express();
 import mongoose from 'mongoose';
 
 const connectStr = process.env.MONGO_STR;
+
 mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
     () => { console.log(`Connected to ${connectStr}.`) },
@@ -509,3 +511,5 @@ app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
 
   }
 });
+
+app.use("",server);

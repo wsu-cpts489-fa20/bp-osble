@@ -22,7 +22,7 @@ export default class AssignmentsPage extends React.Component {
         var JSONassignments = this.state.assignments;
         var JSXassignments = JSONassignments.map(this.createntries)
         return (
-            <div className = "feedpage">
+            <div className = "feedpage" id="assignmentPage">
                 <h1 style={{ margin: "1.5rem", fontSize: "30px" }}>Assignments</h1>
                 <table className="table table-hover">
                     <thead className="thead-light">

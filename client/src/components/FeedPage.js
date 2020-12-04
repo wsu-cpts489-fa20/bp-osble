@@ -47,8 +47,7 @@ class FeedPage extends React.Component {
         var JSONposts = this.state.posts;
         var JSXposts = JSONposts.map(this.createntries)
         return (
-
-            <div className="feedpage">
+            <div className="feedpage" id="feedPage">
                 <div className="flexwrapper">
                     <div className="notifications">
                         <h1 style={{ margin: ".7rem" ,fontSize:"30px"}}>Notifications</h1>
@@ -62,9 +61,9 @@ class FeedPage extends React.Component {
                         <h1 style={{ margin: ".7rem" ,fontSize:"30px"}}>Activity Feed</h1>
 
                         <form onSubmit={this.addpost}>
-                            <textarea required={true} ref={(a) => this._inputElement = a} className="postinput" placeholder="Enter new post here..."></textarea>
+                            <textarea required={true} ref={(a) => this._inputElement = a} className="postinput" id="FeedPostBox" placeholder="Enter new post here..."></textarea>
                             <div style={{ display: "flex", flexDirection: "row", height: "2.5rem" }}>
-                                <button type="submit" className="btn btn-primary" style={{ float: "left", marginLeft: ".5rem" }}>Post</button>
+                                <button type="submit" className="btn btn-primary" id="FeedPostButton" style={{ float: "left", marginLeft: ".5rem" }}>Post</button>
                                 <button type="button" onClick={() => this.toggledropdown()} className="btn btn-primary" style={{ float: "left", marginLeft: ".5rem", width: "10rem" }}>{this.state.curselected}</button>
                                 <input type="checkbox" style={{ marginTop: ".8rem", marginLeft: "1rem" }} onClick={this.setanonymous}></input>
                                 <p style={{ marginTop: ".4rem", marginLeft: ".5rem" }}>Post Anonymously</p>
@@ -97,7 +96,6 @@ class FeedPage extends React.Component {
 
                 </div>
             </div>
-
         );
     }
 }

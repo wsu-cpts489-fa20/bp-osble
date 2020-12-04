@@ -242,6 +242,7 @@ class LoginPage extends React.Component {
 
                                 <button id="login-btn"
                                     type="submit"
+
                                     className=" btn btn-primary btn-block LoginButton">
                                     <span id="login-btn-icon" className={this.state.loginBtnIcon} />
                 &nbsp;{this.state.loginBtnLabel}

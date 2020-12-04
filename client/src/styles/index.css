@@ -5,7 +5,7 @@
 .navbar {
   /*overflow: hidden;  Don't allow scrolling */
   display: block; /* Occupies its own horizontal space */
-  background-color: #13294E;
+  background-color: #104E8B;
   
   top: 0;
   width: 100%; /* 100% of width of screen */
@@ -462,18 +462,7 @@ text-align: center;
     align-items: center; 
     padding-top: 20px;
  }
-  /* .button:before{
-      content:"";
-      position:absolute;
-      width:0px;
-      height:0px;
-      border: 10px solid;
-      border-color: white transparent transparent transparent;
-      right:2px;
-     
-      top:18px;
- } */
-
+ 
  .profile-btn-icon {
   color: rgb(0, 0, 0);
   font-size: 20px;
@@ -557,3 +546,4 @@ text-align: center;
   width:300px;
   height: 300px;
 }
+ 
