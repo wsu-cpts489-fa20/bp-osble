@@ -1,9 +1,9 @@
-import express from 'express';
+var express = require('express');
 import passport from 'passport';
 import session from 'express-session';
 import path from 'path';
 const { Schema } = require("mongoose");
-const app = express();
+const app = express.Router();
 require('dotenv').config();
 
 
