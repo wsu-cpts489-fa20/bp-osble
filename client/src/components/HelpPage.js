@@ -3,7 +3,7 @@ class HelpPage extends React.Component {
 
     render() {
         return (
-        <div className="feedpage">
+        <div className="feedpage" id="helpPage">
             <h1 className="help-header">Help</h1>
             &emsp;OSBLE contains the following help articles:
             <br/>

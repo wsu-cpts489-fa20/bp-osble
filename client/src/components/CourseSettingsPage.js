@@ -1,6 +1,7 @@
 import React from 'react';
 import { async } from 'regenerator-runtime';
 import AppMode from '../AppMode';
+import '../styles/courseSettings.css';
 
 class CourseSettingsPage extends React.Component {
 
@@ -15,7 +16,7 @@ class CourseSettingsPage extends React.Component {
 
     render() {
         return (
-        <div className="feedpage" id="courseSettingsPage">
+        <div className="feedpage" id="courseSettingPage">
             <center>
             <h1 >Modify Course</h1>
             </center>
@@ -24,7 +25,7 @@ class CourseSettingsPage extends React.Component {
                 Prefix
                 <input
                 autoComplete="on"
-                className="form-control-form-text"
+                className="form-control-form-text enterPrefix"
                 name="Prefix-Number"
                 id="UniqueCoursePrefix"
                 type="text"
@@ -37,7 +38,7 @@ class CourseSettingsPage extends React.Component {
                 Course Number
                 <input
                 autoComplete="on"
-                className="form-control-form-text"
+                className="form-control-form-text enterCourseNumber"
                 name="Course-Number"
                 id="CourseNumber"
                 type="text"
@@ -235,8 +236,8 @@ class CourseSettingsPage extends React.Component {
                 <label>
                     hour late will be applied. Assignments that submitted more than
                     <input
-                    className="Late-Assignment-Limit"
-                    id="LateAssignmentLimit"
+                    className="Max-Late-Assignment-Limit"
+                    id="MaxLateAssignmentLimit"
                     ></input>
                 </label>
                 <label>
