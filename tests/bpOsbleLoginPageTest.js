@@ -12,16 +12,15 @@ fixture `bp-osble`
 
 //This test performs a simple check to see if we are on the
 //login page
-test('LoginGoesToLoginPage', async t => {
+test('TestLoginPage', async t => {
 
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
         .typeText('#emailInput', 'joshua.stallworth@wsu.edu')
         .typeText(passwordInput, '123#abc;')
-        // .click('#login-btn-icon');
-        const articleHeader = await Selector('https://i.imgur.com/lBOwYfo.png').find('div')
-        let headerText = await articleHeader.withAttribute;
+        .click('#login-btn-icon');
+       
         
 });
 
