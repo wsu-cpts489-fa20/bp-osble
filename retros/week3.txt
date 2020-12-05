@@ -1,1 +1,5 @@
-To be completed after meeting
+1. Retro Topics
+
+    - Consider working with one server.js file
+    - We discussed about changes the schemas we currently have
+    - Talked about Next steps
