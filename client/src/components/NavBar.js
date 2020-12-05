@@ -99,6 +99,7 @@ class NavBar extends React.Component {
       userdropdown: false
     });
   }
+
   renderRightItems = () => {
 
     return (
@@ -109,11 +110,11 @@ class NavBar extends React.Component {
         <span className={this.state.coursedropdown == true ? "navbar-title fa fa-angle-left" : "navbar-title fa fa-angle-down"}></span>
         </button>
 
-        <button className="btn btn-primary navbutton" id="profile" ref={this.namewidth} onClick={this.toggleuserdropdown}>Leonard Brkanac
+        <button className="btn btn-primary navbutton" id="profile" ref={this.namewidth} onClick={this.toggleuserdropdown}>{this.props.userObj.first_name} {this.props.userObj.last_name}
         &nbsp;
         <span className={this.state.userdropdown == true ? "navbar-title fa fa-angle-left" : "navbar-title fa fa-angle-down"}></span></button>
         <button className="btn btn-primary navbutton" onClick={() => this.switchMode(AppMode.MAIL)}>Mail</button>
-        <button className="btn btn-primary navbutton" id = "viewHelp"onClick={() => this.switchMode(AppMode.HELP)}>Help</button>
+        <button className="btn btn-primary navbutton" id="viewHelp" onClick={() => this.switchMode(AppMode.HELP)}>Help</button>
 
         {this.state.coursedropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav">

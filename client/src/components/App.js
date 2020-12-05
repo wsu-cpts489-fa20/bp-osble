@@ -72,22 +72,23 @@ modeToPage[AppMode.USER_SETTINGS] = UserSettings;
 class App extends React.Component {
 
   constructor() {
-    
+
     super();
-    this.state = {mode: AppMode.LOGIN,
-                  menuOpen: false,
-                  authenticated: false,
-                  userObj: {displayName: "", profilePicURL: ""},
-                  editAccount: false,
-                  showEditAccountDialog: false,
-                  statusMsg: "",
-                  showAboutDialog: false
-                 };
+    this.state = {
+      mode: AppMode.LOGIN,
+      menuOpen: false,
+      authenticated: false,
+      userObj: { displayName: "", profilePicURL: "" },
+      editAccount: false,
+      showEditAccountDialog: false,
+      statusMsg: "",
+      showAboutDialog: false
+    };
   }
 
   //componentDidMount
   componentDidMount() {
-    if (!this.state.authenticated) { 
+    if (!this.state.authenticated) {
       //Use /auth/test route to (re)-test authentication and obtain user data
       fetch("/auth/test")
         .then((response) => response.json())
@@ -100,8 +101,8 @@ class App extends React.Component {
             });
           }
         }
-      )
-    } 
+        )
+    }
   }
 
   //refreshOnUpdate(newMode) -- Called by child components when user data changes in 
@@ -110,7 +111,7 @@ class App extends React.Component {
   //mode state var is set to newMode. After this method is called, the
   //App will re-render itself, forcing the new data to 
   //propagate to the child components when they are re-rendered.
-  refreshOnUpdate = async(newMode) => {
+  refreshOnUpdate = async (newMode) => {
     let response = await fetch("/users/" + this.state.userObj.id);
     response = await response.json();
     const obj = JSON.parse(response);
@@ -122,33 +123,35 @@ class App extends React.Component {
 
 
   handleChangeMode = (newMode) => {
-    this.setState({mode: newMode});
+    this.setState({ mode: newMode });
   }
 
   openMenu = () => {
-    this.setState({menuOpen : true});
+    this.setState({ menuOpen: true });
   }
-  
+
   closeMenu = () => {
-    this.setState({menuOpen : false});
+    this.setState({ menuOpen: false });
   }
 
   toggleMenuOpen = () => {
-    this.setState(prevState => ({menuOpen: !prevState.menuOpen}));
+    this.setState(prevState => ({ menuOpen: !prevState.menuOpen }));
   }
 
   setUserId = (Id) => {
-    this.setState({userId: Id,
-                   authenticated: true});
+    this.setState({
+      userId: Id,
+      authenticated: true
+    });
   }
 
   showEditAccount = () => {
-    this.setState({showEditAccountDialog: true});
+    this.setState({ showEditAccountDialog: true });
 
   }
 
   cancelEditAccount = () => {
-    this.setState({showEditAccountDialog: false});
+    this.setState({ showEditAccountDialog: false });
   }
 
   //editAccountDone -- called after successful edit or
@@ -157,68 +160,74 @@ class App extends React.Component {
   //edited (deleted == false) or deleted (deleted == true)
   editAccountDone = (msg, deleted) => {
     if (deleted) {
-      this.setState({showEditAccountDialog: false,
-                     statusMsg: msg,
-                     mode: AppMode.LOGIN});
-      } else {
-        this.setState({showEditAccountDialog: false,
-          statusMsg: msg});
-      }
+      this.setState({
+        showEditAccountDialog: false,
+        statusMsg: msg,
+        mode: AppMode.LOGIN
+      });
+    } else {
+      this.setState({
+        showEditAccountDialog: false,
+        statusMsg: msg
+      });
+    }
   }
 
   closeStatusMsg = () => {
-    this.setState({statusMsg: ""});
+    this.setState({ statusMsg: "" });
   }
 
   render() {
     const ModePage = modeToPage[this.state.mode];
     return (
       <div className="padded-page">
-        {this.state.showAboutDialog ? 
-          <AboutBox close={() => this.setState({showAboutDialog: false})}/> : null}
+        {this.state.showAboutDialog ?
+          <AboutBox close={() => this.setState({ showAboutDialog: false })} /> : null}
         {this.state.statusMsg != "" ? <div className="status-msg">
-              <span>{this.state.statusMsg}</span>
-              <button className="modal-close" onClick={this.closeStatusMsg}>
-                  <span className="fa fa-times"></span></button></div> : null}
+          <span>{this.state.statusMsg}</span>
+          <button className="modal-close" onClick={this.closeStatusMsg}>
+            <span className="fa fa-times"></span></button></div> : null}
         {/* {this.state.showEditAccountDialog ? 
             <CreateEditAccountDialog 
               create={false} 
               userId={this.state.userObj.id} 
               done={this.editAccountDone} 
               cancel={this.cancelEditAccount}/> : null} */}
-        {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null:<NavBar 
+        {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null : <NavBar
+          userObj={this.state.userObj}
           dashboard={modeTitle[this.state.mode]}
-          grades={modeTitle[AppMode.GRADES]} 
+          grades={modeTitle[AppMode.GRADES]}
           assignments={modeTitle[AppMode.ASSIGNMENTS]}
           users={modeTitle[AppMode.USERS]}
           analytics={modeTitle[AppMode.ANALYTICS]}
-          settings={modeTitle[AppMode.COURSE_SETTINGS]}   
+          settings={modeTitle[AppMode.COURSE_SETTINGS]}
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
           menuOpen={this.state.menuOpen}
-          toggleMenuOpen={this.toggleMenuOpen}/>}
-          <SideMenu 
-            menuOpen = {this.state.menuOpen}
-            mode={this.state.mode}
-            toggleMenuOpen={this.toggleMenuOpen}
-            displayName={this.state.userObj.displayName}
-            profilePicURL={this.state.userObj.profilePicURL}
-            localAccount={this.state.userObj.authStrategy === "local"}
-            editAccount={this.showEditAccount}
-            logOut={() => this.handleChangeMode(AppMode.LOGIN)}
-            showAbout={() => {this.setState({showAboutDialog: true})}}/>
-          {/* <ModeBar 
+          toggleMenuOpen={this.toggleMenuOpen} />}
+        <SideMenu
+          menuOpen={this.state.menuOpen}
+          mode={this.state.mode}
+          toggleMenuOpen={this.toggleMenuOpen}
+          displayName={this.state.userObj.displayName}
+          profilePicURL={this.state.userObj.profilePicURL}
+          localAccount={this.state.userObj.authStrategy === "local"}
+          editAccount={this.showEditAccount}
+          logOut={() => this.handleChangeMode(AppMode.LOGIN)}
+          showAbout={() => { this.setState({ showAboutDialog: true }) }} />
+        {/* <ModeBar 
             mode={this.state.mode} 
             changeMode={this.handleChangeMode}
             menuOpen={this.state.menuOpen}/> */}
-          <ModePage 
-            menuOpen={this.state.menuOpen}
-            mode={this.state.mode}
-            changeMode={this.handleChangeMode}
-            userObj={this.state.userObj}
-            refreshOnUpdate={this.refreshOnUpdate}/>
+        <ModePage
+          create={false} // this will be set to 
+          menuOpen={this.state.menuOpen}
+          mode={this.state.mode}
+          changeMode={this.handleChangeMode}
+          userObj={this.state.userObj}
+          refreshOnUpdate={this.refreshOnUpdate} />
       </div>
-    );  
+    );
   }
 }
 

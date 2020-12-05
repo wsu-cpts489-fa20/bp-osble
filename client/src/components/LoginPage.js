@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateEditAccountDialog from './CreateEditAccountDialog.js';
+import RegisterPage from './RegisterPage.js';
 import ResetPasswordPage from './ResetPasswordPage.js';
 import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
@@ -16,6 +16,7 @@ class LoginPage extends React.Component {
         this.resetA = "";
         this.passwordInputRef = React.createRef();
         this.state = {
+            showCreateAccountDialog: false,
             statusMsg: "",
             loginBtnIcon: "fa fa-sign-in",
             loginBtnLabel: "Log In",
@@ -42,20 +43,20 @@ class LoginPage extends React.Component {
             loginBtnLabel: ""
         });
 
-        this.props.changeMode(AppMode.FEED);
-        // const url = "auth/login?username=" + this.emailInputRef.current.value +
-        //     "&password=" + this.passwordInputRef.current.value;
-        // const res = await fetch(url, { method: 'POST' });
-        // if (res.status == 200) { //successful login!
-        //     window.open("/", "_self");
-        // } else { //Unsuccessful login
-        //     const resText = await res.text();
-        //     this.setState({
-        //         loginBtnIcon: "fa fa-sign-in",
-        //         loginBtnLabel: "Log In",
-        //         statusMsg: resText
-        //     });
-        // }
+        //this.props.changeMode(AppMode.FEED);
+        const url = "auth/login?username=" + this.emailInputRef.current.value +
+            "&password=" + this.passwordInputRef.current.value;
+        const res = await fetch(url, { method: 'POST' });
+        if (res.status == 200) { //successful login!
+            window.open("/", "_self");
+        } else { //Unsuccessful login
+            const resText = await res.text();
+            this.setState({
+                loginBtnIcon: "fa fa-sign-in",
+                loginBtnLabel: "Log In",
+                statusMsg: resText
+            });
+        }
     }
 
     //accountCreateDone -- Called by child CreateAccountDialog component when 
@@ -185,6 +186,7 @@ class LoginPage extends React.Component {
     }
 
     signUp = () => {
+        this.setState({ showCreateAccountDialog: true });
         this.props.changeMode(AppMode.REGISTER);
     }
 
@@ -193,84 +195,77 @@ class LoginPage extends React.Component {
             <div className="osblepage" id="loginPage">
                 <center>
                     <div className="wrapper">
-                        
-                            <img src="https://i.imgur.com/lBOwYfO.png" style={{ position: "relative", right: ".7rem" }}></img>
-                            {this.state.statusMsg != "" ? <div className="status-msg"><span>{this.state.statusMsg}</span>
-                                <button className="modal-close" onClick={this.closeStatusMsg}>
-                                    <span className="fa fa-times"></span>
-                                </button></div> : null}
-                            {this.state.showLookUpAccountDialog ?
-                                <LookUpAccountDialog cancelResetPassword={this.cancelResetPassword}
-                                    getSecurityAnswer={this.getSecurityAnswer} /> : null}
-                            {this.state.showSecurityQuestionDialog ?
-                                <SecurityQuestionDialog cancelResetPassword={this.cancelResetPassword}
-                                    question={this.resetQ}
-                                    answer={this.resetA}
-                                    getNewPassword={this.getNewPassword} /> : null}
-                            {this.state.showResetPaswordDialog ?
-                                <ResetPasswordPage cancelResetPassword={this.cancelResetPassword}
-                                    resetPassword={this.resetPassword} /> : null}
-                            <form id="loginInterface" onSubmit={this.handleLoginSubmit}>
-                                <label htmlFor="emailInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
 
-                                    <input
-                                        style={{ backgroundColor: "white" }}
-                                        ref={this.emailInputRef}
-                                        className="form-control enterEmail"
-                                        type="email"
-                                        placeholder="Email"
-                                        id="emailInput"
-                                        pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
-                                        required={true}
-                                    />
-                                </label>
+                        <img src="https://i.imgur.com/lBOwYfO.png" style={{ position: "relative", right: ".7rem" }}></img>
+                        {this.state.statusMsg != "" ? <div className="status-msg"><span>{this.state.statusMsg}</span>
+                            <button className="modal-close" onClick={this.closeStatusMsg}>
+                                <span className="fa fa-times"></span>
+                            </button></div> : null}
+                        {this.state.showLookUpAccountDialog ?
+                            <LookUpAccountDialog cancelResetPassword={this.cancelResetPassword}
+                                getSecurityAnswer={this.getSecurityAnswer} /> : null}
+                        {this.state.showSecurityQuestionDialog ?
+                            <SecurityQuestionDialog cancelResetPassword={this.cancelResetPassword}
+                                question={this.resetQ}
+                                answer={this.resetA}
+                                getNewPassword={this.getNewPassword} /> : null}
+                        {this.state.showResetPaswordDialog ?
+                            <ResetPasswordPage cancelResetPassword={this.cancelResetPassword}
+                                resetPassword={this.resetPassword} /> : null}
+                        <form id="loginInterface" onSubmit={this.handleLoginSubmit}>
+                            <label htmlFor="emailInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
 
-                                <label htmlFor="passwordInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
+                                <input
+                                    style={{ backgroundColor: "white" }}
+                                    ref={this.emailInputRef}
+                                    className="form-control enterEmail"
+                                    type="email"
+                                    placeholder="Email"
+                                    id="emailInput"
+                                    pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+                                    required={true}
+                                />
+                            </label>
 
-                                    <input
-                                        ref={this.passwordInputRef}
-                                        className="form-control enterPassword"
-                                        type="password"
-                                        placeholder="Password"
-                                        id="passwordInput"
-                                        pattern="[A-Za-z0-9!@#$%^&*()_+\-]+"
-                                        required={true}
-                                    />
-                                </label>
+                            <label htmlFor="passwordInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
 
-                                <p className="bg-danger" id="feedback" style={{ fontSize: 16 }} />
+                                <input
+                                    ref={this.passwordInputRef}
+                                    className="form-control enterPassword"
+                                    type="password"
+                                    placeholder="Password"
+                                    id="passwordInput"
+                                    pattern="[A-Za-z0-9!@#$%^&*()_+\-]+"
+                                    required={true}
+                                />
+                            </label>
 
-                                <button id="login-btn"
-                                    type="submit"
+                            <p className="bg-danger" id="feedback" style={{ fontSize: 16 }} />
 
-                                    className=" btn btn-primary btn-block LoginButton">
-                                    <span id="login-btn-icon" className={this.state.loginBtnIcon} />
+                            <button id="login-btn"
+                                type="submit"
+
+                                className=" btn btn-primary btn-block LoginButton">
+                                <span id="login-btn-icon" className={this.state.loginBtnIcon} />
                 &nbsp;{this.state.loginBtnLabel}
-                                </button>
-                                <br></br>
-                                <p>
-                                    <button type="button" className="btn btn-link login-link" id="createAccountBtn"
-                                        onClick={this.signUp}>
-                                        Create an account</button> |
+                            </button>
+                            <br></br>
+                            <p>
+                                <button type="button" className="btn btn-link login-link" id="createAccountBtn"
+                                    onClick={this.signUp}>
+                                    Create an account</button> |
                 <button type="button" className="btn btn-link login-link" id="resetBtn"
-                                        onClick={this.reset}>
-                                        Reset your password</button>
-                                </p>
-                                <p>
-                                    <i>Version developed by CptS 489 students</i>
-                                </p>
-                            </form>
-                            {this.state.showCreateAccountDialog ?
-                                <CreateEditAccountDialog
-                                    create={true}
-                                    done={this.accountCreateDone}
-                                    cancel={this.cancelCreateAccount} /> : null}
-                            {this.state.showResetPasswordPage ? <ResetPasswordPage /> : null}
-                            </div>
+                                    onClick={this.reset}>
+                                    Reset your password</button>
+                            </p>
+                            <p>
+                                <i>Version developed by CptS 489 students</i>
+                            </p>
+                        </form>
+
+                    </div>
                 </center>
             </div>
-           
-
         )
     }
 }
