@@ -14,7 +14,6 @@
    
 4. What can be done to improve the process
     - We discussed consolidating work onto a single branch and making sure our local repo is up to date before making any changes.
-      This will allow us to work on a single server file without concerns of merge conflicts, and allow us to work of eachothers progress
-      more easily.
+      This will allow us to work on a single server file without concerns of merge conflicts, and allow us to work off of eachothers progress.
     
     
