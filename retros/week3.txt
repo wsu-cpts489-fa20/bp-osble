@@ -3,3 +3,18 @@
     - Consider working with one server.js file
     - We discussed about changes the schemas we currently have
     - Talked about Next steps
+    
+2. Things that are going well:
+    - The front end is set up to be easily integrated with the backend once we have finished there.
+    - Gaining a better understanding of what works and what doesn't
+3. Things that are not going well:
+    - Integrating our individual changes on the backend through seperate files was not as simple as we expected,
+      thus we havent been able to connect the front end and back end.
+    - Our schemas still need some adjusting to be suitable to the app.
+   
+4. What can be done to improve the process
+    - We discussed consolidating work onto a single branch and making sure our local repo is up to date before making any changes.
+      This will allow us to work on a single server file without concerns of merge conflicts, and allow us to work of eachothers progress
+      more easily.
+    
+    
