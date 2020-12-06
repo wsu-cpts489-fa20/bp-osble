@@ -18,7 +18,7 @@ const PORT = process.env.HTTP_PORT || LOCAL_PORT;
 const GithubStrategy = passportGithub.Strategy;
 const LocalStrategy = passportLocal.Strategy;
 const app = express();
-const server = require('./server')
+//const server = require('./server')
 
 //////////////////////////////////////////////////////////////////////////
 //MONGOOSE SET-UP
@@ -36,101 +36,49 @@ mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true }
   );
 
 const Schema = mongoose.Schema;
-const roundSchema = new Schema({
-  date: { type: Date, required: true },
-  course: { type: String, required: true },
-  type: { type: String, required: true, enum: ['practice', 'tournament'] },
-  holes: { type: Number, required: true, min: 1, max: 18 },
-  strokes: { type: Number, required: true, min: 1, max: 300 },
-  minutes: { type: Number, required: true, min: 1, max: 240 },
-  seconds: { type: Number, required: true, min: 0, max: 60 },
-  notes: { type: String, required: true }
-},
-  {
-    toObject: {
-      virtuals: true
-    },
-    toJSON: {
-      virtuals: true
-    }
-  });
-
-roundSchema.virtual('SGS').get(function () {
-  return (this.strokes * 60) + (this.minutes * 60) + this.seconds;
-});
-
-//Define schema that maps to a document in the Users collection in the appdb
-//database.
 const userSchema = new Schema({
-  id: String, //unique identifier for user
+  userid: String, //unique identifier for user
   password: String,
-  displayName: String, //Name to be displayed within app
-  authStrategy: String, //strategy used to authenticate, e.g., github, local
-  profilePicURL: String, //link to profile image
-  securityQuestion: String,
-  securityAnswer: {
-    type: String, required: function () { return this.securityQuestion ? true : false }
-  },
-  rounds: [roundSchema]
+  email: String,
+  first_name: String,
+  last_name: String,
+  school: String,
+  is_instructor: Boolean
 });
+const gradeSchema = new Schema({
+  userid: String,
+  grade: Number
+});
+const assignmentSchema = new Schema({
+  assignment_name: String,
+  assignment_content: String,
+  instructor: String,
+  due_date: Number,
+  grades: [gradeSchema] // each student will be:
+
+});
+const replySchema = new Schema({
+  userid: String,
+  reply_content: String
+});
+const postSchema = new Schema({
+  userid: String,
+  post_content: String,
+  replies: [replySchema]
+});
+const courseSchema = new Schema({
+  //use the _id field for identifying courses
+  course_name: String,
+  instructor: String,
+  students: [],// just an array of userid's for easy access
+  posts: [postSchema],
+  assignments: [assignmentSchema],
+
+});
+
 const User = mongoose.model("User", userSchema);
+const Course = mongoose.model("Course", courseSchema);
 
-//////////////////////////////////////////////////////////////////////////
-//PASSPORT SET-UP
-//The following code sets up the app with OAuth authentication using
-//the 'github' strategy in passport.js.
-//////////////////////////////////////////////////////////////////////////
-
-// passport.use(new GithubStrategy({
-//     clientID: process.env.GH_CLIENT_ID,
-//     clientSecret: process.env.GH_CLIENT_SECRET,
-//     callbackURL: DEPLOY_URL + "/auth/github/callback"
-//   },
-//   //The following function is called after user authenticates with github
-//   async (accessToken, refreshToken, profile, done) => {
-//     console.log("User authenticated through GitHub! In passport callback.");
-//     //Our convention is to build userId from displayName and provider
-//     const userId = `${profile.username}@${profile.provider}`;
-//     //See if document with this unique userId exists in database 
-//     let currentUser = await User.findOne({id: userId});
-//     if (!currentUser) { //Add this user to the database
-//         currentUser = await new User({
-//         id: userId,
-//         displayName: profile.displayName,
-//         authStrategy: profile.provider,
-//         profilePicURL: profile.photos[0].value,
-//         rounds: []
-//       }).save();
-//   }
-//   return done(null,currentUser);
-// }));
-
-//passport.use(new LocalStrategy({passReqToCallback: true},
-/*
-passport.use(new GithubStrategy({
-    clientID: process.env.GH_CLIENT_ID,
-    clientSecret: process.env.GH_CLIENT_SECRET,
-    callbackURL: DEPLOY_URL + "/auth/github/callback"
-  },
-  //The following function is called after user authenticates with github
-  async (accessToken, refreshToken, profile, done) => {
-    console.log("User authenticated through GitHub! In passport callback.");
-    //Our convention is to build userId from displayName and provider
-    const userId = `${profile.username}@${profile.provider}`;
-    //See if document with this unique userId exists in database 
-    let currentUser = await User.findOne({id: userId});
-    if (!currentUser) { //Add this user to the database
-        currentUser = await new User({
-        id: userId,
-        displayName: profile.displayName,
-        authStrategy: profile.provider,
-        profilePicURL: profile.photos[0].value,
-        rounds: []
-      }).save();
-  }
-  return done(null,currentUser);
-}));
-*/
 passport.use(new LocalStrategy({ passReqToCallback: true },
   //Called when user is attempting to log in with local username and password. 
   //userId contains the email address entered into the form and password
@@ -138,7 +86,7 @@ passport.use(new LocalStrategy({ passReqToCallback: true },
   async (req, userId, password, done) => {
     let thisUser;
     try {
-      thisUser = await User.findOne({ id: userId });
+      thisUser = await User.findOne({ email: userId });
       if (thisUser) {
         if (thisUser.password === password) {
           return done(null, thisUser);
@@ -162,7 +110,7 @@ passport.use(new LocalStrategy({ passReqToCallback: true },
 passport.serializeUser((user, done) => {
   console.log("In serializeUser.");
   console.log("Contents of user param: " + JSON.stringify(user));
-  done(null, user.id);
+  done(null, user.email);
 });
 
 //Deserialize the current user from the session
@@ -172,9 +120,10 @@ passport.deserializeUser(async (userId, done) => {
   console.log("Contents of userId param: " + userId);
   let thisUser;
   try {
-    thisUser = await User.findOne({ id: userId });
+    thisUser = await User.findOne({ email: userId });
     console.log("User with id " + userId +
       " found in DB. User object will be available in server routes as req.user.")
+    console.log(thisUser);
     done(null, thisUser);
   } catch (err) {
     done(err);
@@ -204,87 +153,10 @@ app
 //DEFINE EXPRESS APP ROUTES
 //////////////////////////////////////////////////////////////////////////
 
-/////////////////////////
-//AUTHENTICATION ROUTES
-/////////////////////////
-
-//AUTHENTICATE route: Uses passport to authenticate with GitHub.
-//Should be accessed when user clicks on 'Login with GitHub' button on 
-//Log In page.
-
-// app.get('/auth/github', passport.authenticate('github'));
-
-// //CALLBACK route:  GitHub will call this route after the
-// //OAuth authentication process is complete.
-// //req.isAuthenticated() tells us whether authentication was successful.
-// app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }),
-//   (req, res) => {
-//     console.log("auth/github/callback reached.")
-//     res.redirect('/'); //sends user back to login screen; 
-//                        //req.isAuthenticated() indicates status
-//   }
-// );
-
-/*
-app.get('/auth/github', passport.authenticate('github'));
-//CALLBACK route:  GitHub will call this route after the
-//OAuth authentication process is complete.
-//req.isAuthenticated() tells us whether authentication was successful.
-app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }),
-  (req, res) => {
-    console.log("auth/github/callback reached.")
-    res.redirect('/'); //sends user back to login screen; 
-                       //req.isAuthenticated() indicates status
-  }
-);
-*/
-//LOGOUT route: Use passport's req.logout() method to log the user out and
-//redirect the user to the main app page. req.isAuthenticated() is toggled to false.
-app.get('/auth/logout', (req, res) => {
-  console.log('/auth/logout reached. Logging out');
-  req.logout();
-  res.redirect('/');
-});
-
-//TEST route: Tests whether user was successfully authenticated.
-//Should be called from the React.js client to set up app state.
-app.get('/auth/test', (req, res) => {
-  console.log("auth/test reached.");
-  const isAuth = req.isAuthenticated();
-  if (isAuth) {
-    console.log("User is authenticated");
-    console.log("User record tied to session: " + JSON.stringify(req.user));
-  } else {
-    //User is not authenticated
-    console.log("User is not authenticated");
-  }
-  //Return JSON object to client with results.
-  res.json({ isAuthenticated: isAuth, user: req.user });
-});
-
-//LOGIN route: Attempts to log in user using local strategy
-app.post('/auth/login',
-  passport.authenticate('local', { failWithError: true }),
-  (req, res) => {
-    console.log("/login route reached: successful authentication.");
-    //Redirect to app's main page; the /auth/test route should return true
-    res.status(200).send("Login successful");
-  },
-  (err, req, res, next) => {
-    console.log("/login route reached: unsuccessful authentication");
-    if (req.authError) {
-      console.log("req.authError: " + req.authError);
-      res.status(401).send(req.authError);
-    } else {
-      res.status(401).send("Unexpected error occurred when attempting to authenticate. Please try again.");
-    }
-    //Note: Do NOT redirect! Client will take over.
-  });
 
 /////////////////////////////////
 //USER ACCOUNT MANAGEMENT ROUTES
 ////////////////////////////////
-
 
 //READ user route: Retrieves the user with the specified userId from users collection (GET)
 app.get('/users/:userId', async (req, res, next) => {
@@ -311,32 +183,31 @@ app.post('/users/:userId', async (req, res, next) => {
     " and body = " + JSON.stringify(req.body));
   if (req.body === undefined ||
     !req.body.hasOwnProperty("password") ||
-    !req.body.hasOwnProperty("displayName") ||
-    !req.body.hasOwnProperty("profilePicURL") ||
-    !req.body.hasOwnProperty("securityQuestion") ||
-    !req.body.hasOwnProperty("securityAnswer")) {
+    !req.body.hasOwnProperty("first_name") ||
+    !req.body.hasOwnProperty("last_name") ||
+    !req.body.hasOwnProperty("school")) {
     //Body does not contain correct properties
     return res.status(400).send("/users POST request formulated incorrectly. " +
       "It must contain 'password','displayName','profilePicURL','securityQuestion' and 'securityAnswer fields in message body.")
   }
   try {
-    let thisUser = await User.findOne({ id: req.params.userId });
+    let thisUser = await User.findOne({ id: req.params.id });
     if (thisUser) { //account already exists
       res.status(400).send("There is already an account with email '" +
         req.params.userId + "'.");
     } else { //account available -- add to database
       thisUser = await new User({
-        id: req.params.userId,
+        userid: req.body.userid,
         password: req.body.password,
-        displayName: req.body.displayName,
-        authStrategy: 'local',
-        profilePicURL: req.body.profilePicURL,
-        securityQuestion: req.body.securityQuestion,
-        securityAnswer: req.body.securityAnswer,
-        rounds: []
+        email: req.body.email,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        school: req.body.school,
+        is_instructor: false // this will be variable later
+
       }).save();
       return res.status(201).send("New account for '" +
-        req.params.userId + "' successfully created.");
+        req.params.id + "' successfully created.");
     }
   } catch (err) {
     return res.status(400).send("Unexpected error occurred when adding or looking up user in database. " + err);
@@ -393,6 +264,55 @@ app.delete('/users/:userId', async (req, res, next) => {
   }
 });
 
+///////////////////////
+//AUTHENTICATION ROUTES
+///////////////////////
+//LOGOUT route: Use passport's req.logout() method to log the user out and
+//redirect the user to the main app page. req.isAuthenticated() is toggled to false.
+app.get('/auth/logout', (req, res) => {
+  console.log('/auth/logout reached. Logging out');
+  req.logout();
+  res.redirect('/');
+});
+
+//TEST route: Tests whether user was successfully authenticated.
+//Should be called from the React.js client to set up app state.
+app.get('/auth/test', (req, res) => {
+  console.log("auth/test reached.");
+  console.log(req.user);
+  const isAuth = req.isAuthenticated();
+  if (isAuth) {
+    console.log("User is authenticated");
+    console.log("User record tied to session: " + JSON.stringify(req.user));
+  } else {
+    //User is not authenticated
+    console.log("User is not authenticated");
+  }
+  //Return JSON object to client with results.
+  res.json({ isAuthenticated: isAuth, user: req.user });
+});
+
+//LOGIN route: Attempts to log in user using local strategy
+app.post('/auth/login',
+  passport.authenticate('local', { failWithError: true }),
+  (req, res) => {
+    console.log("/login route reached: successful authentication.");
+    //Redirect to app's main page; the /auth/test route should return true
+    res.status(200).send("Login successful");
+  },
+  (err, req, res, next) => {
+    console.log("/login route reached: unsuccessful authentication");
+    if (req.authError) {
+      console.log("req.authError: " + req.authError);
+      res.status(401).send(req.authError);
+    } else {
+      res.status(401).send("Unexpected error occurred when attempting to authenticate. Please try again.");
+    }
+    //Note: Do NOT redirect! Client will take over.
+  });
+
+
+/*
 /////////////////////////////////
 //ROUNDS ROUTES
 ////////////////////////////////
@@ -511,5 +431,6 @@ app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
 
   }
 });
+*/
 
-app.use("",server);
+//app.use("", server);
