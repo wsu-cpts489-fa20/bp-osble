@@ -311,6 +311,72 @@ app.post('/auth/login',
     //Note: Do NOT redirect! Client will take over.
   });
 
+  ////////////////////////////////
+  //COURSE ROUTES
+  ///////////////////////////////
+  //READ user route: Retrieves the user with the specified userId from users collection (GET)
+app.get('/courses/:course_name', async (req, res, next) => {
+  console.log("in /courses route (GET) with name = " +
+    JSON.stringify(req.params.course_name));
+  try {
+    let thisCourse = await User.findOne({ id: req.params.course_name });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
+
+// course_name: String,
+//   instructor: String,
+//   students: [],// just an array of userid's for easy access
+//   posts: [postSchema],
+//   assignments: [assignmentSchema],
+
+//CREATE user route: Adds a new user account to the users collection (POST)
+app.post('/courses/:course_name', async (req, res, next) => {
+  console.log("in /courses route (POST) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("course_name") ||
+    !req.body.hasOwnProperty("instructor") ||
+    !req.body.hasOwnProperty("students") ||
+    !req.body.hasOwnProperty("posts") ||
+    !req.body.hasOwnProperty("assignments")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    let thisCourse = await Course.findOne({ course_name: req.params.course_name });
+    console.log(thisCourse);
+    if (thisCourse) { //account already exists
+      res.status(400).send("There is already a course with the name '" +
+        req.params.course_name + "'.");
+    } else { //account available -- add to database
+      thisCourse = await new Course({
+        course_name: req.body.course_name,
+        instructor: req.body.instructor,
+        students: req.body.students,
+        posts: req.body.posts,
+        assignments: req.body.assignments
+
+      }).save();
+      return res.status(201).send("This course '" +
+        req.params.course_name + "' was successfully created.");
+    }
+  } catch (err) {
+    return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + err);
+  }
+});
+
+
 
 /*
 /////////////////////////////////

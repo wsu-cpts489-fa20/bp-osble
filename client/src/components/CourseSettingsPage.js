@@ -6,8 +6,40 @@ import '../styles/courseSettings.css';
 class CourseSettingsPage extends React.Component {
 
     updateCourse = async (event) => {
-        alert("Course succesfully updated");
-        this.props.changeMode(AppMode.FEED);
+//         course_name: String,
+//   instructor: String,
+//   students: [],// just an array of userid's for easy access
+//   posts: [postSchema],
+//   assignments: [assignmentSchema],
+        console.log("HERE");
+        let courseData = {
+            course_name: "Cpt_S 489",
+            instructor: "Hermes Obiang",
+            students: [],
+            posts: [],
+            assignments: []
+        }
+        const url = '/courses/' + 'Cpt_S 489';
+        console.log(courseData);
+        let res;
+        console.log(courseData);
+        res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(courseData)
+        });
+        if (res.status == 201) { //successful account creation!
+            this.props.changeMode(AppMode.FEED);
+            //this.props.done("New account created! Enter credentials to log in.", false);
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            //this.props.done(resText, false);
+        }
+        
     }
 
     cancelReturnHomepage = async (event) => {
