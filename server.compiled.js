@@ -81,7 +81,13 @@ var postSchema = new Schema({
 });
 var courseSchema = new Schema({
   //use the _id field for identifying courses
+  prefix: String,
+  course_number: Number,
   course_name: String,
+  term: String,
+  year: Number,
+  start_date: String,
+  end_date: String,
   instructor: String,
   students: [],
   // just an array of userid's for easy access
@@ -542,9 +548,9 @@ app.post('/auth/login', _passport["default"].authenticate('local', {
 }); ////////////////////////////////
 //COURSE ROUTES
 ///////////////////////////////
-//READ user route: Retrieves the user with the specified userId from users collection (GET)
+//READ course route: Retrieves the course with the specified course_name from courses collection (GET)
 
-app.get('/courses/:course_name', /*#__PURE__*/function () {
+app.get('/courses/', /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee7(req, res, next) {
     var thisCourse;
     return _regeneratorRuntime["default"].wrap(function _callee7$(_context7) {
@@ -554,7 +560,7 @@ app.get('/courses/:course_name', /*#__PURE__*/function () {
             console.log("in /courses route (GET) with name = " + JSON.stringify(req.params.course_name));
             _context7.prev = 1;
             _context7.next = 4;
-            return User.findOne({
+            return Course.find({
               id: req.params.course_name
             });
 
@@ -592,12 +598,7 @@ app.get('/courses/:course_name', /*#__PURE__*/function () {
   return function (_x19, _x20, _x21) {
     return _ref7.apply(this, arguments);
   };
-}()); // course_name: String,
-//   instructor: String,
-//   students: [],// just an array of userid's for easy access
-//   posts: [postSchema],
-//   assignments: [assignmentSchema],
-//CREATE user route: Adds a new user account to the users collection (POST)
+}()); //CREATE user route: Adds a new course to courses collection (POST)
 
 app.post('/courses/:course_name', /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee8(req, res, next) {
@@ -608,12 +609,12 @@ app.post('/courses/:course_name', /*#__PURE__*/function () {
           case 0:
             console.log("in /courses route (POST) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(req.body === undefined || !req.body.hasOwnProperty("course_name") || !req.body.hasOwnProperty("instructor") || !req.body.hasOwnProperty("students") || !req.body.hasOwnProperty("posts") || !req.body.hasOwnProperty("assignments"))) {
+            if (!(req.body === undefined || !req.body.hasOwnProperty("prefix") || !req.body.hasOwnProperty("course_number") || !req.body.hasOwnProperty("course_name") || !req.body.hasOwnProperty("term") || !req.body.hasOwnProperty("year") || !req.body.hasOwnProperty("start_date") || !req.body.hasOwnProperty("end_date") || !req.body.hasOwnProperty("instructor") || !req.body.hasOwnProperty("students") || !req.body.hasOwnProperty("posts") || !req.body.hasOwnProperty("assignments"))) {
               _context8.next = 3;
               break;
             }
 
-            return _context8.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
+            return _context8.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'prefix','course_number','course_name','term','year','start_date','end_date','instructor'," + "'students','posts' and 'assignments fields in message body."));
 
           case 3:
             _context8.prev = 3;
@@ -639,7 +640,13 @@ app.post('/courses/:course_name', /*#__PURE__*/function () {
           case 12:
             _context8.next = 14;
             return new Course({
+              prefix: req.body.prefix,
+              course_number: req.body.course_number,
               course_name: req.body.course_name,
+              term: req.body.term,
+              year: req.body.year,
+              start_date: req.body.start_date,
+              end_date: req.body.end_date,
               instructor: req.body.instructor,
               students: req.body.students,
               posts: req.body.posts,
@@ -669,6 +676,135 @@ app.post('/courses/:course_name', /*#__PURE__*/function () {
 
   return function (_x22, _x23, _x24) {
     return _ref8.apply(this, arguments);
+  };
+}()); //UPDATE user route: Updates a new user account in the users collection (POST)
+
+app.put('/courses/:course_name', /*#__PURE__*/function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee9(req, res, next) {
+    var validProps, bodyProp, status;
+    return _regeneratorRuntime["default"].wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            console.log("in /course update route (PUT) with course name = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+
+            if (req.params.hasOwnProperty("course_name")) {
+              _context9.next = 3;
+              break;
+            }
+
+            return _context9.abrupt("return", res.status(400).send("courses/ PUT request formulated incorrectly." + "It must contain 'userId' as parameter."));
+
+          case 3:
+            validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students', 'posts', 'assignments'];
+            _context9.t0 = _regeneratorRuntime["default"].keys(req.body);
+
+          case 5:
+            if ((_context9.t1 = _context9.t0()).done) {
+              _context9.next = 11;
+              break;
+            }
+
+            bodyProp = _context9.t1.value;
+
+            if (validProps.includes(bodyProp)) {
+              _context9.next = 9;
+              break;
+            }
+
+            return _context9.abrupt("return", res.status(400).send("courses/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'prefix','course_number','course_name','term','year','start_date','end_date', 'instructor', 'students', 'posts', 'assignments'"));
+
+          case 9:
+            _context9.next = 5;
+            break;
+
+          case 11:
+            _context9.prev = 11;
+            _context9.next = 14;
+            return Course.updateOne({
+              course_name: req.params.course_name
+            }, {
+              $set: req.body
+            });
+
+          case 14:
+            status = _context9.sent;
+
+            if (status.nModified != 1) {
+              //account could not be found
+              res.status(404).send("Course " + req.params.course_name + " does not exists. Course could not be updated.");
+            } else {
+              res.status(200).send("Course " + req.params.course_name + " successfully updated.");
+            }
+
+            _context9.next = 21;
+            break;
+
+          case 18:
+            _context9.prev = 18;
+            _context9.t2 = _context9["catch"](11);
+            res.status(400).send("Unexpected error occurred when updating course data in database: " + _context9.t2);
+
+          case 21:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9, null, [[11, 18]]);
+  }));
+
+  return function (_x25, _x26, _x27) {
+    return _ref9.apply(this, arguments);
+  };
+}()); //DELETE user route: Deletes the document with the specified userId from users collection (DELETE)
+
+app["delete"]('/courses/:course_name', /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee10(req, res, next) {
+    var status;
+    return _regeneratorRuntime["default"].wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            console.log("in /courses route (DELETE) with course name = " + JSON.stringify(req.params.course_name));
+            _context10.prev = 1;
+            _context10.next = 4;
+            return Course.deleteOne({
+              course_name: req.params.course_name
+            });
+
+          case 4:
+            status = _context10.sent;
+
+            if (!(status.deletedCount != 1)) {
+              _context10.next = 9;
+              break;
+            }
+
+            return _context10.abrupt("return", res.status(404).send("No course " + req.params.course_name + " was found. Course could not be deleted."));
+
+          case 9:
+            return _context10.abrupt("return", res.status(200).send("The course " + req.params.course_name + " was successfully deleted."));
+
+          case 10:
+            _context10.next = 16;
+            break;
+
+          case 12:
+            _context10.prev = 12;
+            _context10.t0 = _context10["catch"](1);
+            console.log();
+            return _context10.abrupt("return", res.status(400).send("Unexpected error occurred when attempting to delete  " + req.params.course_name + ": " + _context10.t0));
+
+          case 16:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[1, 12]]);
+  }));
+
+  return function (_x28, _x29, _x30) {
+    return _ref10.apply(this, arguments);
   };
 }());
 /*

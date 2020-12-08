@@ -1,22 +1,33 @@
 import React from 'react';
+import { async } from 'regenerator-runtime';
 import Course from './Course.js'
 class FindCoursePage extends React.Component {
+    loadCourse = async () =>{
+        let response = await fetch("/courses/");
+        response = await response.json();
+        const obj = JSON.parse(response);
+        var index = 0;
+        let courses = [...this.state.courses];
+        for(index; index<obj.length; index++){
+            courses.push({coursename: obj[index].course_name, coursenumber: obj[index].prefix + ' '+ obj[index].course_number,
+                        semester: obj[index].term, instructor: obj[index].instructor})
+        }
+
+        this.setState({courses: courses});
+        
+    }
     constructor(props) {
         super(props);
-
+        this.loadCourse();
         this.state = {
-            courses: [ // the json object should lbe formatted like this
-                { coursename: "Introduction to Parallel Computing", coursenumber: "CPTS 411", semester: "Fall 2020", instructor: "Ananth Kalyanaraman" },
-                { coursename: "Web Development", coursenumber: "CPTS 489", semester: "Fall 2020", instructor: "Chris Handhousen" },
-                { coursename: "Introduction to Data Mining", coursenumber: "CPTS 315", semester: "Fall 2020", instructor: "Ananth Jillepalli" },
-            ]
+            courses: []
         };
-
 
     }
     createntries = (entry) => {
         return <Course coursename={entry.coursename} coursenumber={entry.coursenumber} semester={entry.semester} instructor={entry.instructor}></Course>
     }
+
     render() {
         var JSONcourses = this.state.courses;
         var JSXcourses = JSONcourses.map(this.createntries)
