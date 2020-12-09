@@ -15,10 +15,7 @@
     height: 3.8rem;
     
 }
-.navbutton:hover{
-    color:white;
-    background-color: #00b7ff;
-}
+
 .navbutton:focus{
     box-shadow:none !important;
     

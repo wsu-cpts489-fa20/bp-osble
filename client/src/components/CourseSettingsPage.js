@@ -15,6 +15,7 @@ class CourseSettingsPage extends React.Component {
         let courseData = {
             course_name: "Cpt_S 489",
             instructor: "Hermes Obiang",
+            instructor_id: this.props.userObj.userid,
             students: [],
             posts: [],
             assignments: []

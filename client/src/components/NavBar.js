@@ -6,11 +6,13 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.namewidth = React.createRef()
+    this.coursewidth = React.createRef()
     this.state = {
       displayMenu: false,
       type: "",
       coursedropdown: false,
       userdropdown: false,
+      extend: false
     };
 
   }
@@ -66,10 +68,18 @@ class NavBar extends React.Component {
     );
   }
   togglecoursedropdown = () => {
-    this.setState(prevstate => ({ coursedropdown: !prevstate.coursedropdown, userdropdown: false }));
+    this.setState(prevstate => ({ coursedropdown: !prevstate.coursedropdown, userdropdown: false, extend: false }));
   }
   toggleuserdropdown = () => {
-    this.setState(prevstate => ({ userdropdown: !prevstate.userdropdown, coursedropdown: false }));
+    if (this.state.coursedropdown === true) {
+      this.setState({
+        extend: true
+      })
+      this.setState(prevstate => ({ userdropdown: !prevstate.userdropdown, coursedropdown: false }));
+    } else {
+      this.setState(prevstate => ({ userdropdown: !prevstate.userdropdown, coursedropdown: false, extend: false }));
+    }
+
   }
   gotopage = (string) => {
     if (string == "deletecourse") {
@@ -105,7 +115,7 @@ class NavBar extends React.Component {
     return (
 
       <div>
-        <button className="btn btn-primary navbutton" style={{ width: "7.5rem" }} onClick={this.togglecoursedropdown}>CPTS 489
+        <button className="btn btn-primary navbutton" ref={this.coursewidth} onClick={this.togglecoursedropdown}>{this.props.selectedCourse === null ? "Not enrolled in any courses" : this.props.selectedCourse.course_name}
         &nbsp;
         <span className={this.state.coursedropdown == true ? "navbar-title fa fa-angle-left" : "navbar-title fa fa-angle-down"}></span>
         </button>
@@ -118,16 +128,16 @@ class NavBar extends React.Component {
 
         {this.state.coursedropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav">
-            <button className="btn btn-primary navdropdown" style={{ width: "7.5rem", borderRadius: "0px" }} onClick={() => this.gotopage("findcourse")} >Find Course</button>
-            <button className="btn btn-primary navdropdown" style={{ width: "7.5rem", borderRadius: "0px" }} onClick={() => this.gotopage("createcourse")}>Create Course</button>
-            <button className="btn btn-primary navdropdown" style={{ width: "7.5rem", borderRadius: "0px" }} onClick={() => this.gotopage("deletecourse")}>Delete Course</button>
+            <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("findcourse")} >Find Course</button>
+            <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("createcourse")}>Create Course</button>
+            <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("deletecourse")}>Delete Course</button>
           </div>
           :
           null
         }
 
         {this.state.userdropdown ?
-          <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav moveright">
+          <div style={this.state.extend ? { display: "flex", flexDirection: "column", top: "61px", marginLeft: this.coursewidth.current.offsetWidth + 6 + "px" } : { display: "flex", flexDirection: "column", top: "61px", marginLeft: this.coursewidth.current.offsetWidth + "px" }} className="mydropdownnav">
             <button className="btn btn-primary navdropdown" id="viewMail" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("mail")}>Mail</button>
             <button className="btn btn-primary navdropdown" id="viewProfile" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("profile")}>Profile</button>
             <button className="btn btn-primary navdropdown" id="viewSettings" style={{ width: this.namewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("settings")}>Settings</button>
