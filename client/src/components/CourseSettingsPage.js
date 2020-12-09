@@ -4,6 +4,23 @@ import AppMode from '../AppMode';
 import '../styles/courseSettings.css';
 
 class CourseSettingsPage extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+        prefix: "",
+        course_number: 0,
+        course_name: "",
+        term: "",
+        year: 0,
+        start_date: "",
+        end_date: "",
+        instructor: "Hermes Obiang",
+        students: [],
+        posts: [],
+        assignments: []
+        }
+    }
 
     updateCourse = async (event) => {
 //         course_name: String,
@@ -20,17 +37,17 @@ class CourseSettingsPage extends React.Component {
             posts: [],
             assignments: []
         }
-        const url = '/courses/' + 'Cpt_S 489';
-        console.log(courseData);
+        const url = '/courses/' + this.state.course_name + ' ' + this.state.course_number;
+        console.log(this.state);
         let res;
-        console.log(courseData);
+        console.log(this.state);
         res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify(courseData)
+            body: JSON.stringify(this.state)
         });
         if (res.status == 201) { //successful account creation!
             this.props.changeMode(AppMode.FEED);
@@ -47,11 +64,36 @@ class CourseSettingsPage extends React.Component {
         this.props.changeMode(AppMode.FEED);
     }
 
+    handleOnChange = (event) => {
+        if (event.target.name == "Prefix") {
+            this.setState({ prefix: event.target.value });
+        }
+        else if (event.target.name == "Course-Number") {
+            this.setState({ course_number: event.target.value });
+        }
+        else if (event.target.name == "Course-Name") {
+            this.setState({ course_name: event.target.value });
+        }
+        else if (event.target.name == "Course-Term") {
+            this.setState({ term: event.target.value });
+        }
+        else if (event.target.name == "Course-Year") {
+            this.setState({ year: event.target.value });
+        }
+        else if (event.target.name == "Start-Date") {
+            this.setState({ start_date: event.target.value });
+        }
+
+        else if (event.target.name == "End-Date") {
+            this.setState({ end_date: event.target.value });
+        }
+    }
+
     render() {
         return (
         <div className="feedpage" id="courseSettingPage">
             <center>
-            <h1 >Modify Course</h1>
+            <h1 >Create Course</h1>
             </center>
             <label className="form-label-prefix">
                 {/* Label for Prefix */}
@@ -59,9 +101,10 @@ class CourseSettingsPage extends React.Component {
                 <input
                 autoComplete="on"
                 className="form-control-form-text enterPrefix"
-                name="Prefix-Number"
+                name="Prefix"
                 id="UniqueCoursePrefix"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -75,6 +118,7 @@ class CourseSettingsPage extends React.Component {
                 name="Course-Number"
                 id="CourseNumber"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -88,6 +132,7 @@ class CourseSettingsPage extends React.Component {
                 name="Course-Name"
                 id="CourseName"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -101,6 +146,7 @@ class CourseSettingsPage extends React.Component {
                 name="Course-Term"
                 id="CourseTerm"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -113,6 +159,7 @@ class CourseSettingsPage extends React.Component {
                 className="form-contorl-form-text"
                 name="Course-Year"
                 id="CourseYear"
+                onChange={this.handleOnChange}
                 type="text"
                 required={true}
                 ></input>
@@ -124,6 +171,7 @@ class CourseSettingsPage extends React.Component {
                 <input
                 className="form-control"
                 name="Start-Date"
+                onChange={this.handleOnChange}
                 id="CourseStartDate"
                 ></input>
             </label>
@@ -135,6 +183,7 @@ class CourseSettingsPage extends React.Component {
                 className="form-control"
                 name="End-Date"
                 id="CourseEndDate"
+                onChange={this.handleOnChange}
                 ></input>
             </label>
             <br/>

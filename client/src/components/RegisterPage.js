@@ -54,7 +54,9 @@ class RegisterPage extends React.Component {
             method: 'POST',
             body: JSON.stringify(userData)
         });
-        if (res.status == 200) { //successful account creation!
+        console.log(res.status);
+        if (res.status == 201) { //successful account creation!
+             this.props.changeMode(AppMode.LOGIN);
             //this.props.done("New account created! Enter credentials to log in.", false);
         } else { //Unsuccessful account creation
             //Grab textual error message
