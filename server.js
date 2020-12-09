@@ -31,8 +31,15 @@ const connectStr = process.env.MONGO_STR;
 
 mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
-    () => { console.log(`Connected to ${connectStr}.`) },
+    () => {
+      console.log(`Connected to ${connectStr}.`)
+      var admin = new mongoose.mongo.Admin(mongoose.connection.db);
+      admin.buildInfo(function (err, info) {
+        console.log(info.version);
+      });
+    },
     err => { console.error(`Error connecting to ${connectStr}: ${err}`) }
+
   );
 
 const Schema = mongoose.Schema;
@@ -48,13 +55,15 @@ const userSchema = new Schema({
 });
 const gradeSchema = new Schema({
   userid: String,
-  grade: Number
+  grade: Number,
+  submission_content: String,
+  submit_date: String,
 });
 const assignmentSchema = new Schema({
   assignment_name: String,
   assignment_content: String,
   instructor: String,
-  due_date: Number,
+  due_date: String,
   grades: [gradeSchema] // each student will be:
 
 });
@@ -77,13 +86,14 @@ const courseSchema = new Schema({
   start_date: String,
   end_date: String,
   instructor: String,
+  instructor_id: String,
   students: [],// just an array of userid's for easy access
   posts: [postSchema],
   assignments: [assignmentSchema],
 
 
 });
-
+mongoose.set('debug', true);
 const User = mongoose.model("User", userSchema);
 const Course = mongoose.model("Course", courseSchema);
 
@@ -341,11 +351,102 @@ app.post('/auth/login',
     }
     //Note: Do NOT redirect! Client will take over.
   });
+////////////////////////////////
+//ASSIGNMENT ROUTES
+///////////////////////////////
+app.post('/assignments/:course_name', async (req, res, next) => { // add assignment to course
+  console.log("in /courses route (POST) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("assignment_name") ||
+    !req.body.hasOwnProperty("assignment_content") ||
+    !req.body.hasOwnProperty("instructor_id") ||
+    !req.body.hasOwnProperty("due_date") ||
+    !req.body.hasOwnProperty("grades")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    let status = await Course.updateOne(
+      { course_name: req.params.course_name },
+      { $push: { assignments: req.body } });
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when adding round to" +
+        " database. Round was not added.");
+    } else {
+      res.status(200).send("Round successfully added to database.");
+    }
 
-  ////////////////////////////////
-  //COURSE ROUTES
-  ///////////////////////////////
-  //READ course route: Retrieves the course with the specified course_name from courses collection (GET)
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when adding round" +
+      " to database: " + err);
+  }
+});
+
+
+////////////////////////////////
+//COURSE ROUTES
+///////////////////////////////
+//READ user route: Retrieves the user with the specified userId from users collection (GET)
+app.get('/courses/:course_name', async (req, res, next) => {
+  console.log("in /courses route (GET) with name = " +
+    JSON.stringify(req.params.course_name));
+  try {
+    let thisCourse = await Course.findOne({ course_name: req.params.course_name });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
+
+app.get('/courses/profCourses/:userid', async (req, res, next) => { // gets courses that professor with userid is teaching
+  console.log("in /profcourses route (GET) with name = " +
+    JSON.stringify(req.params.userid));
+  try {
+    let thisCourse = await Course.find({ instructor_id: req.params.userid });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
+
+app.get('/courses/studentCourses/:userid', async (req, res, next) => { // gets courses that student with userid is enrolled in
+  console.log("in /courses route (GET) with name = " +
+    JSON.stringify(req.params.userid));
+  try {
+    let thisCourse = await Course.find({ students: req.params.userid });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
+////////////////////////////////
+//COURSE ROUTES
+///////////////////////////////
+//READ course route: Retrieves the course with the specified course_name from courses collection (GET)
 app.get('/courses/', async (req, res, next) => {
   console.log("in /courses route (GET) with name = " +
     JSON.stringify(req.params.course_name));
@@ -383,7 +484,7 @@ app.post('/courses/:course_name', async (req, res, next) => {
     !req.body.hasOwnProperty("assignments")) {
     //Body does not contain correct properties
     return res.status(400).send("/courses POST request formulated incorrectly. " +
-      "It must contain 'prefix','course_number','course_name','term','year','start_date','end_date','instructor',"+
+      "It must contain 'prefix','course_number','course_name','term','year','start_date','end_date','instructor'," +
       "'students','posts' and 'assignments fields in message body.")
   }
   try {
@@ -402,6 +503,7 @@ app.post('/courses/:course_name', async (req, res, next) => {
         start_date: req.body.start_date,
         end_date: req.body.end_date,
         instructor: req.body.instructor,
+        instructor_id: req.body.instructor_id,
         students: req.body.students,
         posts: req.body.posts,
         assignments: req.body.assignments
@@ -414,6 +516,45 @@ app.post('/courses/:course_name', async (req, res, next) => {
     return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + err);
   }
 });
+app.put('/courses/updategrade/:course_name', async (req, res, next) => { // updates a grade in course_name
+  console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("userid") ||
+    !req.body.hasOwnProperty("assignmentid") ||
+    !req.body.hasOwnProperty("grade") ||
+    !req.body.hasOwnProperty("submit_date")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    Course.updateOne(
+      {
+        "course_name": req.params.course_name,
+        "assignments": {
+          "$elemMatch": {
+            "_id": req.body.assignmentid, "grades.userid": req.body.userid
+          }
+        }
+      },
+      {
+        "$set": {
+          "assignments.$[outer].grades.$[inner].grade": req.body.grade,
+          "assignments.$[outer].grades.$[inner].submit_date": req.body.submit_date,
+          "assignments.$[outer].grades.$[inner].submission_content": req.body.submission_content,
+        }
+      },
+      {
+        "arrayFilters": [{ "outer._id": req.body.assignmentid }, { "inner.userid": req.body.userid }]
+      },
+      function (error) { console.log(error); }
+    );
+  } catch (err) {
+    console.log("Critical Error");
+    return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");
+  }
+});
 
 //UPDATE user route: Updates a new user account in the users collection (POST)
 app.put('/courses/:course_name', async (req, res, next) => {
@@ -423,7 +564,7 @@ app.put('/courses/:course_name', async (req, res, next) => {
     return res.status(400).send("courses/ PUT request formulated incorrectly." +
       "It must contain 'userId' as parameter.");
   }
-  const validProps = ['prefix','course_number','course_name','term','year','start_date','end_date', 'instructor', 'students',
+  const validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students',
     'posts', 'assignments'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
@@ -472,7 +613,7 @@ app.delete('/courses/:course_name', async (req, res, next) => {
 //ROUNDS ROUTES
 ////////////////////////////////
 
-//CREATE round route: Adds a new round as a subdocument to 
+//CREATE round route: Adds a new round as a subdocument to
 //a document in the users collection (POST)
 app.post('/rounds/:userId', async (req, res, next) => {
   console.log("in /rounds (POST) route with params = " +
@@ -507,7 +648,7 @@ app.post('/rounds/:userId', async (req, res, next) => {
   }
 });
 
-//READ round route: Returns all rounds associated 
+//READ round route: Returns all rounds associated
 //with a given user in the users collection (GET)
 app.get('/rounds/:userId', async (req, res) => {
   console.log("in /rounds route (GET) with userId = " +
@@ -525,7 +666,7 @@ app.get('/rounds/:userId', async (req, res) => {
   }
 });
 
-//UPDATE round route: Updates a specific round 
+//UPDATE round route: Updates a specific round
 //for a given user in the users collection (PUT)
 app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   console.log("in /rounds (PUT) route with params = " +
@@ -566,7 +707,7 @@ app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   }
 });
 
-//DELETE round route: Deletes a specific round 
+//DELETE round route: Deletes a specific round
 //for a given user in the users collection (DELETE)
 app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
   console.log("in /rounds (DELETE) route with params = " +
