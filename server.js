@@ -43,7 +43,8 @@ const userSchema = new Schema({
   first_name: String,
   last_name: String,
   school: String,
-  is_instructor: Boolean
+  is_instructor: Boolean,
+  is_admin: Boolean
 });
 const gradeSchema = new Schema({
   userid: String,
@@ -184,6 +185,25 @@ app.get('/users/:userId', async (req, res, next) => {
   }
 });
 
+//READ user route: Retrieves the user with the specified userId from users collection (GET)
+app.get('/users/', async (req, res, next) => {
+  console.log("in /users route (GET ALL) with userId = " +
+    JSON.stringify(req.params.userId));
+  try {
+    let thisUser = await User.find({ id: req.params.userId });
+    if (!thisUser) {
+      return res.status(404).send("No user account with id " +
+        req.params.userId + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisUser));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up user with id " +
+      req.params.userId + " in database: " + err);
+  }
+});
+
 //CREATE user route: Adds a new user account to the users collection (POST)
 app.post('/users/:userId', async (req, res, next) => {
   console.log("in /users route (POST) with params = " + JSON.stringify(req.params) +
@@ -198,7 +218,9 @@ app.post('/users/:userId', async (req, res, next) => {
       "It must contain 'password','displayName','profilePicURL','securityQuestion' and 'securityAnswer fields in message body.")
   }
   try {
-    let thisUser = await User.findOne({ id: req.params.id });
+    let thisUser = await User.findOne({ id: req.params.userId });
+    console.log("In POST -> userId :"+req.params.userId);
+    console.log("In POST -> User :"+thisUser);
     if (thisUser) { //account already exists
       res.status(400).send("There is already an account with email '" +
         req.params.userId + "'.");
@@ -210,7 +232,8 @@ app.post('/users/:userId', async (req, res, next) => {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         school: req.body.school,
-        is_instructor: false // this will be variable later
+        is_instructor: req.body.is_instructor, // this will be variable later
+        is_admin: req.body.is_admin
 
       }).save();
       return res.status(201).send("New account for '" +
@@ -221,7 +244,6 @@ app.post('/users/:userId', async (req, res, next) => {
   }
 });
 
-//UPDATE user route: Updates a new user account in the users collection (POST)
 app.put('/users/:userId', async (req, res, next) => {
   console.log("in /users update route (PUT) with userId = " + JSON.stringify(req.params) +
     " and body = " + JSON.stringify(req.body));
@@ -229,17 +251,18 @@ app.put('/users/:userId', async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
       "It must contain 'userId' as parameter.");
   }
-  const validProps = ['password', 'displayName', 'profilePicURL',
-    'securityQuestion', 'securityAnswer'];
+  const validProps = ['userid', 'email', 'password','first_name','last_name',
+    'school', 'is_instructor','is_admin'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("users/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'password', 'displayname', 'profilePicURL', 'securityQuestion', 'securityAnswer'");
+        "'userid', 'email', 'password','first_name','last_name',"+
+        "'school', 'is_instructor','is_admin'");
     }
   }
   try {
-    let status = await User.updateOne({ id: req.params.userId },
+    let status = await User.updateMany({_id:{$in:[req.params.userId]} },
       { $set: req.body });
     if (status.nModified != 1) { //account could not be found
       res.status(404).send("No user account " + req.params.userId + " exists. Account could not be updated.");
@@ -250,6 +273,7 @@ app.put('/users/:userId', async (req, res, next) => {
     res.status(400).send("Unexpected error occurred when updating user data in database: " + err);
   }
 });
+
 
 //DELETE user route: Deletes the document with the specified userId from users collection (DELETE)
 app.delete('/users/:userId', async (req, res, next) => {
