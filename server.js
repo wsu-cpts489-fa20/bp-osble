@@ -27,7 +27,7 @@ const app = express();
 //////////////////////////////////////////////////////////////////////////
 import mongoose from 'mongoose';
 
-const connectStr = process.env.MONGO_STR;
+const connectStr = "mongodb+srv://sean:sean@cluster0.9rbbv.mongodb.net/appdb?retryWrites=true&w=majority";
 
 mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
@@ -318,10 +318,10 @@ app.post('/auth/login',
     //Note: Do NOT redirect! Client will take over.
   });
 
-  ////////////////////////////////
-  //COURSE ROUTES
-  ///////////////////////////////
-  //READ course route: Retrieves the course with the specified course_name from courses collection (GET)
+////////////////////////////////
+//COURSE ROUTES
+///////////////////////////////
+//READ course route: Retrieves the course with the specified course_name from courses collection (GET)
 app.get('/courses/', async (req, res, next) => {
   console.log("in /courses route (GET) with name = " +
     JSON.stringify(req.params.course_name));
@@ -359,7 +359,7 @@ app.post('/courses/:course_name', async (req, res, next) => {
     !req.body.hasOwnProperty("assignments")) {
     //Body does not contain correct properties
     return res.status(400).send("/courses POST request formulated incorrectly. " +
-      "It must contain 'prefix','course_number','course_name','term','year','start_date','end_date','instructor',"+
+      "It must contain 'prefix','course_number','course_name','term','year','start_date','end_date','instructor'," +
       "'students','posts' and 'assignments fields in message body.")
   }
   try {
@@ -399,7 +399,7 @@ app.put('/courses/:course_name', async (req, res, next) => {
     return res.status(400).send("courses/ PUT request formulated incorrectly." +
       "It must contain 'userId' as parameter.");
   }
-  const validProps = ['prefix','course_number','course_name','term','year','start_date','end_date', 'instructor', 'students',
+  const validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students',
     'posts', 'assignments'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
@@ -441,6 +441,75 @@ app.delete('/courses/:course_name', async (req, res, next) => {
   }
 });
 
+app.get('/grades/:userId', async (req, res, next) => {
+  console.log("in /users route (GET) with userId = " +
+    JSON.stringify(req.params.userId));
+  try {
+    let thisCourse = await Course.find({ students: { $in: [req.params.userId] } });
+    if (!thisCourse) {
+      return res.status(404).send("No user account with id " +
+        req.params.userId + " was found in database.");
+    } else {
+      let grades = []
+      for (let i = 0; i < thisCourse.length; i++) {
+        let course = {};
+        course.coursename = thisCourse[i].course_name + thisCourse[i].course_number;
+        course.assignments = []
+        for (let j = 0; j < thisCourse[i].assignments.length; j++) {
+          let assignment = {}
+
+          assignment.name = thisCourse[i].assignments[j].assignment_name;
+          console.log(assignment);
+          for (let k = 0; k < thisCourse[i].assignments[j].grades.length; k++) {
+            console.log(thisCourse[i].assignments[j].grades[k]);
+            if (thisCourse[i].assignments[j].grades[k].userid === req.params.userId) {
+              assignment.grade = thisCourse[i].assignments[j].grades[k].grade;
+              console.log(assignment);
+            }
+
+          }
+          course.assignments.push(assignment);
+
+        }
+        grades.push(course)
+      }
+      return res.status(200).json(JSON.stringify(grades));
+
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up user with id " +
+      req.params.userId + " in database: " + err);
+  }
+
+});
+app.get('/posts/:userId', async (req, res, next) => {
+  console.log("in /users route (GET) with userId = " +
+    JSON.stringify(req.params.userId));
+  try {
+    let thisCourse = await Course.find({ students: { $in: [req.params.userId] } });
+    if (!thisCourse) {
+      return res.status(404).send("No user account with id " +
+        req.params.userId + " was found in database.");
+    } else {
+      let posts = []
+      for (let i = 0; i < thisCourse.length; i++) {
+        let course = {};
+        course.coursename = thisCourse[i].prefix + " "  + thisCourse[i].course_number+ " " + thisCourse[i].course_name;
+        course.posts = thisCourse[i].posts
+        
+        posts.push(course)
+      }
+      return res.status(200).json(JSON.stringify(posts));
+
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up user with id " +
+      req.params.userId + " in database: " + err);
+  }
+
+});
 
 
 /*
@@ -448,7 +517,7 @@ app.delete('/courses/:course_name', async (req, res, next) => {
 //ROUNDS ROUTES
 ////////////////////////////////
 
-//CREATE round route: Adds a new round as a subdocument to 
+//CREATE round route: Adds a new round as a subdocument to
 //a document in the users collection (POST)
 app.post('/rounds/:userId', async (req, res, next) => {
   console.log("in /rounds (POST) route with params = " +
@@ -483,7 +552,7 @@ app.post('/rounds/:userId', async (req, res, next) => {
   }
 });
 
-//READ round route: Returns all rounds associated 
+//READ round route: Returns all rounds associated
 //with a given user in the users collection (GET)
 app.get('/rounds/:userId', async (req, res) => {
   console.log("in /rounds route (GET) with userId = " +
@@ -501,7 +570,7 @@ app.get('/rounds/:userId', async (req, res) => {
   }
 });
 
-//UPDATE round route: Updates a specific round 
+//UPDATE round route: Updates a specific round
 //for a given user in the users collection (PUT)
 app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   console.log("in /rounds (PUT) route with params = " +
@@ -542,7 +611,7 @@ app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   }
 });
 
-//DELETE round route: Deletes a specific round 
+//DELETE round route: Deletes a specific round
 //for a given user in the users collection (DELETE)
 app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
   console.log("in /rounds (DELETE) route with params = " +

@@ -36,7 +36,7 @@ var app = (0, _express["default"])(); //const server = require('./server')
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
 
-var connectStr = process.env.MONGO_STR;
+var connectStr = "mongodb+srv://sean:sean@cluster0.9rbbv.mongodb.net/appdb?retryWrites=true&w=majority";
 
 _mongoose["default"].connect(connectStr, {
   useNewUrlParser: true,
@@ -807,12 +807,90 @@ app["delete"]('/courses/:course_name', /*#__PURE__*/function () {
     return _ref10.apply(this, arguments);
   };
 }());
+app.get('/grades/:userId', /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee11(req, res, next) {
+    var thisCourse, grades, i, course, j, assignment, k;
+    return _regeneratorRuntime["default"].wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
+            _context11.prev = 1;
+            _context11.next = 4;
+            return Course.find({
+              students: {
+                $in: [req.params.userId]
+              }
+            });
+
+          case 4:
+            thisCourse = _context11.sent;
+
+            if (thisCourse) {
+              _context11.next = 9;
+              break;
+            }
+
+            return _context11.abrupt("return", res.status(404).send("No user account with id " + req.params.userId + " was found in database."));
+
+          case 9:
+            grades = [];
+
+            for (i = 0; i < thisCourse.length; i++) {
+              course = {};
+              course.coursename = thisCourse[i].course_name + thisCourse[i].course_number;
+              course.assignments = [];
+
+              for (j = 0; j < thisCourse[i].assignments.length; j++) {
+                assignment = {};
+                assignment.name = thisCourse[i].assignments[j].assignment_name;
+                console.log(assignment);
+
+                for (k = 0; k < thisCourse[i].assignments[j].grades.length; k++) {
+                  console.log(thisCourse[i].assignments[j].grades[k]);
+
+                  if (thisCourse[i].assignments[j].grades[k].userid === req.params.userId) {
+                    assignment.grade = thisCourse[i].assignments[j].grades[k].grade;
+                    console.log(assignment);
+                  }
+                }
+
+                course.assignments.push(assignment);
+              }
+
+              grades.push(course);
+            }
+
+            return _context11.abrupt("return", res.status(200).json(JSON.stringify(grades)));
+
+          case 12:
+            _context11.next = 18;
+            break;
+
+          case 14:
+            _context11.prev = 14;
+            _context11.t0 = _context11["catch"](1);
+            console.log();
+            return _context11.abrupt("return", res.status(400).send("Unexpected error occurred when looking up user with id " + req.params.userId + " in database: " + _context11.t0));
+
+          case 18:
+          case "end":
+            return _context11.stop();
+        }
+      }
+    }, _callee11, null, [[1, 14]]);
+  }));
+
+  return function (_x31, _x32, _x33) {
+    return _ref11.apply(this, arguments);
+  };
+}());
 /*
 /////////////////////////////////
 //ROUNDS ROUTES
 ////////////////////////////////
 
-//CREATE round route: Adds a new round as a subdocument to 
+//CREATE round route: Adds a new round as a subdocument to
 //a document in the users collection (POST)
 app.post('/rounds/:userId', async (req, res, next) => {
   console.log("in /rounds (POST) route with params = " +
@@ -847,7 +925,7 @@ app.post('/rounds/:userId', async (req, res, next) => {
   }
 });
 
-//READ round route: Returns all rounds associated 
+//READ round route: Returns all rounds associated
 //with a given user in the users collection (GET)
 app.get('/rounds/:userId', async (req, res) => {
   console.log("in /rounds route (GET) with userId = " +
@@ -865,7 +943,7 @@ app.get('/rounds/:userId', async (req, res) => {
   }
 });
 
-//UPDATE round route: Updates a specific round 
+//UPDATE round route: Updates a specific round
 //for a given user in the users collection (PUT)
 app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   console.log("in /rounds (PUT) route with params = " +
@@ -906,7 +984,7 @@ app.put('/rounds/:userId/:roundId', async (req, res, next) => {
   }
 });
 
-//DELETE round route: Deletes a specific round 
+//DELETE round route: Deletes a specific round
 //for a given user in the users collection (DELETE)
 app.delete('/rounds/:userId/:roundId', async (req, res, next) => {
   console.log("in /rounds (DELETE) route with params = " +
