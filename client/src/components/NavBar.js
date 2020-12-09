@@ -56,12 +56,27 @@ class NavBar extends React.Component {
     return (
       <div>
         &nbsp;&nbsp;&nbsp;
-        <button className={this.props.mode == AppMode.FEED ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarFeed" onClick={() => this.switchMode(AppMode.FEED)}>Dashboard</button>
-        <button className={this.props.mode == AppMode.ASSIGNMENTS ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAssignments" onClick={() => this.switchMode(AppMode.ASSIGNMENTS)}>Assignments</button>
-        <button className={this.props.mode == AppMode.GRADES ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarGrades" onClick={() => this.switchMode(AppMode.GRADES)}>Grades</button>
-        <button className={this.props.mode == AppMode.USERS ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarUsers" onClick={() => this.switchMode(AppMode.USERS)}>Users</button>
-        <button className={this.props.mode == AppMode.COURSE_SETTINGS ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarCourseSettings" onClick={() => this.switchMode(AppMode.COURSE_SETTINGS)}>Course Settings</button>
-        <button className={this.props.mode == AppMode.ANALYTICS ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAnalytics" onClick={() => this.switchMode(AppMode.ANALYTICS)}>Analytics</button>
+        <button className={this.props.mode == AppMode.FEED ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} 
+        id="NavBarFeed" onClick={() => this.switchMode(AppMode.FEED)}>Dashboard</button>
+
+        <button className={this.props.mode == AppMode.ASSIGNMENTS ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} 
+        id="NavBarAssignments" onClick={() => this.switchMode(AppMode.ASSIGNMENTS)}>Assignments</button>
+        
+        <button className={this.props.mode == AppMode.GRADES ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} 
+        id="NavBarGrades" onClick={() => this.switchMode(AppMode.GRADES)}>Grades</button>
+        
+        {this.props.userObj.is_instructor || this.props.userObj.is_admin ? <button className={this.props.mode == AppMode.USERS ?
+           "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarUsers" 
+           onClick={() => this.switchMode(AppMode.USERS)}>Users</button>: null}
+        
+        {this.props.userObj.is_instructor || this.props.userObj.is_admin ?<button className={this.props.mode == AppMode.COURSE_SETTINGS ?
+           "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} 
+           id="NavBarCourseSettings" onClick={() => this.switchMode(AppMode.COURSE_SETTINGS)}>Course Settings</button>: null}
+        
+        {this.props.userObj.is_instructor || this.props.userObj.is_admin ?<button className={this.props.mode == AppMode.ANALYTICS ?
+           "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAnalytics" 
+           onClick={() => this.switchMode(AppMode.ANALYTICS)}>Analytics</button>: null}
+        
         { this.props.userObj.is_admin == true ?<button className={this.props.mode == AppMode.ADMIN ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAnalytics" onClick={() => this.switchMode(AppMode.ADMIN)}>Administrator</button> : null}
 
       </div>
@@ -131,7 +146,7 @@ class NavBar extends React.Component {
         {this.state.coursedropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav">
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("findcourse")} >Find Course</button>
-            <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("createcourse")}>Create Course</button>
+            <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={this.props.userObj.is_instructor? () => this.gotopage("createcourse"): null}>Create Course</button>
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("deletecourse")}>Delete Course</button>
           </div>
           :

@@ -139,7 +139,7 @@ passport.deserializeUser(async (userId, done) => {
   let thisUser;
   try {
     thisUser = await User.findOne({ email: userId });
-    console.log("User with id " + userId +
+    console.log("User with userId " + userId +
       " found in DB. User object will be available in server routes as req.user.")
     console.log(thisUser);
     done(null, thisUser);
@@ -229,8 +229,6 @@ app.post('/users/:userId', async (req, res, next) => {
   }
   try {
     let thisUser = await User.findOne({ id: req.params.userId });
-    console.log("In POST -> userId :"+req.params.userId);
-    console.log("In POST -> User :"+thisUser);
     if (thisUser) { //account already exists
       res.status(400).send("There is already an account with email '" +
         req.params.userId + "'.");
@@ -272,8 +270,10 @@ app.put('/users/:userId', async (req, res, next) => {
     }
   }
   try {
-    let status = await User.updateMany({_id:{$in:[req.params.userId]} },
+    
+    let status = await User.updateOne({email: req.params.userId },
       { $set: req.body });
+      console.log("USER UPDATE STATUS -> "+status.nModified+" <-");
     if (status.nModified != 1) { //account could not be found
       res.status(404).send("No user account " + req.params.userId + " exists. Account could not be updated.");
     } else {

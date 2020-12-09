@@ -205,7 +205,7 @@ _passport["default"].deserializeUser( /*#__PURE__*/function () {
 
           case 5:
             thisUser = _context2.sent;
-            console.log("User with id " + userId + " found in DB. User object will be available in server routes as req.user.");
+            console.log("User with userId " + userId + " found in DB. User object will be available in server routes as req.user.");
             console.log(thisUser);
             done(null, thisUser);
             _context2.next = 14;
@@ -379,21 +379,19 @@ app.post('/users/:userId', /*#__PURE__*/function () {
 
           case 6:
             thisUser = _context5.sent;
-            console.log("In POST -> userId :" + req.params.userId);
-            console.log("In POST -> User :" + thisUser);
 
             if (!thisUser) {
-              _context5.next = 13;
+              _context5.next = 11;
               break;
             }
 
             //account already exists
             res.status(400).send("There is already an account with email '" + req.params.userId + "'.");
-            _context5.next = 17;
+            _context5.next = 15;
             break;
 
-          case 13:
-            _context5.next = 15;
+          case 11:
+            _context5.next = 13;
             return new User({
               userid: req.body.userid,
               password: req.body.password,
@@ -406,25 +404,25 @@ app.post('/users/:userId', /*#__PURE__*/function () {
               is_admin: req.body.is_admin
             }).save();
 
-          case 15:
+          case 13:
             thisUser = _context5.sent;
             return _context5.abrupt("return", res.status(201).send("New account for '" + req.params.id + "' successfully created."));
 
-          case 17:
-            _context5.next = 22;
+          case 15:
+            _context5.next = 20;
             break;
 
-          case 19:
-            _context5.prev = 19;
+          case 17:
+            _context5.prev = 17;
             _context5.t0 = _context5["catch"](3);
             return _context5.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up user in database. " + _context5.t0));
 
-          case 22:
+          case 20:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[3, 19]]);
+    }, _callee5, null, [[3, 17]]);
   }));
 
   return function (_x13, _x14, _x15) {
@@ -473,16 +471,15 @@ app.put('/users/:userId', /*#__PURE__*/function () {
           case 11:
             _context6.prev = 11;
             _context6.next = 14;
-            return User.updateMany({
-              _id: {
-                $in: [req.params.userId]
-              }
+            return User.updateOne({
+              email: req.params.userId
             }, {
               $set: req.body
             });
 
           case 14:
             status = _context6.sent;
+            console.log("USER UPDATE STATUS -> " + status.nModified + " <-");
 
             if (status.nModified != 1) {
               //account could not be found
@@ -491,20 +488,20 @@ app.put('/users/:userId', /*#__PURE__*/function () {
               res.status(200).send("User account " + req.params.userId + " successfully updated.");
             }
 
-            _context6.next = 21;
+            _context6.next = 22;
             break;
 
-          case 18:
-            _context6.prev = 18;
+          case 19:
+            _context6.prev = 19;
             _context6.t2 = _context6["catch"](11);
             res.status(400).send("Unexpected error occurred when updating user data in database: " + _context6.t2);
 
-          case 21:
+          case 22:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee6, null, [[11, 18]]);
+    }, _callee6, null, [[11, 19]]);
   }));
 
   return function (_x16, _x17, _x18) {

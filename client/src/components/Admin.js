@@ -58,12 +58,12 @@ class Admin extends React.Component {
             school: this.state.users[index].school,
             is_instructor: this.state.users[index].is_instructor == true ? false: true,
             is_admin: this.state.users[index].is_admin,
-            // _id: this.state.users[index]._id
+            //  _id: this.state.users[index]._id
           }
 
 
-        this.changeRoleCallBack(userData,this.state.users[index].userid);
-
+        this.changeRoleCallBack(userData,userData.email);
+        this.loadUsers();
     }
 
     updateUser = async (newData,id) =>{
@@ -95,7 +95,7 @@ class Admin extends React.Component {
           <td>{this.state.users[r].first_name + " "+this.state.users[r].last_name}</td>
           <td>{this.state.users[r].userid}</td>
           <td>{this.state.users[r].email}</td>
-          <td>{String (this.state.users[r].is_instructor)} 
+          <td>{String (this.state.users[r].is_instructor)}&nbsp;
           <button onClick={() => this.changeRole(r)}>
                 <span className="fa fa-pencil"></span></button>
                 </td>
@@ -122,7 +122,7 @@ class Admin extends React.Component {
             <th>NAME</th>
             <th>ID</th>
             <th>EMAIL ADDRESS</th>
-            <th>ROLE</th>
+            <th>INSTRUCTOR ROLE</th>
             <th>DELETE</th>
           </tr>
           </thead>

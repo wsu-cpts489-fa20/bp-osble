@@ -32,7 +32,6 @@ class RegisterPage extends React.Component {
     }
 
     createAccount = async (event) => {
-        console.log("HERE");
         let userData = {
             userid: this.state.id,
             email: this.state.email,
@@ -41,7 +40,7 @@ class RegisterPage extends React.Component {
             last_name: this.state.last_name,
             school: this.state.school,
             is_instructor: false,
-            is_admin: this.state.id == 101 ? true : false,
+            is_admin: this.state.id == 101 ||this.state.id == 102 || this.state.id == 103 ? true : false,
         }
         const url = '/users/' + this.state.id; 
         let res;

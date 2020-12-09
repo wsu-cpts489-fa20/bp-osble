@@ -65,35 +65,6 @@ class LoginPage extends React.Component {
         }
     }
 
-    setAdmin = async () =>{
-        let newData = {
-            userid: this.props.userObj.userid,
-            email: this.props.userObj.email,
-            password: this.props.userObj.password,
-            first_name: this.props.userObj.first_name,
-            last_name: this.props.userObj.last_name,
-            school: this.props.userObj.school,
-            is_instructor: true,
-            is_admin: true,
-        }
-
-        const url = '/users/' + this.props.userObj.userid 
-    const res = await fetch(url, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-        method: 'PUT',
-        body: JSON.stringify(newData)}); 
-    const msg = await res.text();
-    if (res.status != 200) {
-        console.log("Sucessfully set Admin");
-    } else { 
-        console.log("Error happened while setting Admin")   
-    }
-
-    }
-
     //accountCreateDone -- Called by child CreateAccountDialog component when 
     //user attempted to create new account. Hide the dialog and display 
     //a message indicating result of the attempt.
