@@ -22,10 +22,12 @@ import Profile from './ProfilePage'
 import DeleteCourse from './DeleteCoursePage'
 import FindCourse from './FindCoursePage'
 import UserSettings from './UserSettingsPage'
+import Administrator from './Admin'
 
 
 
 const modeTitle = {};
+modeTitle[AppMode.ADMIN] = "Administrator"
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
 modeTitle[AppMode.FEED] = "Dashboard";
 modeTitle[AppMode.REGISTER] = "Register";
@@ -47,6 +49,7 @@ modeTitle[AppMode.FIND_COURSE] = "Find Course";
 modeTitle[AppMode.USER_SETTINGS] = "User Settings";
 
 const modeToPage = {};
+modeToPage[AppMode.ADMIN] = Administrator;
 modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.FEED] = FeedPage;
 modeToPage[AppMode.REGISTER] = Register;
@@ -242,6 +245,7 @@ class App extends React.Component {
           grades={modeTitle[AppMode.GRADES]}
           assignments={modeTitle[AppMode.ASSIGNMENTS]}
           users={modeTitle[AppMode.USERS]}
+          userObj={this.state.userObj}
           analytics={modeTitle[AppMode.ANALYTICS]}
           settings={modeTitle[AppMode.COURSE_SETTINGS]}
           mode={this.state.mode}

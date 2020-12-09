@@ -5,6 +5,7 @@ import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
 import './LoginPage.css';
 import AppMode from '../AppMode.js';
+import { async } from 'regenerator-runtime';
 class LoginPage extends React.Component {
 
     constructor() {
@@ -48,6 +49,11 @@ class LoginPage extends React.Component {
             "&password=" + this.passwordInputRef.current.value;
         const res = await fetch(url, { method: 'POST' });
         if (res.status == 200) { //successful login!
+            // if(this.props.userObj.userid == "101")
+            // {
+                
+            //     await this.setAdmin()
+            // }
             window.open("/", "_self");
         } else { //Unsuccessful login
             const resText = await res.text();
@@ -57,6 +63,35 @@ class LoginPage extends React.Component {
                 statusMsg: resText
             });
         }
+    }
+
+    setAdmin = async () =>{
+        let newData = {
+            userid: this.props.userObj.userid,
+            email: this.props.userObj.email,
+            password: this.props.userObj.password,
+            first_name: this.props.userObj.first_name,
+            last_name: this.props.userObj.last_name,
+            school: this.props.userObj.school,
+            is_instructor: true,
+            is_admin: true,
+        }
+
+        const url = '/users/' + this.props.userObj.userid 
+    const res = await fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+        method: 'PUT',
+        body: JSON.stringify(newData)}); 
+    const msg = await res.text();
+    if (res.status != 200) {
+        console.log("Sucessfully set Admin");
+    } else { 
+        console.log("Error happened while setting Admin")   
+    }
+
     }
 
     //accountCreateDone -- Called by child CreateAccountDialog component when 
