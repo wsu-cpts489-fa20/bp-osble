@@ -294,7 +294,10 @@ class LoginPage extends React.Component {
                                     Reset your password</button>
                             </p>
                             <p>
-                                <i>Version developed by CptS 489 students</i>
+                                <i>Developed by Hermes Obiang, Leonard Brkanac,
+                                     Joshua James Stallworth, Sean Brendan Washington,Tianhao Ye
+
+</i>
                             </p>
                         </form>
 
