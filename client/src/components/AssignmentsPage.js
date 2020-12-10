@@ -164,11 +164,9 @@ export default class AssignmentsPage extends React.Component {
         if (prevProps.selectedCourse.course_name === this.props.selectedCourse.course_name) {
             //do nothing
         } else {
-            let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
-            response = await response.json();
-            const obj = JSON.parse(response);
+
             this.setState({
-                assignments: obj.assignments
+                assignments: this.props.selectedCourse.assignments
             })
         }
     }
@@ -209,7 +207,7 @@ export default class AssignmentsPage extends React.Component {
                 }
                 {
                     this.state.showSubmissions ?
-                        <SubmissionModal updateEntries = {this.updateEntries} selectedCourse={this.props.selectedCourse} assignments={this.state.assignments} assignmentid={this.state.curassignmentid} showSubmissions={this.showSubmissions}></SubmissionModal>
+                        <SubmissionModal updateEntries={this.updateEntries} selectedCourse={this.props.selectedCourse} assignments={this.state.assignments} assignmentid={this.state.curassignmentid} showSubmissions={this.showSubmissions}></SubmissionModal>
                         :
                         null
                 }
