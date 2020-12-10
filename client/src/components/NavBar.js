@@ -170,7 +170,7 @@ class NavBar extends React.Component {
 
         {this.state.coursedropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav">
-            {this.renderCourse()}
+            {this.props.Enrolledcourses.length > 0 ? this.renderCourse():null}
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("findcourse")} >Find Course</button>
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={this.props.userObj.is_instructor? () => this.gotopage("createcourse"): null}>Create Course</button>
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("deletecourse")}>Delete Course</button>
