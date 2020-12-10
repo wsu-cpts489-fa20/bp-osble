@@ -15,7 +15,7 @@ class CourseSettingsPage extends React.Component {
         year: 0,
         start_date: "",
         end_date: "",
-        instructor: "Hermes Obiang",
+        instructor: this.props.userObj.first_name + ' '+ this.props.userObj.last_name,
         students: [],
         posts: [],
         assignments: []
@@ -28,14 +28,8 @@ class CourseSettingsPage extends React.Component {
 //   students: [],// just an array of userid's for easy access
 //   posts: [postSchema],
 //   assignments: [assignmentSchema],
-        console.log("HERE");
-        let courseData = {
-            course_name: "Cpt_S 489",
-            instructor: "Hermes Obiang",
-            students: [],
-            posts: [],
-            assignments: []
-        }
+       
+        
         const url = '/courses/' + this.state.course_name + ' ' + this.state.course_number;
         console.log(this.state);
         let res;
@@ -333,7 +327,7 @@ class CourseSettingsPage extends React.Component {
             id="ComfirmUpdateCourseBtn"
             type="submit"
             color="#191970"
-            onClick={this.updateCourse}
+            onClick={this.props.userObj.is_instructor == true? this.updateCourse:null}
             >Update Course</button>
             
             {/* Button for canceling changes and returning to homepage */}

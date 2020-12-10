@@ -24,7 +24,7 @@ class RegisterPage extends React.Component {
             last_name: "",
             confirm_last_name: "",
             confirm_first_name: "",
-            school: "",
+            school: "Washington State University",
             id: 0,
             confirm_id: 0,
             validated: true,
@@ -32,7 +32,6 @@ class RegisterPage extends React.Component {
     }
 
     createAccount = async (event) => {
-        console.log("HERE");
         let userData = {
             userid: this.state.id,
             email: this.state.email,
@@ -40,12 +39,11 @@ class RegisterPage extends React.Component {
             first_name: this.state.first_name,
             last_name: this.state.last_name,
             school: this.state.school,
-            is_instructor: false
+            is_instructor: false,
+            is_admin: this.state.id == 101 ||this.state.id == 102 || this.state.id == 103 ? true : false,
         }
-        const url = '/users/' + this.state.id;
-        console.log(userData);
+        const url = '/users/' + this.state.id; 
         let res;
-        console.log(userData);
         res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
@@ -56,7 +54,7 @@ class RegisterPage extends React.Component {
         });
         console.log(res.status);
         if (res.status == 201) { //successful account creation!
-             this.props.changeMode(AppMode.LOGIN);
+            this.props.changeMode(AppMode.LOGIN);
             //this.props.done("New account created! Enter credentials to log in.", false);
         } else { //Unsuccessful account creation
             //Grab textual error message
@@ -66,9 +64,7 @@ class RegisterPage extends React.Component {
 
         //this.props.changeMode(AppMode.LOGIN);
     }
-
-
-
+    
     handleRegister = (event) => {
         event.preventDefault();
         if (this.state.email == this.state.confirm_email &&
@@ -268,7 +264,7 @@ class RegisterPage extends React.Component {
                                 Confirm Student, Faculty, or Staff ID Number
                  <input style={{ width: "600px" }}
                                     autocomplete="off"
-                                    className="form-control form-text form-center formSize"
+                                    className="form-control form-text"
                                     name="confirm_id"
                                     type="number"
                                     size="35"

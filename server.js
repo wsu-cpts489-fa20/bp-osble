@@ -31,8 +31,15 @@ const connectStr = "mongodb+srv://sean:sean@cluster0.9rbbv.mongodb.net/appdb?ret
 
 mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
-    () => { console.log(`Connected to ${connectStr}.`) },
+    () => {
+      console.log(`Connected to ${connectStr}.`)
+      var admin = new mongoose.mongo.Admin(mongoose.connection.db);
+      admin.buildInfo(function (err, info) {
+        console.log(info.version);
+      });
+    },
     err => { console.error(`Error connecting to ${connectStr}: ${err}`) }
+
   );
 
 const Schema = mongoose.Schema;
@@ -43,17 +50,20 @@ const userSchema = new Schema({
   first_name: String,
   last_name: String,
   school: String,
-  is_instructor: Boolean
+  is_instructor: Boolean,
+  is_admin: Boolean
 });
 const gradeSchema = new Schema({
   userid: String,
-  grade: Number
+  grade: Number,
+  submission_content: String,
+  submit_date: String,
 });
 const assignmentSchema = new Schema({
   assignment_name: String,
   assignment_content: String,
   instructor: String,
-  due_date: Number,
+  due_date: String,
   grades: [gradeSchema] // each student will be:
 
 });
@@ -76,13 +86,14 @@ const courseSchema = new Schema({
   start_date: String,
   end_date: String,
   instructor: String,
+  instructor_id: String,
   students: [],// just an array of userid's for easy access
   posts: [postSchema],
   assignments: [assignmentSchema],
 
 
 });
-
+mongoose.set('debug', true);
 const User = mongoose.model("User", userSchema);
 const Course = mongoose.model("Course", courseSchema);
 
@@ -128,7 +139,7 @@ passport.deserializeUser(async (userId, done) => {
   let thisUser;
   try {
     thisUser = await User.findOne({ email: userId });
-    console.log("User with id " + userId +
+    console.log("User with userId " + userId +
       " found in DB. User object will be available in server routes as req.user.")
     console.log(thisUser);
     done(null, thisUser);
@@ -184,6 +195,25 @@ app.get('/users/:userId', async (req, res, next) => {
   }
 });
 
+//READ user route: Retrieves the user with the specified userId from users collection (GET)
+app.get('/users/', async (req, res, next) => {
+  console.log("in /users route (GET ALL) with userId = " +
+    JSON.stringify(req.params.userId));
+  try {
+    let thisUser = await User.find({ id: req.params.userId });
+    if (!thisUser) {
+      return res.status(404).send("No user account with id " +
+        req.params.userId + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisUser));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up user with id " +
+      req.params.userId + " in database: " + err);
+  }
+});
+
 //CREATE user route: Adds a new user account to the users collection (POST)
 app.post('/users/:userId', async (req, res, next) => {
   console.log("in /users route (POST) with params = " + JSON.stringify(req.params) +
@@ -198,7 +228,7 @@ app.post('/users/:userId', async (req, res, next) => {
       "It must contain 'password','displayName','profilePicURL','securityQuestion' and 'securityAnswer fields in message body.")
   }
   try {
-    let thisUser = await User.findOne({ id: req.params.id });
+    let thisUser = await User.findOne({ id: req.params.userId });
     if (thisUser) { //account already exists
       res.status(400).send("There is already an account with email '" +
         req.params.userId + "'.");
@@ -210,7 +240,8 @@ app.post('/users/:userId', async (req, res, next) => {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         school: req.body.school,
-        is_instructor: false // this will be variable later
+        is_instructor: req.body.is_instructor, // this will be variable later
+        is_admin: req.body.is_admin
 
       }).save();
       return res.status(201).send("New account for '" +
@@ -221,7 +252,6 @@ app.post('/users/:userId', async (req, res, next) => {
   }
 });
 
-//UPDATE user route: Updates a new user account in the users collection (POST)
 app.put('/users/:userId', async (req, res, next) => {
   console.log("in /users update route (PUT) with userId = " + JSON.stringify(req.params) +
     " and body = " + JSON.stringify(req.body));
@@ -229,18 +259,21 @@ app.put('/users/:userId', async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
       "It must contain 'userId' as parameter.");
   }
-  const validProps = ['password', 'displayName', 'profilePicURL',
-    'securityQuestion', 'securityAnswer'];
+  const validProps = ['userid', 'email', 'password','first_name','last_name',
+    'school', 'is_instructor','is_admin'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("users/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'password', 'displayname', 'profilePicURL', 'securityQuestion', 'securityAnswer'");
+        "'userid', 'email', 'password','first_name','last_name',"+
+        "'school', 'is_instructor','is_admin'");
     }
   }
   try {
-    let status = await User.updateOne({ id: req.params.userId },
+    
+    let status = await User.updateOne({email: req.params.userId },
       { $set: req.body });
+      console.log("USER UPDATE STATUS -> "+status.nModified+" <-");
     if (status.nModified != 1) { //account could not be found
       res.status(404).send("No user account " + req.params.userId + " exists. Account could not be updated.");
     } else {
@@ -250,6 +283,7 @@ app.put('/users/:userId', async (req, res, next) => {
     res.status(400).send("Unexpected error occurred when updating user data in database: " + err);
   }
 });
+
 
 //DELETE user route: Deletes the document with the specified userId from users collection (DELETE)
 app.delete('/users/:userId', async (req, res, next) => {
@@ -317,7 +351,98 @@ app.post('/auth/login',
     }
     //Note: Do NOT redirect! Client will take over.
   });
+////////////////////////////////
+//ASSIGNMENT ROUTES
+///////////////////////////////
+app.post('/assignments/:course_name', async (req, res, next) => { // add assignment to course
+  console.log("in /courses route (POST) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("assignment_name") ||
+    !req.body.hasOwnProperty("assignment_content") ||
+    !req.body.hasOwnProperty("instructor_id") ||
+    !req.body.hasOwnProperty("due_date") ||
+    !req.body.hasOwnProperty("grades")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    let status = await Course.updateOne(
+      { course_name: req.params.course_name },
+      { $push: { assignments: req.body } });
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when adding round to" +
+        " database. Round was not added.");
+    } else {
+      res.status(200).send("Round successfully added to database.");
+    }
 
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when adding round" +
+      " to database: " + err);
+  }
+});
+
+
+////////////////////////////////
+//COURSE ROUTES
+///////////////////////////////
+//READ user route: Retrieves the user with the specified userId from users collection (GET)
+app.get('/courses/:course_name', async (req, res, next) => {
+  console.log("in /courses route (GET) with name = " +
+    JSON.stringify(req.params.course_name));
+  try {
+    let thisCourse = await Course.findOne({ course_name: req.params.course_name });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
+
+app.get('/courses/profCourses/:userid', async (req, res, next) => { // gets courses that professor with userid is teaching
+  console.log("in /profcourses route (GET) with name = " +
+    JSON.stringify(req.params.userid));
+  try {
+    let thisCourse = await Course.find({ instructor_id: req.params.userid });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
+
+app.get('/courses/studentCourses/:userid', async (req, res, next) => { // gets courses that student with userid is enrolled in
+  console.log("in /courses route (GET) with name = " +
+    JSON.stringify(req.params.userid));
+  try {
+    let thisCourse = await Course.find({ students: req.params.userid });
+    if (!thisCourse) {
+      return res.status(404).send("No course named " +
+        req.params.course_name + " was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisCourse));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).send("Unexpected error occurred when looking up course with name " +
+      req.params.course_name + " in database: " + err);
+  }
+});
 ////////////////////////////////
 //COURSE ROUTES
 ///////////////////////////////
@@ -378,6 +503,7 @@ app.post('/courses/:course_name', async (req, res, next) => {
         start_date: req.body.start_date,
         end_date: req.body.end_date,
         instructor: req.body.instructor,
+        instructor_id: req.body.instructor_id,
         students: req.body.students,
         posts: req.body.posts,
         assignments: req.body.assignments
@@ -388,6 +514,45 @@ app.post('/courses/:course_name', async (req, res, next) => {
     }
   } catch (err) {
     return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + err);
+  }
+});
+app.put('/courses/updategrade/:course_name', async (req, res, next) => { // updates a grade in course_name
+  console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("userid") ||
+    !req.body.hasOwnProperty("assignmentid") ||
+    !req.body.hasOwnProperty("grade") ||
+    !req.body.hasOwnProperty("submit_date")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    Course.updateOne(
+      {
+        "course_name": req.params.course_name,
+        "assignments": {
+          "$elemMatch": {
+            "_id": req.body.assignmentid, "grades.userid": req.body.userid
+          }
+        }
+      },
+      {
+        "$set": {
+          "assignments.$[outer].grades.$[inner].grade": req.body.grade,
+          "assignments.$[outer].grades.$[inner].submit_date": req.body.submit_date,
+          "assignments.$[outer].grades.$[inner].submission_content": req.body.submission_content,
+        }
+      },
+      {
+        "arrayFilters": [{ "outer._id": req.body.assignmentid }, { "inner.userid": req.body.userid }]
+      },
+      function (error) { console.log(error); }
+    );
+  } catch (err) {
+    console.log("Critical Error");
+    return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");
   }
 });
 

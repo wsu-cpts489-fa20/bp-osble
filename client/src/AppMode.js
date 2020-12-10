@@ -2,6 +2,7 @@
 
 
 const AppMode = {
+    ADMIN: "AdminMode",
     LOGIN: "LoginMode",
     HELP: "HelpMode", 
     MAIL: "MailMode", 

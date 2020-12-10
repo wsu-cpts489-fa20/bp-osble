@@ -5,6 +5,7 @@ import LookUpAccountDialog from './LookUpAccountDialog.js';
 import SecurityQuestionDialog from './SecurityQuestionDialog.js';
 import './LoginPage.css';
 import AppMode from '../AppMode.js';
+import { async } from 'regenerator-runtime';
 class LoginPage extends React.Component {
 
     constructor() {
@@ -48,6 +49,11 @@ class LoginPage extends React.Component {
             "&password=" + this.passwordInputRef.current.value;
         const res = await fetch(url, { method: 'POST' });
         if (res.status == 200) { //successful login!
+            // if(this.props.userObj.userid == "101")
+            // {
+                
+            //     await this.setAdmin()
+            // }
             window.open("/", "_self");
         } else { //Unsuccessful login
             const resText = await res.text();
@@ -259,7 +265,10 @@ class LoginPage extends React.Component {
                                     Reset your password</button>
                             </p>
                             <p>
-                                <i>Version developed by CptS 489 students</i>
+                                <i>Developed by Hermes Obiang, Leonard Brkanac,
+                                     Joshua James Stallworth, Sean Brendan Washington,Tianhao Ye
+
+</i>
                             </p>
                         </form>
 

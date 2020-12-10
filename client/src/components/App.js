@@ -22,10 +22,12 @@ import Profile from './ProfilePage'
 import DeleteCourse from './DeleteCoursePage'
 import FindCourse from './FindCoursePage'
 import UserSettings from './UserSettingsPage'
+import Administrator from './Admin'
 
 
 
 const modeTitle = {};
+modeTitle[AppMode.ADMIN] = "Administrator"
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
 modeTitle[AppMode.FEED] = "Dashboard";
 modeTitle[AppMode.REGISTER] = "Register";
@@ -47,6 +49,7 @@ modeTitle[AppMode.FIND_COURSE] = "Find Course";
 modeTitle[AppMode.USER_SETTINGS] = "User Settings";
 
 const modeToPage = {};
+modeToPage[AppMode.ADMIN] = Administrator;
 modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.FEED] = FeedPage;
 modeToPage[AppMode.REGISTER] = Register;
@@ -79,6 +82,7 @@ class App extends React.Component {
       menuOpen: false,
       authenticated: false,
       userObj: { displayName: "", profilePicURL: "" },
+      selectedCourse: {},
       editAccount: false,
       showEditAccountDialog: false,
       statusMsg: "",
@@ -88,6 +92,7 @@ class App extends React.Component {
 
   //componentDidMount
   componentDidMount() {
+
     if (!this.state.authenticated) {
       //Use /auth/test route to (re)-test authentication and obtain user data
       fetch("/auth/test")
@@ -98,8 +103,47 @@ class App extends React.Component {
               userObj: obj.user,
               authenticated: true,
               mode: AppMode.FEED //We're authenticated so can get into the app.
+            }, async function () {
+
+              if (this.state.userObj.is_instructor === true) {
+                // gets all courses currently logged in proffesor is teaching
+                let response = await fetch("courses/profCourses/" + this.state.userObj.userid);
+                response = await response.json();
+                const obj = JSON.parse(response);
+                if (obj.length != 0) { // if there are courses
+                  this.setState({
+                    selectedCourse: obj[0]
+                  })
+                  console.log(obj);
+                } else {
+                  this.setState({
+                    mode: AppMode.COURSE_SETTINGS,
+                    selectedCourse: null
+                  })
+                  //instructor has no courses
+                }
+              } else {
+                let response = await fetch("courses/studentCourses/" + this.state.userObj.userid);
+                response = await response.json();
+                const obj = JSON.parse(response);
+                if (obj.length != 0) {
+                  this.setState({
+                    selectedCourse: obj[0],
+                  })
+                  console.log(obj);
+                } else {
+                  this.setState({
+                    mode: AppMode.FIND_COURSE,
+                    selectedCourse: null
+                  })
+                  // student not enrolled in any courses
+                }
+
+              }
+
             });
           }
+
         }
         )
     }
@@ -112,6 +156,7 @@ class App extends React.Component {
   //App will re-render itself, forcing the new data to 
   //propagate to the child components when they are re-rendered.
   refreshOnUpdate = async (newMode) => {
+    //console.log("HERE");
     let response = await fetch("/users/" + this.state.userObj.id);
     response = await response.json();
     const obj = JSON.parse(response);
@@ -195,10 +240,12 @@ class App extends React.Component {
               cancel={this.cancelEditAccount}/> : null} */}
         {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null : <NavBar
           userObj={this.state.userObj}
+          selectedCourse={this.state.selectedCourse}
           dashboard={modeTitle[this.state.mode]}
           grades={modeTitle[AppMode.GRADES]}
           assignments={modeTitle[AppMode.ASSIGNMENTS]}
           users={modeTitle[AppMode.USERS]}
+          userObj={this.state.userObj}
           analytics={modeTitle[AppMode.ANALYTICS]}
           settings={modeTitle[AppMode.COURSE_SETTINGS]}
           mode={this.state.mode}
@@ -225,6 +272,7 @@ class App extends React.Component {
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
           userObj={this.state.userObj}
+          selectedCourse={this.state.selectedCourse}
           refreshOnUpdate={this.refreshOnUpdate} />
       </div>
     );
