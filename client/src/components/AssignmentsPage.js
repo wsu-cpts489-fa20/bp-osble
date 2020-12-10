@@ -2,6 +2,7 @@ import React from "react";
 import '../styles/FeedItem.css';
 import Assignment from './Assignment.js'
 import AssignmentProf from './AssignmentProf.js'
+import SubmissionModal from './SubmissionModal.js'
 export default class AssignmentsPage extends React.Component {
     constructor(props) {
         super(props);
@@ -10,6 +11,7 @@ export default class AssignmentsPage extends React.Component {
             assignments: [],
             createAssignment: false,
             showModal: false,
+            showSubmissions: false,
             curassignmentid: "",
         };
         // old assignment format assignment: "Assignment 1", duedate: "11/18/2020 11:59 PM", didsubmit: false, latestactivity: ""
@@ -46,17 +48,25 @@ export default class AssignmentsPage extends React.Component {
 
     }
     showModal = (assignmentid) => {
-        if (assignmentid) {
-            this.setState({
-                curassignmentid: assignmentid
-            })
-        }
-        this.setState(prevstate => ({ showModal: !prevstate.showModal }))
 
+        this.setState({
+            curassignmentid: assignmentid
+        }, () => this.setState(prevstate => ({ showModal: !prevstate.showModal })))
+
+
+
+    }
+    showSubmissions = (assignmentid) => {
+
+        this.setState({
+            curassignmentid: assignmentid
+        })
+
+        this.setState(prevstate => ({ showSubmissions: !prevstate.showSubmissions }))
     }
     createntries = (entry) => {
         if (this.props.userObj.is_instructor === true) {
-            return <AssignmentProf showSubmissions={this.showModal} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></AssignmentProf>
+            return <AssignmentProf showSubmissions={this.showSubmissions} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></AssignmentProf>
         } else {// will need to retrieve the grade object corresponding to assignment and student in the current class for didsubmit and latestactivity
             return <Assignment showModal={this.showModal} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></Assignment>
         }
@@ -162,7 +172,7 @@ export default class AssignmentsPage extends React.Component {
                                 </div>
                                 <div className="modal-body">
                                     <form onSubmit={this.updateGrade}>
-                                        <textarea style ={{width:"90%",height:"500px"}}></textarea>
+                                        <textarea style={{ width: "90%", height: "500px" }}></textarea>
                                         <div className="modal-footer">
 
                                             <button type="submit" className="btn btn-primary" >
@@ -175,6 +185,12 @@ export default class AssignmentsPage extends React.Component {
                             </div>
 
                         </div>
+                        :
+                        null
+                }
+                {
+                    this.state.showSubmissions ?
+                        <SubmissionModal selectedCourse={this.props.selectedCourse} assignments={this.state.assignments} assignmentid={this.state.curassignmentid} showSubmissions={this.showSubmissions}></SubmissionModal>
                         :
                         null
                 }

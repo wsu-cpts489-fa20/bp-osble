@@ -168,6 +168,7 @@ class App extends React.Component {
 
 
   handleChangeMode = (newMode) => {
+    
     this.setState({ mode: newMode });
   }
 
