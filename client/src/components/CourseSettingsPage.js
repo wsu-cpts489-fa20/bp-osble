@@ -16,6 +16,7 @@ class CourseSettingsPage extends React.Component {
         start_date: "",
         end_date: "",
         instructor: this.props.userObj.first_name + ' '+ this.props.userObj.last_name,
+        instructor_id: this.props.userObj.userid,
         students: [],
         posts: [],
         assignments: []
@@ -44,6 +45,7 @@ class CourseSettingsPage extends React.Component {
         });
         if (res.status == 201) { //successful account creation!
             this.props.changeMode(AppMode.FEED);
+            this.props.loadCourses()
             //this.props.done("New account created! Enter credentials to log in.", false);
         } else { //Unsuccessful account creation
             //Grab textual error message
@@ -86,7 +88,7 @@ class CourseSettingsPage extends React.Component {
         return (
         <div className="feedpage" id="courseSettingPage">
             <center>
-            <h1 >Create Course</h1>
+            <h1 >{this.props.createCourse?"Create Course":"Update Course"}</h1>
             </center>
             <label className="form-label-prefix">
                 {/* Label for Prefix */}
@@ -328,7 +330,7 @@ class CourseSettingsPage extends React.Component {
             type="submit"
             color="#191970"
             onClick={this.props.userObj.is_instructor == true? this.updateCourse:null}
-            >Update Course</button>
+        >{this.props.createCourse ? "Create Course":"Update Course"}</button>
             
             {/* Button for canceling changes and returning to homepage */}
             <button

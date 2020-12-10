@@ -885,7 +885,7 @@ app.post('/courses/:course_name', /*#__PURE__*/function () {
           case 0:
             console.log("in /courses route (POST) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(req.body === undefined || !req.body.hasOwnProperty("prefix") || !req.body.hasOwnProperty("course_number") || !req.body.hasOwnProperty("course_name") || !req.body.hasOwnProperty("term") || !req.body.hasOwnProperty("year") || !req.body.hasOwnProperty("start_date") || !req.body.hasOwnProperty("end_date") || !req.body.hasOwnProperty("instructor") || !req.body.hasOwnProperty("students") || !req.body.hasOwnProperty("posts") || !req.body.hasOwnProperty("assignments"))) {
+            if (!(req.body === undefined || !req.body.hasOwnProperty("prefix") || !req.body.hasOwnProperty("course_number") || !req.body.hasOwnProperty("course_name") || !req.body.hasOwnProperty("term") || !req.body.hasOwnProperty("year") || !req.body.hasOwnProperty("start_date") || !req.body.hasOwnProperty("end_date") || !req.body.hasOwnProperty("instructor") || !req.body.hasOwnProperty("instructor_id") || !req.body.hasOwnProperty("students") || !req.body.hasOwnProperty("posts") || !req.body.hasOwnProperty("assignments"))) {
               _context13.next = 3;
               break;
             }
