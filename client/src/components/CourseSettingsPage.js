@@ -45,6 +45,7 @@ class CourseSettingsPage extends React.Component {
         });
         if (res.status == 201) { //successful account creation!
             this.props.changeMode(AppMode.FEED);
+            this.props.loadCourses()
             //this.props.done("New account created! Enter credentials to log in.", false);
         } else { //Unsuccessful account creation
             //Grab textual error message

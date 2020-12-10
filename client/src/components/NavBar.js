@@ -133,8 +133,27 @@ class NavBar extends React.Component {
     });
   }
 
-  renderRightItems = () => {
+  handleSelectedCourse = (r) =>{
+    this.props.updateSelectedCourse(this.props.Enrolledcourses[r]._id)
+    this.setState({coursedropdown:false});
 
+  }
+  renderCourse = () => {
+    let table = [];
+    for (let r = 0; r < this.props.Enrolledcourses.length; ++r) {
+      table.push(
+        <tr key={r}>
+          <td><button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} 
+          onClick={() => this.handleSelectedCourse(r)}>{this.props.Enrolledcourses[r].course_name}</button></td>
+        </tr> 
+      );
+    }
+   
+    return table;
+    }
+
+  renderRightItems = () => {
+   
     return (
 
       <div>
@@ -151,6 +170,7 @@ class NavBar extends React.Component {
 
         {this.state.coursedropdown ?
           <div style={{ display: "flex", flexDirection: "column", top: "61px" }} className="mydropdownnav">
+            {this.renderCourse()}
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("findcourse")} >Find Course</button>
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={this.props.userObj.is_instructor? () => this.gotopage("createcourse"): null}>Create Course</button>
             <button className="btn btn-primary navdropdown" style={{ width: this.coursewidth.current.offsetWidth - 5, borderRadius: "0px" }} onClick={() => this.gotopage("deletecourse")}>Delete Course</button>
