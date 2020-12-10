@@ -83,7 +83,9 @@ var replySchema = new Schema({
 });
 var postSchema = new Schema({
   userid: String,
+  createdby: String,
   post_content: String,
+  key: Date,
   replies: [replySchema]
 });
 var courseSchema = new Schema({
@@ -784,7 +786,9 @@ app.get('/courses/studentCourses/:userid', /*#__PURE__*/function () {
             _context11.prev = 1;
             _context11.next = 4;
             return Course.find({
-              students: req.params.userid
+              students: {
+                $in: [req.params.userId]
+              }
             });
 
           case 4:
@@ -1147,15 +1151,15 @@ app["delete"]('/courses/:course_name', /*#__PURE__*/function () {
   };
 }());
 app.get('/grades/:userId', /*#__PURE__*/function () {
-  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee11(req, res, next) {
+  var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee17(req, res, next) {
     var thisCourse, grades, i, course, j, assignment, k;
-    return _regeneratorRuntime["default"].wrap(function _callee11$(_context11) {
+    return _regeneratorRuntime["default"].wrap(function _callee17$(_context17) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context17.prev = _context17.next) {
           case 0:
             console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
-            _context11.prev = 1;
-            _context11.next = 4;
+            _context17.prev = 1;
+            _context17.next = 4;
             return Course.find({
               students: {
                 $in: [req.params.userId]
@@ -1163,14 +1167,14 @@ app.get('/grades/:userId', /*#__PURE__*/function () {
             });
 
           case 4:
-            thisCourse = _context11.sent;
+            thisCourse = _context17.sent;
 
             if (thisCourse) {
-              _context11.next = 9;
+              _context17.next = 9;
               break;
             }
 
-            return _context11.abrupt("return", res.status(404).send("No user account with id " + req.params.userId + " was found in database."));
+            return _context17.abrupt("return", res.status(404).send("No user account with id " + req.params.userId + " was found in database."));
 
           case 9:
             grades = [];
@@ -1200,28 +1204,136 @@ app.get('/grades/:userId', /*#__PURE__*/function () {
               grades.push(course);
             }
 
-            return _context11.abrupt("return", res.status(200).json(JSON.stringify(grades)));
+            return _context17.abrupt("return", res.status(200).json(JSON.stringify(grades)));
 
           case 12:
-            _context11.next = 18;
+            _context17.next = 18;
             break;
 
           case 14:
-            _context11.prev = 14;
-            _context11.t0 = _context11["catch"](1);
+            _context17.prev = 14;
+            _context17.t0 = _context17["catch"](1);
             console.log();
-            return _context11.abrupt("return", res.status(400).send("Unexpected error occurred when looking up user with id " + req.params.userId + " in database: " + _context11.t0));
+            return _context17.abrupt("return", res.status(400).send("Unexpected error occurred when looking up user with id " + req.params.userId + " in database: " + _context17.t0));
 
           case 18:
           case "end":
-            return _context11.stop();
+            return _context17.stop();
         }
       }
-    }, _callee11, null, [[1, 14]]);
+    }, _callee17, null, [[1, 14]]);
   }));
 
-  return function (_x31, _x32, _x33) {
-    return _ref11.apply(this, arguments);
+  return function (_x49, _x50, _x51) {
+    return _ref17.apply(this, arguments);
+  };
+}());
+app.get('/posts/:userId', /*#__PURE__*/function () {
+  var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee18(req, res, next) {
+    var thisCourse, posts, i, course;
+    return _regeneratorRuntime["default"].wrap(function _callee18$(_context18) {
+      while (1) {
+        switch (_context18.prev = _context18.next) {
+          case 0:
+            console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
+            _context18.prev = 1;
+            _context18.next = 4;
+            return Course.find({
+              students: {
+                $in: [req.params.userId]
+              }
+            });
+
+          case 4:
+            thisCourse = _context18.sent;
+
+            if (thisCourse) {
+              _context18.next = 9;
+              break;
+            }
+
+            return _context18.abrupt("return", res.status(404).send("No user account with id " + req.params.userId + " was found in database."));
+
+          case 9:
+            posts = [];
+
+            for (i = 0; i < thisCourse.length; i++) {
+              course = {};
+              course.coursename = thisCourse[i].prefix + " " + thisCourse[i].course_number + " " + thisCourse[i].course_name;
+              course.posts = thisCourse[i].posts;
+              posts.push(course);
+            }
+
+            return _context18.abrupt("return", res.status(200).json(JSON.stringify(posts)));
+
+          case 12:
+            _context18.next = 18;
+            break;
+
+          case 14:
+            _context18.prev = 14;
+            _context18.t0 = _context18["catch"](1);
+            console.log();
+            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when looking up user with id " + req.params.userId + " in database: " + _context18.t0));
+
+          case 18:
+          case "end":
+            return _context18.stop();
+        }
+      }
+    }, _callee18, null, [[1, 14]]);
+  }));
+
+  return function (_x52, _x53, _x54) {
+    return _ref18.apply(this, arguments);
+  };
+}());
+app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
+  var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee19(req, res, next) {
+    return _regeneratorRuntime["default"].wrap(function _callee19$(_context19) {
+      while (1) {
+        switch (_context19.prev = _context19.next) {
+          case 0:
+            // updates a grade in course_name
+            console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+
+            if (!(req.body === undefined || !req.body.hasOwnProperty("userid") || !req.body.hasOwnProperty("createdby") || !req.body.hasOwnProperty("post_content") || !req.body.hasOwnProperty("key"))) {
+              _context19.next = 3;
+              break;
+            }
+
+            return _context19.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
+
+          case 3:
+            _context19.prev = 3;
+            Course.updateOne({
+              "course_name": req.params.course_name
+            }, {
+              "$push": {
+                "posts": req.body
+              }
+            }, function (error) {
+              console.log(error);
+            });
+            _context19.next = 11;
+            break;
+
+          case 7:
+            _context19.prev = 7;
+            _context19.t0 = _context19["catch"](3);
+            console.log("Critical Error");
+            return _context19.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+
+          case 11:
+          case "end":
+            return _context19.stop();
+        }
+      }
+    }, _callee19, null, [[3, 7]]);
+  }));
+
+  return function (_x55, _x56, _x57) {
+    return _ref19.apply(this, arguments);
   };
 }());
 /*

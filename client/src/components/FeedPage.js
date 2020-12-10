@@ -4,28 +4,54 @@ import FeedPostItem from './FeedPostItem.js'
 class FeedPage extends React.Component {
     constructor(props) {
         super(props);
-
+        
         this.state = { // each json object should follow at least this format
-            posts: [{ userid:111111111,createdby: "Leonard", content: "Example Post", key: Date.now() }],
+            posts: this.props.selectedCourse.posts,
+            
             showdropdown: false,
             curselected: "Everyone",
             isanonymous: false,
         };
+            }; 
+        
 
 
-    }
-    addpost = (e) => {
+    
+    addpost = async (e) => {
         var newpost = {
-            createdby: "Leonard",
+            userid: this.props.userObj.userid, 
+            createdby: this.props.userObj.first_name+ this.props.userObj.last_name,
             content: this._inputElement.value,
-            key: Date.now()
+            key: Date.now(),
+            replies: []
         }
         if (this.state.isanonymous == true) {
             newpost.createdby = "Anonymous"
         }
-        this.setState(prevstate => ({ posts: [newpost].concat(prevstate.posts) }));
+   
         this._inputElement.value = "";
+               
+        
         e.preventDefault();
+        console.log(newpost);
+        const url = '/courses/addpost' + this.props.selectedCourse.course_name;
+        let body = newpost;
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            body: JSON.stringify(body)
+        });
+        if (res.status == 200) { //successful account creation!
+            this.setState(prevstate => ({ posts: [newpost].concat(prevstate.posts) }));
+            //this.props.done("New account created! Enter credentials to log in.", false);
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            //this.props.done(resText, false);
+        }
     }
     toggledropdown = (e) => {
         this.setState(prevstate => ({ showdropdown: !prevstate.showdropdown }));
@@ -44,7 +70,8 @@ class FeedPage extends React.Component {
         return <FeedPostItem content={entry.content} createdby={entry.createdby} key={entry.key}></FeedPostItem>
     }
     render() {
-        var JSONposts = this.state.posts;
+        var JSONposts = this.props.selectedCourse.posts;
+        console.log(this.props.selectedCourse);
         var JSXposts = JSONposts.map(this.createntries)
         return (
             <div className="feedpage" id="feedPage">
@@ -99,5 +126,4 @@ class FeedPage extends React.Component {
         );
     }
 }
-
 export default FeedPage;

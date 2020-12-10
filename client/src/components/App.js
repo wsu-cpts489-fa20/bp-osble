@@ -126,6 +126,7 @@ class App extends React.Component {
                 let response = await fetch("courses/studentCourses/" + this.state.userObj.userid);
                 response = await response.json();
                 const obj = JSON.parse(response);
+                console.log(obj)
                 if (obj.length != 0) {
                   this.setState({
                     selectedCourse: obj[0],
@@ -146,6 +147,7 @@ class App extends React.Component {
 
         }
         )
+
     }
   }
 
@@ -164,6 +166,22 @@ class App extends React.Component {
       userObj: obj,
       mode: newMode
     });
+    let response2 = await fetch("courses/studentCourses/" + this.state.userObj.userid);
+    response2 = await response.json();
+    const obj2 = JSON.parse(response);
+    console.log(obj2)
+    if (obj2.length != 0) {
+      this.setState({
+        selectedCourse: obj2[0],
+      })
+      console.log(obj2);
+    } else {
+      this.setState({
+       
+        selectedCourse: null
+      })
+      // student not enrolled in any courses
+    }
   }
 
 

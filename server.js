@@ -73,7 +73,9 @@ const replySchema = new Schema({
 });
 const postSchema = new Schema({
   userid: String,
+  createdby: String ,
   post_content: String,
+  key: Date,
   replies: [replySchema]
 });
 const courseSchema = new Schema({
@@ -430,7 +432,7 @@ app.get('/courses/studentCourses/:userid', async (req, res, next) => { // gets c
   console.log("in /courses route (GET) with name = " +
     JSON.stringify(req.params.userid));
   try {
-    let thisCourse = await Course.find({ students: req.params.userid });
+    let thisCourse = await Course.find({ students: { $in: [req.params.userId] } });
     if (!thisCourse) {
       return res.status(404).send("No course named " +
         req.params.course_name + " was found in database.");
@@ -677,6 +679,41 @@ app.get('/posts/:userId', async (req, res, next) => {
 });
 
 
+
+
+app.put('/courses/addpost/:course_name', async (req, res, next) => { // updates a grade in course_name
+  console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("userid") ||
+    !req.body.hasOwnProperty("createdby") ||
+    !req.body.hasOwnProperty("post_content") ||
+    !req.body.hasOwnProperty("key")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    Course.updateOne(
+      {
+        "course_name": req.params.course_name
+        
+        }
+    ,
+      {
+        "$push": {
+          "posts": req.body
+          
+        }
+      },
+     
+      function (error) { console.log(error); }
+    );
+  } catch (err) {
+    console.log("Critical Error");
+    return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");
+  }
+});
 /*
 /////////////////////////////////
 //ROUNDS ROUTES
