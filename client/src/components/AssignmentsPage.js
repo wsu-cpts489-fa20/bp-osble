@@ -25,7 +25,6 @@ export default class AssignmentsPage extends React.Component {
         })
         var submission_content = e.target[0].value;
         e.preventDefault();
-        console.log(submission_content);
         const url = '/courses/updategrade/' + this.props.selectedCourse.course_name;
         let body = { userid: this.props.userObj.userid, assignmentid: this.state.curassignmentid, grade: -1, submit_date: '12/7/2020', submission_content: submission_content };
         let res = await fetch(url, {
@@ -37,7 +36,7 @@ export default class AssignmentsPage extends React.Component {
             body: JSON.stringify(body)
         });
         if (res.status == 200) { //successful account creation!
-
+            console.log("GRADE UPDATED");
             //this.props.done("New account created! Enter credentials to log in.", false);
         } else { //Unsuccessful account creation
             //Grab textual error message
@@ -64,14 +63,7 @@ export default class AssignmentsPage extends React.Component {
 
         this.setState(prevstate => ({ showSubmissions: !prevstate.showSubmissions }))
     }
-    createntries = (entry) => {
-        if (this.props.userObj.is_instructor === true) {
-            return <AssignmentProf showSubmissions={this.showSubmissions} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></AssignmentProf>
-        } else {// will need to retrieve the grade object corresponding to assignment and student in the current class for didsubmit and latestactivity
-            return <Assignment showModal={this.showModal} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></Assignment>
-        }
 
-    }
     /*
     const assignmentSchema = new Schema({
         assignment_name: String,
@@ -118,7 +110,7 @@ export default class AssignmentsPage extends React.Component {
             body: JSON.stringify(assignmentData)
         });
         if (res.status == 200) { //successful account creation!
-            this.forceUpdate();
+            this.updateEntries();
             //this.props.done("New account created! Enter credentials to log in.", false);
         } else { //Unsuccessful account creation
             //Grab textual error message
@@ -128,6 +120,22 @@ export default class AssignmentsPage extends React.Component {
 
 
     }
+    updateEntries = async () => {
+        let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+        response = await response.json();
+        const obj = JSON.parse(response);
+        this.setState({
+            assignments: obj.assignments
+        });
+    }
+    createntries = (entry) => {
+        if (this.props.userObj.is_instructor === true) {
+            return <AssignmentProf showSubmissions={this.showSubmissions} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></AssignmentProf>
+        } else {// will need to retrieve the grade object corresponding to assignment and student in the current class for didsubmit and latestactivity
+            return <Assignment showModal={this.showModal} assignmentid={entry._id} assignment={entry.assignment_name} duedate={entry.due_date} didsubmit={false} latestactivity={""}></Assignment>
+        }
+
+    }
     toggleCreate = (e) => {
         this.setState(prevstate => ({ createAssignment: !prevstate.createAssignment }))
     }
@@ -135,7 +143,6 @@ export default class AssignmentsPage extends React.Component {
         let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
         response = await response.json();
         const obj = JSON.parse(response);
-        console.log(obj.assignments);
         this.setState({
             assignments: obj.assignments
         })
@@ -147,15 +154,27 @@ export default class AssignmentsPage extends React.Component {
         let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
         response = await response.json();
         const obj = JSON.parse(response);
-        console.log(obj.assignments);
         this.setState({
             assignments: obj.assignments
-        })
+        }, () => console.log(this.state.assignments, obj.assignments));
 
     }
 
-    render() {
+    componentDidUpdate = async (prevProps, prevState) => { // updates current assignmentlist
+        if (prevProps.selectedCourse.course_name === this.props.selectedCourse.course_name) {
+            //do nothing
+        } else {
+            let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+            response = await response.json();
+            const obj = JSON.parse(response);
+            this.setState({
+                assignments: obj.assignments
+            })
+        }
+    }
 
+    render() {
+        //this.getAssignments();
         var JSONassignments = this.state.assignments;
         var JSXassignments = JSONassignments.map(this.createntries)
         return (
@@ -190,7 +209,7 @@ export default class AssignmentsPage extends React.Component {
                 }
                 {
                     this.state.showSubmissions ?
-                        <SubmissionModal selectedCourse={this.props.selectedCourse} assignments={this.state.assignments} assignmentid={this.state.curassignmentid} showSubmissions={this.showSubmissions}></SubmissionModal>
+                        <SubmissionModal updateEntries = {this.updateEntries} selectedCourse={this.props.selectedCourse} assignments={this.state.assignments} assignmentid={this.state.curassignmentid} showSubmissions={this.showSubmissions}></SubmissionModal>
                         :
                         null
                 }

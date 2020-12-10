@@ -957,6 +957,7 @@ app.post('/courses/:course_name', /*#__PURE__*/function () {
 }());
 app.put('/courses/updategrade/:course_name', /*#__PURE__*/function () {
   var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee14(req, res, next) {
+    var status;
     return _regeneratorRuntime["default"].wrap(function _callee14$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
@@ -973,7 +974,8 @@ app.put('/courses/updategrade/:course_name', /*#__PURE__*/function () {
 
           case 3:
             _context14.prev = 3;
-            Course.updateOne({
+            _context14.next = 6;
+            return Course.updateOne({
               "course_name": req.params.course_name,
               "assignments": {
                 "$elemMatch": {
@@ -996,21 +998,25 @@ app.put('/courses/updategrade/:course_name', /*#__PURE__*/function () {
             }, function (error) {
               console.log(error);
             });
-            _context14.next = 11;
+
+          case 6:
+            status = _context14.sent;
+            res.status(200).send("Course " + req.params.course_name + " successfully updated.");
+            _context14.next = 14;
             break;
 
-          case 7:
-            _context14.prev = 7;
+          case 10:
+            _context14.prev = 10;
             _context14.t0 = _context14["catch"](3);
             console.log("Critical Error");
             return _context14.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
 
-          case 11:
+          case 14:
           case "end":
             return _context14.stop();
         }
       }
-    }, _callee14, null, [[3, 7]]);
+    }, _callee14, null, [[3, 10]]);
   }));
 
   return function (_x40, _x41, _x42) {

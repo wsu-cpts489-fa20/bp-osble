@@ -259,21 +259,21 @@ app.put('/users/:userId', async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
       "It must contain 'userId' as parameter.");
   }
-  const validProps = ['userid', 'email', 'password','first_name','last_name',
-    'school', 'is_instructor','is_admin'];
+  const validProps = ['userid', 'email', 'password', 'first_name', 'last_name',
+    'school', 'is_instructor', 'is_admin'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("users/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'userid', 'email', 'password','first_name','last_name',"+
+        "'userid', 'email', 'password','first_name','last_name'," +
         "'school', 'is_instructor','is_admin'");
     }
   }
   try {
-    
-    let status = await User.updateOne({email: req.params.userId },
+
+    let status = await User.updateOne({ email: req.params.userId },
       { $set: req.body });
-      console.log("USER UPDATE STATUS -> "+status.nModified+" <-");
+    console.log("USER UPDATE STATUS -> " + status.nModified + " <-");
     if (status.nModified != 1) { //account could not be found
       res.status(404).send("No user account " + req.params.userId + " exists. Account could not be updated.");
     } else {
@@ -530,7 +530,7 @@ app.put('/courses/updategrade/:course_name', async (req, res, next) => { // upda
       "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
   }
   try {
-    Course.updateOne(
+    let status = await Course.updateOne(
       {
         "course_name": req.params.course_name,
         "assignments": {
@@ -550,7 +550,9 @@ app.put('/courses/updategrade/:course_name', async (req, res, next) => { // upda
         "arrayFilters": [{ "outer._id": req.body.assignmentid }, { "inner.userid": req.body.userid }]
       },
       function (error) { console.log(error); }
+
     );
+    res.status(200).send("Course " + req.params.course_name + " successfully updated.")
   } catch (err) {
     console.log("Critical Error");
     return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");

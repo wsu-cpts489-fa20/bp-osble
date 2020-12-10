@@ -13,7 +13,7 @@ export default class SubmissionModal extends React.Component {
     }
     componentDidMount() {
 
-        this.getGrades();
+        //this.getGrades();
         for (let i = 0; i < this.props.assignments.length; i += 1) {
             if (this.props.assignments[i]._id === this.props.assignmentid) {
                 this.setState({
@@ -23,8 +23,8 @@ export default class SubmissionModal extends React.Component {
         }
     }
 
-    updateGrade = async (userid, date, content, oldgrade) => {
-        console.log(userid, date, content, oldgrade,this.props.selectedCourse.course_name);
+    updateGrade = (userid, date, content, oldgrade) => {
+        console.log(userid, date, content, oldgrade,newgrade,this.props.assignmentid, this.props.selectedCourse.course_name);
         const url = '/courses/updategrade/' + this.props.selectedCourse.course_name;
         let body;
         if (newgrade === null) {
@@ -32,24 +32,19 @@ export default class SubmissionModal extends React.Component {
         } else {
             body = { userid: userid, assignmentid: this.props.assignmentid, grade: newgrade, submit_date: date, submission_content: content };
         }
-
-        let res = await fetch(url, {
+        fetch(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             method: 'PUT',
             body: JSON.stringify(body)
-        });
-        if (res.status == 200) { //successful account creation!
-
-            //this.props.done("New account created! Enter credentials to log in.", false);
-        } else { //Unsuccessful account creation
-            //Grab textual error message
-            const resText = await res.text();
-            //this.props.done(resText, false);
-        }
+        }).then(console.log("Grade updated Succesfully"))
+            
         newgrade = null;
+
+        this.props.updateEntries();
+
 
     }
     createntries = (entry) => {
