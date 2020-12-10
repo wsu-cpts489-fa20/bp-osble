@@ -86,7 +86,8 @@ class App extends React.Component {
       editAccount: false,
       showEditAccountDialog: false,
       statusMsg: "",
-      showAboutDialog: false
+      showAboutDialog: false,
+      createCourse: true
     };
   }
 
@@ -164,6 +165,10 @@ class App extends React.Component {
       userObj: obj,
       mode: newMode
     });
+  }
+
+  createCourse = (arg) => {
+    this.setState( { createCourse: arg });
   }
 
 
@@ -251,10 +256,12 @@ class App extends React.Component {
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
           menuOpen={this.state.menuOpen}
+          createCourse={this.createCourse}
           toggleMenuOpen={this.toggleMenuOpen} />}
         <SideMenu
           menuOpen={this.state.menuOpen}
           mode={this.state.mode}
+          createCourse = {this.state.createCourse}
           toggleMenuOpen={this.toggleMenuOpen}
           displayName={this.state.userObj.displayName}
           profilePicURL={this.state.userObj.profilePicURL}

@@ -479,6 +479,7 @@ app.post('/courses/:course_name', async (req, res, next) => {
     !req.body.hasOwnProperty("start_date") ||
     !req.body.hasOwnProperty("end_date") ||
     !req.body.hasOwnProperty("instructor") ||
+    !req.body.hasOwnProperty("instructor_id") ||
     !req.body.hasOwnProperty("students") ||
     !req.body.hasOwnProperty("posts") ||
     !req.body.hasOwnProperty("assignments")) {

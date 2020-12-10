@@ -27,6 +27,11 @@ class NavBar extends React.Component {
     this.props.changeMode(newMode);
   }
 
+  courseManagement = (newMode) =>{
+    this.props.createCourse(false);
+    this.props.changeMode(newMode);
+  }
+
   setType = (newType) => {
     this.setState({ type: newType });
   }
@@ -71,7 +76,7 @@ class NavBar extends React.Component {
         
         {this.props.userObj.is_instructor || this.props.userObj.is_admin ?<button className={this.props.mode == AppMode.COURSE_SETTINGS ?
            "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} 
-           id="NavBarCourseSettings" onClick={() => this.switchMode(AppMode.COURSE_SETTINGS)}>Course Settings</button>: null}
+           id="NavBarCourseSettings" onClick={() => this.courseManagement(AppMode.COURSE_SETTINGS)}>Course Settings</button>: null}
         
         {this.props.userObj.is_instructor || this.props.userObj.is_admin ?<button className={this.props.mode == AppMode.ANALYTICS ?
            "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAnalytics" 
@@ -118,6 +123,7 @@ class NavBar extends React.Component {
       this.props.changeMode(AppMode.LOGIN);
     }
     else if (string == "createcourse") {
+      this.props.createCourse(true)
       this.props.changeMode(AppMode.COURSE_SETTINGS);
     }
 
