@@ -16,11 +16,11 @@ class CourseSettingsPage extends React.Component {
 
     render() {
         return (
-        <div className="feedpage" id="courseSettingsPage">
+        <div className="feedpage" id="createSettingsPage">
             <center>
                 <div className="courseSettingsWrapper">
                     <center>
-                    <h1 >Modify Course</h1>
+                    <h1 >Create Course</h1>
                     </center>
                     <div className="classInfoWrapper">
                         <label className="form-label-prefix">
