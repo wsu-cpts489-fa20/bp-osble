@@ -64,6 +64,7 @@ class Admin extends React.Component {
 
         this.changeRoleCallBack(userData,userData.email);
         this.loadUsers();
+        
     }
 
     updateUser = async (newData,id) =>{
@@ -92,16 +93,13 @@ class Admin extends React.Component {
     for (let r = 0; r < this.state.users.length; ++r) {
       table.push(
         <tr key={r}>
-          <td>{this.state.users[r].first_name + " "+this.state.users[r].last_name}</td>
-          <td>{this.state.users[r].userid}</td>
+          <td id={"userAdmin"+r}>{this.state.users[r].first_name + " "+this.state.users[r].last_name}</td>
+          <td id={"userId"+r}>{this.state.users[r].userid}</td>
           <td>{this.state.users[r].email}</td>
-          <td>{String (this.state.users[r].is_instructor)}&nbsp;
-          <button onClick={() => this.changeRole(r)}>
+          <td id={"userRole"+r}>{String (this.state.users[r].is_instructor)}&nbsp;
+          <button onClick={() => this.changeRole(r)} id={"changeRoleBtn"+r}>
                 <span className="fa fa-pencil"></span></button>
                 </td>
-          {/* <td><button onClick={this.props.menuOpen ? null : () => 
-            this.editRound(r)}>
-                <span className="fa fa-eye"></span></button></td> */}
           <td><button onClick={() => this.deleteUser(r)}>
                 <span className="fa fa-trash"></span></button> </td>
         </tr> 
@@ -114,7 +112,7 @@ class Admin extends React.Component {
     //Rounds Logged" message in case the table is empty.
     render() {
       return(
-      <div className="padded-page">
+      <div className="padded-page" id="adminPage">
         <h1></h1>
         <table className="table table-hover">
           <thead className="thead-light">
@@ -134,10 +132,6 @@ class Admin extends React.Component {
             }
           </tbody>
         </table>
-        {/* {this.state.showConfirmDelete ?
-          <ConfirmDeleteRound 
-            close={() => this.setState({showConfirmDelete: false})} 
-            deleteRound={this.deleteRound} /> : null} */}
       </div>
       );
     }

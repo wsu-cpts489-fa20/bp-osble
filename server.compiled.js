@@ -36,7 +36,7 @@ var app = (0, _express["default"])(); //const server = require('./server')
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
 
-var connectStr = process.env.MONGO_STR;
+var connectStr = "mongodb+srv://sean:sean@cluster0.9rbbv.mongodb.net/appdb?retryWrites=true&w=majority";
 
 _mongoose["default"].connect(connectStr, {
   useNewUrlParser: true,
@@ -79,11 +79,14 @@ var assignmentSchema = new Schema({
 });
 var replySchema = new Schema({
   userid: String,
-  reply_content: String
+  reply_content: String,
+  key: Date
 });
 var postSchema = new Schema({
   userid: String,
+  createdby: String,
   post_content: String,
+  key: Date,
   replies: [replySchema]
 });
 var courseSchema = new Schema({
@@ -265,7 +268,7 @@ app.get('/users/:userId', /*#__PURE__*/function () {
             _context3.prev = 1;
             _context3.next = 4;
             return User.findOne({
-              id: req.params.userId
+              userid: req.params.userId
             });
 
           case 4:
@@ -784,7 +787,9 @@ app.get('/courses/studentCourses/:userid', /*#__PURE__*/function () {
             _context11.prev = 1;
             _context11.next = 4;
             return Course.find({
-              students: req.params.userid
+              students: {
+                $in: [req.params.userid]
+              }
             });
 
           case 4:
@@ -1041,7 +1046,7 @@ app.put('/courses/:course_name', /*#__PURE__*/function () {
             return _context15.abrupt("return", res.status(400).send("courses/ PUT request formulated incorrectly." + "It must contain 'userId' as parameter."));
 
           case 3:
-            validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students', 'posts', 'assignments'];
+            validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students', 'post', 'assignments'];
             _context15.t0 = _regeneratorRuntime["default"].keys(req.body);
 
           case 5:
@@ -1150,6 +1155,143 @@ app["delete"]('/courses/:course_name', /*#__PURE__*/function () {
 
   return function (_x46, _x47, _x48) {
     return _ref16.apply(this, arguments);
+  };
+}());
+app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
+  var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee17(req, res, next) {
+    return _regeneratorRuntime["default"].wrap(function _callee17$(_context17) {
+      while (1) {
+        switch (_context17.prev = _context17.next) {
+          case 0:
+            // updates a grade in course_name
+            console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+
+            if (!(req.body === undefined || !req.body.hasOwnProperty("userid") || !req.body.hasOwnProperty("createdby") || !req.body.hasOwnProperty("post_content") || !req.body.hasOwnProperty("key"))) {
+              _context17.next = 3;
+              break;
+            }
+
+            return _context17.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
+
+          case 3:
+            _context17.prev = 3;
+            Course.updateOne({
+              "course_name": req.params.course_name
+            }, {
+              "$push": {
+                "posts": req.body
+              }
+            }, function (error) {
+              console.log(error);
+            });
+            return _context17.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+
+          case 8:
+            _context17.prev = 8;
+            _context17.t0 = _context17["catch"](3);
+            console.log("Critical Error");
+            return _context17.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+
+          case 12:
+          case "end":
+            return _context17.stop();
+        }
+      }
+    }, _callee17, null, [[3, 8]]);
+  }));
+
+  return function (_x49, _x50, _x51) {
+    return _ref17.apply(this, arguments);
+  };
+}());
+app.put('/courses/addreply/:course_name', /*#__PURE__*/function () {
+  var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee18(req, res, next) {
+    return _regeneratorRuntime["default"].wrap(function _callee18$(_context18) {
+      while (1) {
+        switch (_context18.prev = _context18.next) {
+          case 0:
+            // updates a grade in course_name
+            console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+
+            if (!(req.body === undefined || !req.body.hasOwnProperty("createdby") || !req.body.hasOwnProperty("content") || !req.body.hasOwnProperty("key"))) {
+              _context18.next = 3;
+              break;
+            }
+
+            return _context18.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
+
+          case 3:
+            _context18.prev = 3;
+            Course.updateOne({
+              "course_name": req.params.course_name,
+              "posts._id": req.body._id
+            }, {
+              "$push": {
+                "posts.$.replies": {
+                  "userid": req.body.createdby,
+                  "reply_content": req.body.content,
+                  "key": req.body.key
+                }
+              }
+            }, function (error) {
+              console.log(error);
+            });
+            return _context18.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+
+          case 8:
+            _context18.prev = 8;
+            _context18.t0 = _context18["catch"](3);
+            console.log("Critical Error");
+            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+
+          case 12:
+          case "end":
+            return _context18.stop();
+        }
+      }
+    }, _callee18, null, [[3, 8]]);
+  }));
+
+  return function (_x52, _x53, _x54) {
+    return _ref18.apply(this, arguments);
+  };
+}());
+app.put('/courses/:course_name/addUser/:userid', /*#__PURE__*/function () {
+  var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee19(req, res, next) {
+    return _regeneratorRuntime["default"].wrap(function _callee19$(_context19) {
+      while (1) {
+        switch (_context19.prev = _context19.next) {
+          case 0:
+            // updates a grade in course_name
+            console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            _context19.prev = 1;
+            Course.updateOne({
+              "course_name": req.params.course_name
+            }, {
+              "$push": {
+                "students": req.params.userid
+              }
+            }, function (error) {
+              console.log(error);
+            });
+            return _context19.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+
+          case 6:
+            _context19.prev = 6;
+            _context19.t0 = _context19["catch"](1);
+            console.log("Critical Error");
+            return _context19.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+
+          case 10:
+          case "end":
+            return _context19.stop();
+        }
+      }
+    }, _callee19, null, [[1, 6]]);
+  }));
+
+  return function (_x55, _x56, _x57) {
+    return _ref19.apply(this, arguments);
   };
 }());
 /*

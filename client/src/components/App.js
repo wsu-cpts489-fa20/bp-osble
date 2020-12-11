@@ -1,14 +1,8 @@
 import React from 'react';
 import NavBar from './NavBar.js';
-import SideMenu from './SideMenu.js';
-import ModeBar from './ModeBar.js';
-import CreateEditAccountDialog from './CreateEditAccountDialog.js'
 import LoginPage from './LoginPage.js';
 import AppMode from "./../AppMode.js"
 import FeedPage from './FeedPage.js';
-import Rounds from './Rounds.js';
-import CoursesPage from './CoursesPage.js';
-import AboutBox from './AboutBox.js';
 import Register from './RegisterPage'
 import ResetPassword from './ResetPasswordPage'
 import Grades from './GradesPage'
@@ -32,13 +26,12 @@ modeTitle[AppMode.ADMIN] = "Administrator"
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
 modeTitle[AppMode.FEED] = "Dashboard";
 modeTitle[AppMode.REGISTER] = "Register";
-modeTitle[AppMode.ROUNDS] = "My Rounds";
-modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
-modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 modeTitle[AppMode.RESET] = "Reset Password";
 modeTitle[AppMode.GRADES] = "Grades";
 modeTitle[AppMode.USERS] = "Users";
+modeTitle[AppMode.USERS_LOGUSER]= "Add User";
+modeTitle[AppMode.USERS_EDITUSER]= "Edit User";
 modeTitle[AppMode.ANALYTICS] = "Analytics";
 modeTitle[AppMode.ASSIGNMENTS] = "Assignments";
 modeTitle[AppMode.COURSE_SETTINGS] = "Course Settings";
@@ -54,13 +47,11 @@ modeToPage[AppMode.ADMIN] = Administrator;
 modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.FEED] = FeedPage;
 modeToPage[AppMode.REGISTER] = Register;
-modeToPage[AppMode.ROUNDS] = Rounds;
-modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
-modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
-modeToPage[AppMode.COURSES] = CoursesPage;
 modeToPage[AppMode.RESET] = ResetPassword;
 modeToPage[AppMode.GRADES] = Grades;
 modeToPage[AppMode.USERS] = Users;
+modeToPage[AppMode.USERS_LOGUSER] = Users;
+modeToPage[AppMode.USERS_EDITUSER] = Users;
 modeToPage[AppMode.ANALYTICS] = Analytics;
 modeToPage[AppMode.ASSIGNMENTS] = Assignments;
 modeToPage[AppMode.COURSE_SETTINGS] = CourseSettings;
@@ -102,11 +93,13 @@ class App extends React.Component {
         .then((response) => response.json())
         .then((obj) => {
           if (obj.isAuthenticated) {
-            this.setState({
+            console.log("inside didmount ")
+             this.setState({
               userObj: obj.user,
               authenticated: true,
               mode: AppMode.FEED //We're authenticated so can get into the app.
             }, async function () {
+              console.log("inside didmount ")
 
               if (this.state.userObj.is_instructor === true) {
                 // gets all courses currently logged in proffesor is teaching
@@ -114,7 +107,7 @@ class App extends React.Component {
                 response = await response.json();
                 const obj = JSON.parse(response);
                 if (obj.length != 0) { // if there are courses
-                  this.setState({selectedCourse: obj[0],Enrolledcourses:obj})
+                  await this.setState({selectedCourse: obj[0],Enrolledcourses:obj})
                   console.log(obj);
                 } else {
                   
@@ -128,8 +121,8 @@ class App extends React.Component {
                 let response = await fetch("courses/studentCourses/" + this.state.userObj.userid);
                 response = await response.json();
                 const obj = JSON.parse(response);
-                if (obj.length != 0) {
-                  this.setState({
+                 if (obj.length != 0) {
+                  await this.setState({
                     selectedCourse: obj[0],Enrolledcourses: obj})
                   console.log(obj);
                 } else {
@@ -147,6 +140,7 @@ class App extends React.Component {
 
         }
         )
+
     }
   }
 
@@ -158,13 +152,31 @@ class App extends React.Component {
   //propagate to the child components when they are re-rendered.
   refreshOnUpdate = async (newMode) => {
     //console.log("HERE");
-    let response = await fetch("/users/" + this.state.userObj.id);
+    let response = await fetch("/users/" + this.state.userObj.email);
     response = await response.json();
     const obj = JSON.parse(response);
     this.setState({
       userObj: obj,
       mode: newMode
     });
+    if (newMode === AppMode.FEED || newMode === AppMode.USERS){
+    let response2 = await fetch("courses/studentCourses/" + this.state.userObj.userid);
+    response2 = await response.json();
+    const obj2 = JSON.parse(response);
+    console.log(obj2)
+    if (obj2.length != 0) {
+      this.setState({
+        selectedCourse: obj2[0],
+      })
+      console.log(obj2);
+    } else {
+      this.setState({
+       
+        selectedCourse: null
+      })
+      // student not enrolled in any courses
+    }
+  }
   }
 
   loadCourses = async() =>{
@@ -252,18 +264,10 @@ class App extends React.Component {
     const ModePage = modeToPage[this.state.mode];
     return (
       <div className="padded-page">
-        {this.state.showAboutDialog ?
-          <AboutBox close={() => this.setState({ showAboutDialog: false })} /> : null}
         {this.state.statusMsg != "" ? <div className="status-msg">
           <span>{this.state.statusMsg}</span>
           <button className="modal-close" onClick={this.closeStatusMsg}>
             <span className="fa fa-times"></span></button></div> : null}
-        {/* {this.state.showEditAccountDialog ? 
-            <CreateEditAccountDialog 
-              create={false} 
-              userId={this.state.userObj.id} 
-              done={this.editAccountDone} 
-              cancel={this.cancelEditAccount}/> : null} */}
         {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null : <NavBar
           Enrolledcourses={this.state.Enrolledcourses}
           userObj={this.state.userObj}
@@ -281,21 +285,6 @@ class App extends React.Component {
           menuOpen={this.state.menuOpen}
           createCourse={this.createCourse}
           toggleMenuOpen={this.toggleMenuOpen} />}
-        <SideMenu
-          menuOpen={this.state.menuOpen}
-          mode={this.state.mode}
-          createCourse = {this.state.createCourse}
-          toggleMenuOpen={this.toggleMenuOpen}
-          displayName={this.state.userObj.displayName}
-          profilePicURL={this.state.userObj.profilePicURL}
-          localAccount={this.state.userObj.authStrategy === "local"}
-          editAccount={this.showEditAccount}
-          logOut={() => this.handleChangeMode(AppMode.LOGIN)}
-          showAbout={() => { this.setState({ showAboutDialog: true }) }} />
-        {/* <ModeBar 
-            mode={this.state.mode} 
-            changeMode={this.handleChangeMode}
-            menuOpen={this.state.menuOpen}/> */}
         <ModePage
           create={false} // this will be set to 
           menuOpen={this.state.menuOpen}
@@ -304,6 +293,7 @@ class App extends React.Component {
           changeMode={this.handleChangeMode}
           userObj={this.state.userObj}
           selectedCourse={this.state.selectedCourse}
+          Enrolledcourses = {this.state.Enrolledcourses}
           refreshOnUpdate={this.refreshOnUpdate} />
       </div>
     );

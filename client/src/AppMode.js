@@ -17,11 +17,10 @@ const AppMode = {
     FIND_COURSE: "FindCourseMode",
     ANALYTICS: "AnalyticsMode",
     USERS: "UsersMode",
+    USERS_LOGUSER: "UsersMode-LogUser",
+    USERS_EDITUSER: "UsersMode-EditUser",
     REGISTER : "RegisterMode",
     FEED: "FeedMode",
-    ROUNDS: "RoundsMode",
-    ROUNDS_LOGROUND: "RoundsMode-LogRound",
-    ROUNDS_EDITROUND: "RoundsMode-EditRound",
     COURSES: "CoursesMode"
 };
 

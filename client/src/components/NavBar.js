@@ -82,7 +82,8 @@ class NavBar extends React.Component {
            "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAnalytics" 
            onClick={() => this.switchMode(AppMode.ANALYTICS)}>Analytics</button>: null}
         
-        { this.props.userObj.is_admin == true ?<button className={this.props.mode == AppMode.ADMIN ? "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAnalytics" onClick={() => this.switchMode(AppMode.ADMIN)}>Administrator</button> : null}
+        { this.props.userObj.is_admin == true ?<button className={this.props.mode == AppMode.ADMIN ?
+           "btn btn-primary navbutton selected" : "btn btn-primary navbutton"} id="NavBarAdmin" onClick={() => this.switchMode(AppMode.ADMIN)}>Administrator</button> : null}
 
       </div>
 

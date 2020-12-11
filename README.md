@@ -1,19 +1,32 @@
-# Milestone 3 Update
+# Milestone 4
 
-This week, we focused on the server side of the appication. We seperated the
-server.js into three different component which are 
+This week we worked a lot on both backend and frontend. We designed efficient schemas for our project
+ and. After Implementing the backend, we proceed to populate the user interface with real data coming 
+ from the database. Also, we adjusted our old test cases to work with the new data and created new test 
+ cases for the user interface such as the administrator interface. That means we rewrote the existing test 
+ cases.
 
-course.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/master/server/course.js
+DEPLOY URL: https://osble.bfapp.org
+
+ Key features:
+
+ * An instructor can create a course
+
+ * If there exist a course, then the instructor can create assignments for that particular course 
+
+ * A student can write a submission for an assignment.
+
+ * An instructor can grade student's submission
+
+ * Students can view their grades & Instructor can view student's grades too
+
+ And much more ... 
+
+To be reviewed for code quality:  https://github.com/wsu-cpts489-fa20/bp-osble/blob/milestone4/tests/bpOsbleAdminTest.js
 
 mail.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/master/server/mail.js
 
 user.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/leonard/server/user.js. 
-
-We created a schema for each of the elements but haven't actually 
-connect the backend to the frontend yet. 
-We have also created two new test cases to test the dropdown menu and 
-logout functionality.
-Links: will be post later
 
 Milestone 3 tests: https://drive.google.com/file/d/1YvekurPYVMLVsi5SJ30VBzy8c1w300D-/view?usp=sharing
 
@@ -38,5 +51,3 @@ stored in your GitHub repo!
 The app is presently set be served to http://localhost:8081 through the command
 npm run dev. You'll need to update DEPLOY_URL in server.js for remote deployment.
 
-Milestone 2 tests: https://www.dropbox.com/s/ogjuld68wowhduz/mileston2Tests.gif?dl=0
-DEPLOY URL: https://osble.bfapp.org

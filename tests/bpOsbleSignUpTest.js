@@ -21,19 +21,24 @@ test('TestSignUpPage', async t => {
     const schoolID = Selector('input').withAttribute('name', 'id', 'type', 'number');
     const schoolIDComf = Selector('input').withAttribute('name', 'confirm_id', 'type', 'number');
     const registerBtn = Selector('button').withAttribute('class', 'register-btn', 'role', 'submit', 'type', 'submit');
+    const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
         .click(accountBtn)
-        .typeText(emailSignUp,'hermes_esono@hotmail.es')
-        .typeText(emailComf,'hermes_esono@hotmail.es')
+        .typeText(emailSignUp,'hermes_esono@hotmail.com')
+        .typeText(emailComf,'hermes_esono@hotmail.com')
         .typeText('#passwordReg','Password123abc')
         .typeText(passwordComf,'Password123abc')
-        .typeText(firstName,'Josh')
-        .typeText(lastName,'Stallworth')
-        .typeText(lastNameComf,'Stallworth')
-        .typeText(firstNameComf,'Josh')
+        .typeText(firstName,'Tom')
+        .typeText(lastName,'Stall')
+        .typeText(lastNameComf,'Stall')
+        .typeText(firstNameComf,'Tom')
         .typeText(schoolID,'1234567890')
         .typeText(schoolIDComf,'1234567890')
         .click(registerBtn)
-        //.expect(registerBtn.click).ok();
+        .expect(Selector('#loginPage').visible).eql(true)
+        .typeText('#emailInput', 'hermes_esono@hotmail.com')
+        .typeText(passwordInput, 'Password123abc')
+        .click('#login-btn-icon')
+        .expect(Selector('#profile').innerText).contains('Tom Stall');
 });

@@ -1,8 +1,6 @@
 import React from 'react';
 import RegisterPage from './RegisterPage.js';
 import ResetPasswordPage from './ResetPasswordPage.js';
-import LookUpAccountDialog from './LookUpAccountDialog.js';
-import SecurityQuestionDialog from './SecurityQuestionDialog.js';
 import './LoginPage.css';
 import AppMode from '../AppMode.js';
 import { async } from 'regenerator-runtime';
@@ -207,17 +205,6 @@ class LoginPage extends React.Component {
                             <button className="modal-close" onClick={this.closeStatusMsg}>
                                 <span className="fa fa-times"></span>
                             </button></div> : null}
-                        {this.state.showLookUpAccountDialog ?
-                            <LookUpAccountDialog cancelResetPassword={this.cancelResetPassword}
-                                getSecurityAnswer={this.getSecurityAnswer} /> : null}
-                        {this.state.showSecurityQuestionDialog ?
-                            <SecurityQuestionDialog cancelResetPassword={this.cancelResetPassword}
-                                question={this.resetQ}
-                                answer={this.resetA}
-                                getNewPassword={this.getNewPassword} /> : null}
-                        {this.state.showResetPaswordDialog ?
-                            <ResetPasswordPage cancelResetPassword={this.cancelResetPassword}
-                                resetPassword={this.resetPassword} /> : null}
                         <form id="loginInterface" onSubmit={this.handleLoginSubmit}>
                             <label htmlFor="emailInput" style={{ padding: 0, fontSize: 24, fontWeight: "500" }}>
 
