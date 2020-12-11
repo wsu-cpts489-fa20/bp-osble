@@ -9,13 +9,7 @@ class UsersPage extends React.Component {
             data: this.props.selectedCourse.students
 
         }
-        this.data = {
-            'Instructors': [{ id: 'hermes@wsu.edu', name: "Hermes Obiang" }],
-            'TAs': [{ id: 'Joshua@wsu.edu', name: "Joshua Stallworth" }],
-            'Students': [{ id: 'sean@wsu.edu', name: "Sean Washington" }, { id: 'Leonard@wsu.edu', name: "Leonard Brkanac" }]
-
-
-        }
+        
         this.deleteId = "";
         this.deleteRole= "";
         this.editId = "";
@@ -48,9 +42,10 @@ class UsersPage extends React.Component {
         console.log(res.status)
         if (res.status === 200) { //successful account creation!
            //this.updateEntries();
-           this.props.refreshOnUpdate(AppMode.USERS);
+           //this.props.refreshOnUpdate(AppMode.FEED);
             //this.props.done("New account created! Enter credentials to log in.", false);
             //this.setState({ posts: newposts });
+            this.props.changeMode(AppMode.FEED)
             
         } else { //Unsuccessful account creation
             //Grab textual error message
@@ -128,7 +123,7 @@ class UsersPage extends React.Component {
             case AppMode.USERS:
                 return (
                     <>
-                        {this.state.errorMsg != "" ? <div className="status-msg"><span>{this.state.errorMsg}</span>
+                        {/* {this.state.errorMsg != "" ? <div className="status-msg"><span>{this.state.errorMsg}</span>
                             <button className="modal-close" onClick={this.closeErrorMsg}>
                                 <span className="fa fa-times"></span>
                             </button></div> : null}
@@ -152,7 +147,14 @@ class UsersPage extends React.Component {
                             setDeleteId={this.setDeleteId}
                             deleteUser={this.deleteUser}
                             changeMode={this.props.changeMode}
-                            menuOpen={this.props.menuOpen} />
+                            menuOpen={this.props.menuOpen} /> */}
+                            
+                    <UserForm
+                        mode={this.props.mode}
+                        startData={{}}
+                        saveUser={this.addUser}
+                        selectedCourse = {this.props.selectedCourse} />
+                );
                     </>
                 );
             case AppMode.USERS_LOGUSER:
