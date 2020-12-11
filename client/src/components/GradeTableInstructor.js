@@ -7,9 +7,7 @@ export default class GradeTableInstructor extends React.Component {
         
     }
 
-    getKeys = function () {
-        return Object.keys(this.props.data[0]);
-    }
+   
 
     getHeader = function () {
         

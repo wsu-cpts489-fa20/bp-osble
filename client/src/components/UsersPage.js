@@ -6,71 +6,88 @@ class UsersPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: this.props.selectedCourse.students
+            users: []
 
         }
-        
+
         this.deleteId = "";
-        this.deleteRole= "";
+        this.deleteRole = "";
         this.editId = "";
-        this.editRole ="";
+        this.editRole = "";
         this.state = { errorMsg: "" };
         this.getUserLists = this.getUserLists.bind(this);
+    }
+    componentDidMount = async () => {
+        // get most recent list of assignments
+        this.getUsers();
+
+    }
+    componentDidUpdate = async (prevProps, prevState) => { // updates current assignmentlist
+        if (prevProps.selectedCourse.course_name === this.props.selectedCourse.course_name) {
+            //do nothing
+        } else {
+
+            this.getUsers();
+        }
+        
     }
 
     addUser = async (e) => {
         var course_name = this.props.selectedCourse.course_name;
         var userid = e.sId;
-        
-        
-        
-        
 
         console.log(course_name, userid);
-        
-        const url = '/courses/' + this.props.selectedCourse.course_name+'/addUser/'+ userid;
-        
+
+        const url = '/courses/' + this.props.selectedCourse.course_name + '/addUser/' + userid;
+
         let res = await fetch(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             method: 'PUT'
-            
+
         });
 
         console.log(res.status)
         if (res.status === 200) { //successful account creation!
-           //this.updateEntries();
-           //this.props.refreshOnUpdate(AppMode.FEED);
-            //this.props.done("New account created! Enter credentials to log in.", false);
-            //this.setState({ posts: newposts });
+
             this.props.changeMode(AppMode.FEED)
-            
+
         } else { //Unsuccessful account creation
             //Grab textual error message
             const resText = await res.text();
             //this.props.done(resText, false);
         }
         //this.setState({ posts: newposts });
-        
+
     }
     //setDeleteId -- Capture in this.state.deleteId the unique id of the item
     //the user is considering deleting.
     setDeleteId = (val, role) => {
         this.deleteId = val;
-        this.deleteRole= role;
+        this.deleteRole = role;
         this.setState({ errorMsg: "" });
     }
 
     //setEditId -- Capture in this.state.editId the unique id of the item
     //the user is considering editing.
-    setEditId = (val,role) => {
+    setEditId = (val, role) => {
         this.editId = val;
-        this.editRole= role;
+        this.editRole = role;
         this.setState({ errorMsg: "" });
     }
-
+    getUsers = async () => {
+        var students = this.props.selectedCourse.students;
+        let data = [];
+        for (let i = 0; i < students.length; i++) {
+            let response = await fetch("/users/" + students[i]);
+            response = await response.json();
+            const obj = JSON.parse(response);
+            data.push(obj);
+        }
+        this.setState({users: data});
+    }
     editUser = async (newData) => {
         /*  const url = '/rounds/' + this.props.userObj.id + '/' + 
              this.props.userObj.rounds[this.editId]._id;
@@ -102,6 +119,7 @@ class UsersPage extends React.Component {
             this.props.refreshOnUpdate(AppMode.ROUNDS);
         }   */
     }
+
 
 
     getUserLists = function () {
@@ -138,23 +156,24 @@ class UsersPage extends React.Component {
                         <button onClick={ () =>
                         this.props.changeMode(AppMode.USERS_LOGUSER)} > Add User</button>
             </div>
-                        </div>
+                        </div>*/}
 
                         
-                        <UsersList data={this.state.data}
+                        <UsersList data={this.state.users}
                             type="Students"
                             setEditId={this.setEditId}
                             setDeleteId={this.setDeleteId}
                             deleteUser={this.deleteUser}
                             changeMode={this.props.changeMode}
-                            menuOpen={this.props.menuOpen} /> */}
-                            
-                    <UserForm
+                            menuOpen={this.props.menuOpen} /> 
+                        <button onClick={() =>
+                            this.props.changeMode(AppMode.USERS_LOGUSER)} > Add User by ID </button>
+                        {/* <UserForm
                         mode={this.props.mode}
                         startData={{}}
                         saveUser={this.addUser}
-                        selectedCourse = {this.props.selectedCourse} />
-                );
+                        selectedCourse = {this.props.selectedCourse} /> */}
+            
                     </>
                 );
             case AppMode.USERS_LOGUSER:
@@ -163,7 +182,7 @@ class UsersPage extends React.Component {
                         mode={this.props.mode}
                         startData={{}}
                         saveUser={this.addUser}
-                        selectedCourse = {this.props.selectedCourse} />
+                        selectedCourse={this.props.selectedCourse} />
                 );
             case AppMode.USERS_EDITUSER:
                 let thisUser = this.data[this.editRole][this.editId];
@@ -172,18 +191,18 @@ class UsersPage extends React.Component {
                     <UserForm
                         mode={this.props.mode}
                         startData={thisUser}
-                        saveUser={this.editUser} 
-                        selectedCourse = {this.props.selectedCourse}/>
+                        saveUser={this.editUser}
+                        selectedCourse={this.props.selectedCourse} />
                 );
 
-                /* return (
-                    <UserForm
-                        mode={this.props.mode}
-                        startData={thisUser}
-                        saveUser={this.editUser} />
-                ); */
+            /* return (
+                <UserForm
+                    mode={this.props.mode}
+                    startData={thisUser}
+                    saveUser={this.editUser} />
+            ); */
         }
-        
+
     }
 }
 
