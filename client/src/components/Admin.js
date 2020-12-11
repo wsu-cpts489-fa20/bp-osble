@@ -100,9 +100,6 @@ class Admin extends React.Component {
           <button onClick={() => this.changeRole(r)} id={"changeRoleBtn"+r}>
                 <span className="fa fa-pencil"></span></button>
                 </td>
-          {/* <td><button onClick={this.props.menuOpen ? null : () => 
-            this.editRound(r)}>
-                <span className="fa fa-eye"></span></button></td> */}
           <td><button onClick={() => this.deleteUser(r)}>
                 <span className="fa fa-trash"></span></button> </td>
         </tr> 
@@ -135,10 +132,6 @@ class Admin extends React.Component {
             }
           </tbody>
         </table>
-        {/* {this.state.showConfirmDelete ?
-          <ConfirmDeleteRound 
-            close={() => this.setState({showConfirmDelete: false})} 
-            deleteRound={this.deleteRound} /> : null} */}
       </div>
       );
     }

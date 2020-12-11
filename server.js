@@ -27,7 +27,7 @@ const app = express();
 //////////////////////////////////////////////////////////////////////////
 import mongoose from 'mongoose';
 
-const connectStr = "mongodb+srv://sean:sean@cluster0.9rbbv.mongodb.net/appdb?retryWrites=true&w=majority";
+const connectStr = process.env.MONGO_STR;
 
 mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
@@ -571,7 +571,7 @@ app.put('/courses/:course_name', async (req, res, next) => {
       "It must contain 'userId' as parameter.");
   }
   const validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students',
-    'posts', 'assignments'];
+    'post', 'assignments'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("courses/ PUT request formulated incorrectly." +
