@@ -9,9 +9,10 @@ test("TestLogOutButton", async t => {
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'joshua.stallworth@wsu.edu')
-        .typeText(passwordInput, 'ABC123#abc')
-        .click('#login')
+        .typeText('#emailInput', 'joshua@me.com')
+        .typeText(passwordInput, 'Cpts48912')
+        .click('#login-btn')
+        .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
         .click('#profile')
         .click('#logoutButton')

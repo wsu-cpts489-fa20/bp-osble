@@ -24,16 +24,19 @@ test('TestSignUpPage', async t => {
 
     await t
         .click(accountBtn)
-        .typeText(emailSignUp,'hermes_esono@hotmail.es')
-        .typeText(emailComf,'hermes_esono@hotmail.es')
+        .typeText(emailSignUp,'hermes_esono@hotmail.com')
+        .typeText(emailComf,'hermes_esono@hotmail.com')
         .typeText('#passwordReg','Password123abc')
         .typeText(passwordComf,'Password123abc')
-        .typeText(firstName,'Josh')
-        .typeText(lastName,'Stallworth')
-        .typeText(lastNameComf,'Stallworth')
-        .typeText(firstNameComf,'Josh')
+        .typeText(firstName,'Tom')
+        .typeText(lastName,'Stall')
+        .typeText(lastNameComf,'Stall')
+        .typeText(firstNameComf,'Tom')
         .typeText(schoolID,'1234567890')
         .typeText(schoolIDComf,'1234567890')
         .click(registerBtn)
+        .typeText('#emailInput', 'hermes_esono@hotmail.com')
+        .typeText(passwordInput, 'Password123abc')
+        .expect(Selector('#profile').innerText).contains('Tom Stall');
         //.expect(registerBtn.click).ok();
 });

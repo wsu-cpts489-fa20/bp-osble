@@ -17,9 +17,10 @@ test('TestNavBar', async t => {
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'hermes_esono@hotmail.es')
-        .typeText(passwordInput, 'MongoDB240')
+        .typeText('#emailInput', 'admin@admin.com')
+        .typeText(passwordInput, 'Admin2020')
         .click('#login-btn-icon')
+        .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
         .click('#NavBarAssignments')
         .expect(Selector('#assignmentPage').visible).eql(true)
@@ -28,7 +29,7 @@ test('TestNavBar', async t => {
         .click('#NavBarUsers')
         .expect(Selector('#userPage').visible).eql(true)
         .click('#NavBarCourseSettings')
-        .expect(Selector('#courseSettingsPage').visible).eql(true)
+        .expect(Selector('#courseSettingPage').visible).eql(true)
         .click('#NavBarAnalytics')
         .expect(Selector('#analyticsPage').visible).eql(true)
     //.expect(Selector('NavBarFeed').className).eql("btn btn-primary navbutton selected")

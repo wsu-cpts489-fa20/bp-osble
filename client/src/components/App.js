@@ -1,14 +1,8 @@
 import React from 'react';
 import NavBar from './NavBar.js';
-import SideMenu from './SideMenu.js';
-import ModeBar from './ModeBar.js';
-import CreateEditAccountDialog from './CreateEditAccountDialog.js'
 import LoginPage from './LoginPage.js';
 import AppMode from "./../AppMode.js"
 import FeedPage from './FeedPage.js';
-import Rounds from './Rounds.js';
-import CoursesPage from './CoursesPage.js';
-import AboutBox from './AboutBox.js';
 import Register from './RegisterPage'
 import ResetPassword from './ResetPasswordPage'
 import Grades from './GradesPage'
@@ -32,9 +26,6 @@ modeTitle[AppMode.ADMIN] = "Administrator"
 modeTitle[AppMode.LOGIN] = "Welcome to SpeedScore";
 modeTitle[AppMode.FEED] = "Dashboard";
 modeTitle[AppMode.REGISTER] = "Register";
-modeTitle[AppMode.ROUNDS] = "My Rounds";
-modeTitle[AppMode.ROUNDS_LOGROUND] = "Log New Round";
-modeTitle[AppMode.ROUNDS_EDITROUND] = "Edit Round";
 modeTitle[AppMode.COURSES] = "Courses";
 modeTitle[AppMode.RESET] = "Reset Password";
 modeTitle[AppMode.GRADES] = "Grades";
@@ -54,10 +45,6 @@ modeToPage[AppMode.ADMIN] = Administrator;
 modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.FEED] = FeedPage;
 modeToPage[AppMode.REGISTER] = Register;
-modeToPage[AppMode.ROUNDS] = Rounds;
-modeToPage[AppMode.ROUNDS_LOGROUND] = Rounds;
-modeToPage[AppMode.ROUNDS_EDITROUND] = Rounds;
-modeToPage[AppMode.COURSES] = CoursesPage;
 modeToPage[AppMode.RESET] = ResetPassword;
 modeToPage[AppMode.GRADES] = Grades;
 modeToPage[AppMode.USERS] = Users;
@@ -158,7 +145,7 @@ class App extends React.Component {
   //propagate to the child components when they are re-rendered.
   refreshOnUpdate = async (newMode) => {
     //console.log("HERE");
-    let response = await fetch("/users/" + this.state.userObj.id);
+    let response = await fetch("/users/" + this.state.userObj.email);
     response = await response.json();
     const obj = JSON.parse(response);
     this.setState({
@@ -252,18 +239,10 @@ class App extends React.Component {
     const ModePage = modeToPage[this.state.mode];
     return (
       <div className="padded-page">
-        {this.state.showAboutDialog ?
-          <AboutBox close={() => this.setState({ showAboutDialog: false })} /> : null}
         {this.state.statusMsg != "" ? <div className="status-msg">
           <span>{this.state.statusMsg}</span>
           <button className="modal-close" onClick={this.closeStatusMsg}>
             <span className="fa fa-times"></span></button></div> : null}
-        {/* {this.state.showEditAccountDialog ? 
-            <CreateEditAccountDialog 
-              create={false} 
-              userId={this.state.userObj.id} 
-              done={this.editAccountDone} 
-              cancel={this.cancelEditAccount}/> : null} */}
         {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null : <NavBar
           Enrolledcourses={this.state.Enrolledcourses}
           userObj={this.state.userObj}
@@ -281,7 +260,7 @@ class App extends React.Component {
           menuOpen={this.state.menuOpen}
           createCourse={this.createCourse}
           toggleMenuOpen={this.toggleMenuOpen} />}
-        <SideMenu
+        {/* <SideMenu
           menuOpen={this.state.menuOpen}
           mode={this.state.mode}
           createCourse = {this.state.createCourse}
@@ -291,7 +270,7 @@ class App extends React.Component {
           localAccount={this.state.userObj.authStrategy === "local"}
           editAccount={this.showEditAccount}
           logOut={() => this.handleChangeMode(AppMode.LOGIN)}
-          showAbout={() => { this.setState({ showAboutDialog: true }) }} />
+          showAbout={() => { this.setState({ showAboutDialog: true }) }} /> */}
         {/* <ModeBar 
             mode={this.state.mode} 
             changeMode={this.handleChangeMode}

@@ -19,9 +19,6 @@ const AppMode = {
     USERS: "UsersMode",
     REGISTER : "RegisterMode",
     FEED: "FeedMode",
-    ROUNDS: "RoundsMode",
-    ROUNDS_LOGROUND: "RoundsMode-LogRound",
-    ROUNDS_EDITROUND: "RoundsMode-EditRound",
     COURSES: "CoursesMode"
 };
 
