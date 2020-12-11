@@ -9,9 +9,10 @@ test("TestDropdownMenu", async t => {
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'joshua.stallworth@wsu.edu')
-        .typeText(passwordInput, 'ABC123#abc')
-        .click('#login')
+        .typeText('#emailInput', 'hermes_esono@hotmail.es')
+        .typeText(passwordInput, 'Galaxy2020')
+        .click('#login-btn')
+        .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
         .click('#profile')
         .click('#viewMail')

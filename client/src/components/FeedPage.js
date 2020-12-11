@@ -1,31 +1,76 @@
+import { set } from 'mongoose';
 import React from 'react';
+import AppMode from '../AppMode';
 import '../styles/FeedPage.css';
 import FeedPostItem from './FeedPostItem.js'
 class FeedPage extends React.Component {
     constructor(props) {
         super(props);
+        if (this.props.selectedCourse) {
+            this.state = { // each json object should follow at least this format
+                posts: this.props.selectedCourse.posts,
 
-        this.state = { // each json object should follow at least this format
-            posts: [{ userid:111111111,createdby: "Leonard", content: "Example Post", key: Date.now() }],
-            showdropdown: false,
-            curselected: "Everyone",
-            isanonymous: false,
-        };
+                showdropdown: false,
+                curselected: "Everyone",
+                isanonymous: false,
+            };
+        } else {
+            this.state = { // each json object should follow at least this format
+                posts: [],
+                showdropdown: false,
+                curselected: "Everyone",
+                isanonymous: false,
+            };
+        }
+
+    };
 
 
-    }
-    addpost = (e) => {
+
+
+    addpost = async (e) => {
         var newpost = {
-            createdby: "Leonard",
-            content: this._inputElement.value,
-            key: Date.now()
+            userid: this.props.userObj.userid,
+            createdby: this.props.userObj.first_name + " " + this.props.userObj.last_name,
+            post_content: this._inputElement.value,
+            key: Date.now(),
+            replies: []
         }
         if (this.state.isanonymous == true) {
             newpost.createdby = "Anonymous"
         }
-        this.setState(prevstate => ({ posts: [newpost].concat(prevstate.posts) }));
+
         this._inputElement.value = "";
+
+
+
+        console.log(newpost);
         e.preventDefault();
+        const url = '/courses/addpost/' + this.props.selectedCourse.course_name;
+        let body = newpost;
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            body: JSON.stringify(body)
+        });
+
+        console.log(res.status)
+        if (res.status === 200) { //successful account creation!
+            this.updateEntries();
+            this.props.refreshOnUpdate(AppMode.FEED);
+            //this.props.done("New account created! Enter credentials to log in.", false);
+            //this.setState({ posts: newposts });
+
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            //this.props.done(resText, false);
+        }
+        //this.setState({ posts: newposts });
+
     }
     toggledropdown = (e) => {
         this.setState(prevstate => ({ showdropdown: !prevstate.showdropdown }));
@@ -41,16 +86,58 @@ class FeedPage extends React.Component {
         this.setState(prevstate => ({ isanonymous: !prevstate.isanonymous }));
     }
     createntries = (entry) => {
-        return <FeedPostItem content={entry.content} createdby={entry.createdby} key={entry.key}></FeedPostItem>
+        return <FeedPostItem userObj = {this.props.userObj} selectedCourse={this.props.selectedCourse} postid={entry._id} content={entry.post_content} createdby={entry.createdby} key={entry.key} replies={entry.replies}></FeedPostItem>
+    }
+    updateEntries = async () => {
+        let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+        response = await response.json();
+        const obj = JSON.parse(response);
+        this.setState({
+            posts: obj.posts
+        });
+    }
+
+    getEntries = async () => {
+
+    }
+
+    componentDidMount = async () => {
+        // get most recent list of assignments
+        await this.props.selectedCourse.course_name;
+        if (this.props.selectedCourse.course_name) {
+            let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+            response = await response.json();
+            const obj = JSON.parse(response);
+            this.setState({
+                posts: obj.posts
+            }, () => console.log(this.state.posts, obj.posts));
+
+        }
+
+    }
+
+    componentDidUpdate = async (prevProps, prevState) => { // updates current assignmentlist
+        if (prevProps.selectedCourse.course_name === this.props.selectedCourse.course_name) {
+            //do nothing
+        } else {
+
+            this.setState({
+                posts: this.props.selectedCourse.posts
+            })
+        }
     }
     render() {
         var JSONposts = this.state.posts;
-        var JSXposts = JSONposts.map(this.createntries)
+        console.log("selected" + this.props.selectedCourse);
+        if (JSONposts) {
+            var JSXposts = JSONposts.map(this.createntries)
+        }
+
         return (
             <div className="feedpage" id="feedPage">
                 <div className="flexwrapper">
                     <div className="notifications">
-                        <h1 style={{ margin: ".7rem" ,fontSize:"30px"}}>Notifications</h1>
+                        <h1 style={{ margin: ".7rem", fontSize: "30px" }}>Notifications</h1>
                         <ul>
                             <li>Notification 1</li>
                             <li>Notification 2</li>
@@ -58,7 +145,7 @@ class FeedPage extends React.Component {
                         </ul>
                     </div>
                     <div className="feed">
-                        <h1 style={{ margin: ".7rem" ,fontSize:"30px"}}>Activity Feed</h1>
+                        <h1 style={{ margin: ".7rem", fontSize: "30px" }}>Activity Feed</h1>
 
                         <form onSubmit={this.addpost}>
                             <textarea required={true} ref={(a) => this._inputElement = a} className="postinput" id="FeedPostBox" placeholder="Enter new post here..."></textarea>
@@ -79,14 +166,14 @@ class FeedPage extends React.Component {
                             null
 
                         }
-                        
-                        <ul style={{ listStyleType: "none", padding: "0px" ,marginTop:"1rem"}}>
+
+                        <ul style={{ listStyleType: "none", padding: "0px", marginTop: "1rem" }}>
                             {JSXposts}
                         </ul>
 
                     </div>
                     <div className="files">
-                        <h1 style={{ margin: ".7rem" ,fontSize:"30px"}}>Files</h1>
+                        <h1 style={{ margin: ".7rem", fontSize: "30px" }}>Files</h1>
                         <ul>
                             <li>File 1</li>
                             <li>File 2</li>
@@ -99,5 +186,4 @@ class FeedPage extends React.Component {
         );
     }
 }
-
 export default FeedPage;

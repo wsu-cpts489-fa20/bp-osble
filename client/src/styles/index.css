@@ -336,7 +336,7 @@ text-align: center;
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 7% auto; /* 15% from the top and centered */
   padding: 20px;
   width: 80%; /* Could be more or less, depending on screen size */
 }
@@ -417,6 +417,7 @@ text-align: center;
   }
   .feedpage{
     background-color: white	;
+    margin: 20px;
     height: 100vh;
     
     overflow: auto; /* Enable scroll if needed */

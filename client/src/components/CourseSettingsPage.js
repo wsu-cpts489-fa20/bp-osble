@@ -4,21 +4,91 @@ import AppMode from '../AppMode';
 import '../styles/courseSettings.css';
 
 class CourseSettingsPage extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+        prefix: "",
+        course_number: 0,
+        course_name: "",
+        term: "",
+        year: 0,
+        start_date: "",
+        end_date: "",
+        instructor: this.props.userObj.first_name + ' '+ this.props.userObj.last_name,
+        instructor_id: this.props.userObj.userid,
+        students: [],
+        posts: [],
+        assignments: []
+        }
+    }
 
     updateCourse = async (event) => {
-        alert("Course succesfully updated");
-        this.props.changeMode(AppMode.FEED);
+//         course_name: String,
+//   instructor: String,
+//   students: [],// just an array of userid's for easy access
+//   posts: [postSchema],
+//   assignments: [assignmentSchema],
+       
+        
+        const url = '/courses/' + this.state.course_name + ' ' + this.state.course_number;
+        console.log(this.state);
+        let res;
+        console.log(this.state);
+        res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(this.state)
+        });
+        if (res.status == 201) { //successful account creation!
+            this.props.changeMode(AppMode.FEED);
+            this.props.loadCourses()
+            //this.props.done("New account created! Enter credentials to log in.", false);
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            //this.props.done(resText, false);
+        }
+        
     }
 
     cancelReturnHomepage = async (event) => {
         this.props.changeMode(AppMode.FEED);
     }
 
+    handleOnChange = (event) => {
+        if (event.target.name == "Prefix") {
+            this.setState({ prefix: event.target.value });
+        }
+        else if (event.target.name == "Course-Number") {
+            this.setState({ course_number: event.target.value });
+        }
+        else if (event.target.name == "Course-Name") {
+            this.setState({ course_name: event.target.value });
+        }
+        else if (event.target.name == "Course-Term") {
+            this.setState({ term: event.target.value });
+        }
+        else if (event.target.name == "Course-Year") {
+            this.setState({ year: event.target.value });
+        }
+        else if (event.target.name == "Start-Date") {
+            this.setState({ start_date: event.target.value });
+        }
+
+        else if (event.target.name == "End-Date") {
+            this.setState({ end_date: event.target.value });
+        }
+    }
+
     render() {
         return (
         <div className="feedpage" id="courseSettingPage">
             <center>
-            <h1 >Modify Course</h1>
+            <h1 >{this.props.createCourse?"Create Course":"Update Course"}</h1>
             </center>
             <label className="form-label-prefix">
                 {/* Label for Prefix */}
@@ -26,9 +96,10 @@ class CourseSettingsPage extends React.Component {
                 <input
                 autoComplete="on"
                 className="form-control-form-text enterPrefix"
-                name="Prefix-Number"
+                name="Prefix"
                 id="UniqueCoursePrefix"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -42,6 +113,7 @@ class CourseSettingsPage extends React.Component {
                 name="Course-Number"
                 id="CourseNumber"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -55,6 +127,7 @@ class CourseSettingsPage extends React.Component {
                 name="Course-Name"
                 id="CourseName"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -68,6 +141,7 @@ class CourseSettingsPage extends React.Component {
                 name="Course-Term"
                 id="CourseTerm"
                 type="text"
+                onChange={this.handleOnChange}
                 required={true}
                 ></input>
             </label>
@@ -80,6 +154,7 @@ class CourseSettingsPage extends React.Component {
                 className="form-contorl-form-text"
                 name="Course-Year"
                 id="CourseYear"
+                onChange={this.handleOnChange}
                 type="text"
                 required={true}
                 ></input>
@@ -91,6 +166,7 @@ class CourseSettingsPage extends React.Component {
                 <input
                 className="form-control"
                 name="Start-Date"
+                onChange={this.handleOnChange}
                 id="CourseStartDate"
                 ></input>
             </label>
@@ -102,6 +178,7 @@ class CourseSettingsPage extends React.Component {
                 className="form-control"
                 name="End-Date"
                 id="CourseEndDate"
+                onChange={this.handleOnChange}
                 ></input>
             </label>
             <br/>
@@ -252,8 +329,8 @@ class CourseSettingsPage extends React.Component {
             id="ComfirmUpdateCourseBtn"
             type="submit"
             color="#191970"
-            onClick={this.updateCourse}
-            >Update Course</button>
+            onClick={this.props.userObj.is_instructor == true? this.updateCourse:null}
+        >{this.props.createCourse ? "Create Course":"Update Course"}</button>
             
             {/* Button for canceling changes and returning to homepage */}
             <button
