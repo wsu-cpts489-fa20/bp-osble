@@ -1,0 +1,21 @@
+Retroactive Meeting Week4
+
+1. Retro Topics
+    -Getting pages to work with the data base
+    -Assignment of tasks
+    -Test Cases
+    -Naming conventions
+    -Working with last remaining issues
+2. Things that are going well:
+    -Database schemas are working well
+    -Pages look nice and mostly operational
+    -Working together and having lots of meetings to discuss issues
+3. Things that are not going well:
+    -Git Merging having a lot of conflicts
+    -Each of us have a seperate local data base
+4. What can be done to improve the process
+    To improve the process we could figure out how to all use one generalized
+    data base. Having seperate data bases for each of us caused some conflicts
+    to our code. Also maybe more comments for our code, as blocks of codes would
+    sometimes leave us confused. Finally just a better overall understanding of 
+    git would smooth out the process.
