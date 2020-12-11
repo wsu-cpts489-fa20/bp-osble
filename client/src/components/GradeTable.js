@@ -13,21 +13,21 @@ export default class GradeTable extends React.Component {
 
     getHeader = function () {
         
-        let headerRow =[<th>Assignment:</th>];
-        for (let i = 0; i < this.props.data.length; i++)
+        let headerRow =[<th>Assignment:</th>, <th>Grade:</th>];
+       /*  for (let i = 0; i < this.props.data.length; i++)
         {
-            headerRow.push(<th key={i}>{this.props.data[i].assignment_name }</th>)
-        }
+            headerRow.push(<td key={i}>{this.props.data[i].assignment_name }</td>)
+        } */
         return headerRow;
         
 
     }
 
     getRowsData = function () {
-        let row = [<th>Grade:</th>];
+        let row = []
         for (let i = 0; i < this.props.data.length; i++)
         {
-            row.push(<th key={i}>{this.props.data[i].grade }</th>)
+        row.push([<td key={i}>{this.props.data[i].assignment_name }</td>,<td key={i}>{this.props.data[i].grade }</td>])
         }
         
             return <tr>{row}</tr>

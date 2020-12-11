@@ -36,7 +36,7 @@ var app = (0, _express["default"])(); //const server = require('./server')
 //using the mongoose library.
 //////////////////////////////////////////////////////////////////////////
 
-var connectStr = process.env.MONGO_STR;
+var connectStr = "mongodb+srv://sean:sean@cluster0.9rbbv.mongodb.net/appdb?retryWrites=true&w=majority";
 
 _mongoose["default"].connect(connectStr, {
   useNewUrlParser: true,
