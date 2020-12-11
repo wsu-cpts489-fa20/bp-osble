@@ -13,15 +13,15 @@ export default class FeedpostItem extends React.Component {
 
 
     }
-    componentDidMount(){
+    componentDidMount() {
         this.setState({
             replies: this.props.replies
-        },()=> console.log(this.state.replies))
+        }, () => console.log(this.state.replies))
     }
     showReply = (e) => {
         this.setState(prevstate => ({ showReply: !prevstate.showReply }));
     }
-    addreply = async(e) => {
+    addreply = async (e) => {
         var newpost = {
             userid: this.props.createdby,
             reply_content: this._inputElement.value,
@@ -36,10 +36,10 @@ export default class FeedpostItem extends React.Component {
         this.showReply();
         e.preventDefault();
         var newReply = {
-            createdby: this.props.createdby,
+            createdby: this.props.userObj.first_name + " " + this.props.userObj.last_name,
             content: newpost.reply_content,
             key: Date.now(),
-            _id:this.props.postid
+            _id: this.props.postid
         }
         const url = '/courses/addreply/' + this.props.selectedCourse.course_name
         let res = await fetch(url, {

@@ -86,7 +86,7 @@ class FeedPage extends React.Component {
         this.setState(prevstate => ({ isanonymous: !prevstate.isanonymous }));
     }
     createntries = (entry) => {
-        return <FeedPostItem selectedCourse={this.props.selectedCourse} postid={entry._id} content={entry.post_content} createdby={entry.createdby} key={entry.key} replies={entry.replies}></FeedPostItem>
+        return <FeedPostItem userObj = {this.props.userObj} selectedCourse={this.props.selectedCourse} postid={entry._id} content={entry.post_content} createdby={entry.createdby} key={entry.key} replies={entry.replies}></FeedPostItem>
     }
     updateEntries = async () => {
         let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
