@@ -1,23 +1,15 @@
 import React from 'react';
-import UsersList from './UsersList'
+import UsersList from './UsersList.js'
+import UserForm from './UserForm.js'
+import AppMode from './../AppMode.js';
 class UsersPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data:
-            {
-                'Instructors': [{ id: 'hermes@wsu.edu', name: "Hermes Obiang" }],
-                'TAs': [{ id: 'Joshua@wsu.edu', name: "Joshua Stallworth" }],
-                'Students': [{ id: 'sean@wsu.edu', name: "Sean Washington" }, { id: 'Leonard@wsu.edu', name: "Leonard Brkanac" }]
-
-
-            }
-
-            ,
-            courseId: 1
+            data: this.props.selectedCourse.students
 
         }
-        this.data ={
+        this.data = {
             'Instructors': [{ id: 'hermes@wsu.edu', name: "Hermes Obiang" }],
             'TAs': [{ id: 'Joshua@wsu.edu', name: "Joshua Stallworth" }],
             'Students': [{ id: 'sean@wsu.edu', name: "Sean Washington" }, { id: 'Leonard@wsu.edu', name: "Leonard Brkanac" }]
@@ -25,21 +17,62 @@ class UsersPage extends React.Component {
 
         }
         this.deleteId = "";
+        this.deleteRole= "";
         this.editId = "";
+        this.editRole ="";
         this.state = { errorMsg: "" };
         this.getUserLists = this.getUserLists.bind(this);
     }
+
+    addUser = async (e) => {
+        var course_name = this.props.selectedCourse.course_name;
+        var userid = e.sId;
+        
+        
+        
+        
+
+        console.log(course_name, userid);
+        
+        const url = '/courses/' + this.props.selectedCourse.course_name+'/addUser/'+ userid;
+        
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT'
+            
+        });
+
+        console.log(res.status)
+        if (res.status === 200) { //successful account creation!
+           //this.updateEntries();
+           this.props.refreshOnUpdate(AppMode.USERS);
+            //this.props.done("New account created! Enter credentials to log in.", false);
+            //this.setState({ posts: newposts });
+            
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            //this.props.done(resText, false);
+        }
+        //this.setState({ posts: newposts });
+        
+    }
     //setDeleteId -- Capture in this.state.deleteId the unique id of the item
     //the user is considering deleting.
-    setDeleteId = (val) => {
+    setDeleteId = (val, role) => {
         this.deleteId = val;
+        this.deleteRole= role;
         this.setState({ errorMsg: "" });
     }
 
     //setEditId -- Capture in this.state.editId the unique id of the item
     //the user is considering editing.
-    setEditId = (val) => {
+    setEditId = (val,role) => {
         this.editId = val;
+        this.editRole= role;
         this.setState({ errorMsg: "" });
     }
 
@@ -74,46 +107,6 @@ class UsersPage extends React.Component {
             this.props.refreshOnUpdate(AppMode.ROUNDS);
         }   */
     }
-    addUser = async (e) => {
-        var course_name = this.props.selectedCourse.course_name;
-        userid = this._inputElement.value
-        var newpost = {
-            userid: this.props.userObj.userid, 
-            createdby: this.props.userObj.first_name + " " + this.props.userObj.last_name,
-            post_content: this._inputElement.value,
-            key: Date.now(),
-            replies: []
-        } 
-        this._inputElement.value = "";
-
-        console.log(course_name, userid);
-        e.preventDefault();
-        const url = '/courses/' + this.props.selectedCourse.course_name+'/addUser/'+ userid;
-        
-        let res = await fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'PUT'
-            
-        });
-
-        console.log(res.status)
-        if (res.status === 200) { //successful account creation!
-           //this.updateEntries();
-           //this.props.refreshOnUpdate(AppMode.FEED);
-            //this.props.done("New account created! Enter credentials to log in.", false);
-            //this.setState({ posts: newposts });
-            
-        } else { //Unsuccessful account creation
-            //Grab textual error message
-            const resText = await res.text();
-            //this.props.done(resText, false);
-        }
-        //this.setState({ posts: newposts });
-        
-    }
 
 
     getUserLists = function () {
@@ -131,47 +124,64 @@ class UsersPage extends React.Component {
         })
     }
     render() {
-        return (
-            <div className="feedpage" id="userPage">
-                <center>
-                    <h1> Roster</h1>
+        switch (this.props.mode) {
+            case AppMode.USERS:
+                return (
+                    <>
+                        {this.state.errorMsg != "" ? <div className="status-msg"><span>{this.state.errorMsg}</span>
+                            <button className="modal-close" onClick={this.closeErrorMsg}>
+                                <span className="fa fa-times"></span>
+                            </button></div> : null}
+                        <h1> Roster</h1>
 
 
-                    <div id="add_update_users" style={{ display: 'block' }}>
-                        <h4>
-                            Add Single User
+                        <div id="add_update_users" style={{ display: 'block' }}>
+                            <h4>
+                                Add Single User
                         </h4>
                         <div>
-                        <button onClick={this.props.menuOpen ? null : () =>
-                        this.editUser(r)} > Add User</button>
+                        <button onClick={ () =>
+                        this.props.changeMode(AppMode.USERS_LOGUSER)} > Add User</button>
             </div>
-                    </div>
-                    <UsersList data={this.data["Instructors"]}
-                type="Instructors"
-                setEditId={this.setEditId}
-                setDeleteId={this.setDeleteId}
-                deleteRound={this.deleteRound}
-                changeMode={this.props.changeMode}
-                menuOpen={this.props.menuOpen} />
+                        </div>
 
-                <UsersList data={this.data["TAs"]}
-                type="TAs"
-                setEditId={this.setEditId}
-                setDeleteId={this.setDeleteId}
-                deleteRound={this.deleteRound}
-                changeMode={this.props.changeMode}
-                menuOpen={this.props.menuOpen} />
-                <UsersList data={this.data["Students"]}
-                type="Students"
-                setEditId={this.setEditId}
-                setDeleteId={this.setDeleteId}
-                deleteRound={this.deleteRound}
-                changeMode={this.props.changeMode}
-                menuOpen={this.props.menuOpen} />
+                        
+                        <UsersList data={this.state.data}
+                            type="Students"
+                            setEditId={this.setEditId}
+                            setDeleteId={this.setDeleteId}
+                            deleteUser={this.deleteUser}
+                            changeMode={this.props.changeMode}
+                            menuOpen={this.props.menuOpen} />
+                    </>
+                );
+            case AppMode.USERS_LOGUSER:
+                return (
+                    <UserForm
+                        mode={this.props.mode}
+                        startData={{}}
+                        saveUser={this.addUser}
+                        selectedCourse = {this.props.selectedCourse} />
+                );
+            case AppMode.USERS_EDITUSER:
+                let thisUser = this.data[this.editRole][this.editId];
+                console.log(thisUser);
+                return (
+                    <UserForm
+                        mode={this.props.mode}
+                        startData={thisUser}
+                        saveUser={this.editUser} 
+                        selectedCourse = {this.props.selectedCourse}/>
+                );
 
-                </center>
-            </div>
-        );
+                /* return (
+                    <UserForm
+                        mode={this.props.mode}
+                        startData={thisUser}
+                        saveUser={this.editUser} />
+                ); */
+        }
+        
     }
 }
 

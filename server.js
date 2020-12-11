@@ -183,7 +183,7 @@ app.get('/users/:userId', async (req, res, next) => {
   console.log("in /users route (GET) with userId = " +
     JSON.stringify(req.params.userId));
   try {
-    let thisUser = await User.findOne({ id: req.params.userId });
+    let thisUser = await User.findOne({ userid: req.params.userId });
     if (!thisUser) {
       return res.status(404).send("No user account with id " +
         req.params.userId + " was found in database.");

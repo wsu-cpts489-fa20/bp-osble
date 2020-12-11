@@ -30,12 +30,15 @@ export default class UsersList extends React.Component {
     }
     renderTable = () => {
         let table = [];
+        if (!this.props.data)
+        {
+            return table
+        }
         for (let r = 0; r < this.props.data.length; ++r) {
             table.push(
                 <tr key={r}>
-                    <td>{this.props.data[r].name}</td>
                     
-                    <td>{this.props.data[r].id}</td>
+                    <td>{this.props.data[r].userid}</td>
                     <td><button onClick={this.props.menuOpen ? null : () =>
                         this.editUser(r)}>
                         <span className="fa fa-pencil"></span></button></td>

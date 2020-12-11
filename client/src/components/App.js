@@ -39,6 +39,8 @@ modeTitle[AppMode.COURSES] = "Courses";
 modeTitle[AppMode.RESET] = "Reset Password";
 modeTitle[AppMode.GRADES] = "Grades";
 modeTitle[AppMode.USERS] = "Users";
+modeTitle[AppMode.USERS_LOGUSER]= "Add User";
+modeTitle[AppMode.USERS_EDITUSER]= "Edit User";
 modeTitle[AppMode.ANALYTICS] = "Analytics";
 modeTitle[AppMode.ASSIGNMENTS] = "Assignments";
 modeTitle[AppMode.COURSE_SETTINGS] = "Course Settings";
@@ -61,6 +63,8 @@ modeToPage[AppMode.COURSES] = CoursesPage;
 modeToPage[AppMode.RESET] = ResetPassword;
 modeToPage[AppMode.GRADES] = Grades;
 modeToPage[AppMode.USERS] = Users;
+modeToPage[AppMode.USERS_LOGUSER] = Users;
+modeToPage[AppMode.USERS_EDITUSER] = Users;
 modeToPage[AppMode.ANALYTICS] = Analytics;
 modeToPage[AppMode.ASSIGNMENTS] = Assignments;
 modeToPage[AppMode.COURSE_SETTINGS] = CourseSettings;
@@ -162,14 +166,14 @@ class App extends React.Component {
   //propagate to the child components when they are re-rendered.
   refreshOnUpdate = async (newMode) => {
     //console.log("HERE");
-    let response = await fetch("/users/" + this.state.userObj.id);
+    let response = await fetch("/users/" + this.state.userObj.userid);
     response = await response.json();
     const obj = JSON.parse(response);
     this.setState({
       userObj: obj,
       mode: newMode
     });
-    if (newMode === AppMode.FEED){
+    if (newMode === AppMode.FEED || newMode === AppMode.USERS){
     let response2 = await fetch("courses/studentCourses/" + this.state.userObj.userid);
     response2 = await response.json();
     const obj2 = JSON.parse(response);

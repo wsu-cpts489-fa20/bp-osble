@@ -1156,162 +1156,24 @@ app["delete"]('/courses/:course_name', /*#__PURE__*/function () {
     return _ref16.apply(this, arguments);
   };
 }());
-app.get('/grades/:userId', /*#__PURE__*/function () {
+app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
   var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee17(req, res, next) {
-    var thisCourse, grades, i, course, j, assignment, k;
     return _regeneratorRuntime["default"].wrap(function _callee17$(_context17) {
       while (1) {
         switch (_context17.prev = _context17.next) {
-          case 0:
-            console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
-            _context17.prev = 1;
-            _context17.next = 4;
-            return Course.find({
-              students: {
-                $in: [req.params.userId]
-              }
-            });
-
-          case 4:
-            thisCourse = _context17.sent;
-
-            if (thisCourse) {
-              _context17.next = 9;
-              break;
-            }
-
-            return _context17.abrupt("return", res.status(404).send("No user account with id " + req.params.userId + " was found in database."));
-
-          case 9:
-            grades = [];
-
-            for (i = 0; i < thisCourse.length; i++) {
-              course = {};
-              course.coursename = thisCourse[i].course_name + thisCourse[i].course_number;
-              course.assignments = [];
-
-              for (j = 0; j < thisCourse[i].assignments.length; j++) {
-                assignment = {};
-                assignment.name = thisCourse[i].assignments[j].assignment_name;
-                console.log(assignment);
-
-                for (k = 0; k < thisCourse[i].assignments[j].grades.length; k++) {
-                  console.log(thisCourse[i].assignments[j].grades[k]);
-
-                  if (thisCourse[i].assignments[j].grades[k].userid === req.params.userId) {
-                    assignment.grade = thisCourse[i].assignments[j].grades[k].grade;
-                    console.log(assignment);
-                  }
-                }
-
-                course.assignments.push(assignment);
-              }
-
-              grades.push(course);
-            }
-
-            return _context17.abrupt("return", res.status(200).json(JSON.stringify(grades)));
-
-          case 12:
-            _context17.next = 18;
-            break;
-
-          case 14:
-            _context17.prev = 14;
-            _context17.t0 = _context17["catch"](1);
-            console.log();
-            return _context17.abrupt("return", res.status(400).send("Unexpected error occurred when looking up user with id " + req.params.userId + " in database: " + _context17.t0));
-
-          case 18:
-          case "end":
-            return _context17.stop();
-        }
-      }
-    }, _callee17, null, [[1, 14]]);
-  }));
-
-  return function (_x49, _x50, _x51) {
-    return _ref17.apply(this, arguments);
-  };
-}());
-app.get('/posts/:userId', /*#__PURE__*/function () {
-  var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee18(req, res, next) {
-    var thisCourse, posts, i, course;
-    return _regeneratorRuntime["default"].wrap(function _callee18$(_context18) {
-      while (1) {
-        switch (_context18.prev = _context18.next) {
-          case 0:
-            console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
-            _context18.prev = 1;
-            _context18.next = 4;
-            return Course.find({
-              students: {
-                $in: [req.params.userId]
-              }
-            });
-
-          case 4:
-            thisCourse = _context18.sent;
-
-            if (thisCourse) {
-              _context18.next = 9;
-              break;
-            }
-
-            return _context18.abrupt("return", res.status(404).send("No user account with id " + req.params.userId + " was found in database."));
-
-          case 9:
-            posts = [];
-
-            for (i = 0; i < thisCourse.length; i++) {
-              course = {};
-              course.coursename = thisCourse[i].prefix + " " + thisCourse[i].course_number + " " + thisCourse[i].course_name;
-              course.posts = thisCourse[i].posts;
-              posts.push(course);
-            }
-
-            return _context18.abrupt("return", res.status(200).json(JSON.stringify(posts)));
-
-          case 12:
-            _context18.next = 18;
-            break;
-
-          case 14:
-            _context18.prev = 14;
-            _context18.t0 = _context18["catch"](1);
-            console.log();
-            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when looking up user with id " + req.params.userId + " in database: " + _context18.t0));
-
-          case 18:
-          case "end":
-            return _context18.stop();
-        }
-      }
-    }, _callee18, null, [[1, 14]]);
-  }));
-
-  return function (_x52, _x53, _x54) {
-    return _ref18.apply(this, arguments);
-  };
-}());
-app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
-  var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee19(req, res, next) {
-    return _regeneratorRuntime["default"].wrap(function _callee19$(_context19) {
-      while (1) {
-        switch (_context19.prev = _context19.next) {
           case 0:
             // updates a grade in course_name
             console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
             if (!(req.body === undefined || !req.body.hasOwnProperty("userid") || !req.body.hasOwnProperty("createdby") || !req.body.hasOwnProperty("post_content") || !req.body.hasOwnProperty("key"))) {
-              _context19.next = 3;
+              _context17.next = 3;
               break;
             }
 
-            return _context19.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
+            return _context17.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
 
           case 3:
-            _context19.prev = 3;
+            _context17.prev = 3;
             Course.updateOne({
               "course_name": req.params.course_name
             }, {
@@ -1321,24 +1183,62 @@ app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
             }, function (error) {
               console.log(error);
             });
-            return _context19.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+            return _context17.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
 
           case 8:
-            _context19.prev = 8;
-            _context19.t0 = _context19["catch"](3);
+            _context17.prev = 8;
+            _context17.t0 = _context17["catch"](3);
             console.log("Critical Error");
-            return _context19.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+            return _context17.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
 
           case 12:
           case "end":
-            return _context19.stop();
+            return _context17.stop();
         }
       }
-    }, _callee19, null, [[3, 8]]);
+    }, _callee17, null, [[3, 8]]);
   }));
 
-  return function (_x55, _x56, _x57) {
-    return _ref19.apply(this, arguments);
+  return function (_x49, _x50, _x51) {
+    return _ref17.apply(this, arguments);
+  };
+}());
+app.put('/courses/:course_name/addUser/:userid', /*#__PURE__*/function () {
+  var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee18(req, res, next) {
+    return _regeneratorRuntime["default"].wrap(function _callee18$(_context18) {
+      while (1) {
+        switch (_context18.prev = _context18.next) {
+          case 0:
+            // updates a grade in course_name
+            console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            _context18.prev = 1;
+            Course.updateOne({
+              "course_name": req.params.course_name
+            }, {
+              "$push": {
+                "students": req.params.userid
+              }
+            }, function (error) {
+              console.log(error);
+            });
+            return _context18.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+
+          case 6:
+            _context18.prev = 6;
+            _context18.t0 = _context18["catch"](1);
+            console.log("Critical Error");
+            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+
+          case 10:
+          case "end":
+            return _context18.stop();
+        }
+      }
+    }, _callee18, null, [[1, 6]]);
+  }));
+
+  return function (_x52, _x53, _x54) {
+    return _ref18.apply(this, arguments);
   };
 }());
 /*

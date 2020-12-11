@@ -13,7 +13,7 @@ class UserForm extends React.Component {
     this.state = { 
                   sId: "",
                   role: "student",
-                  class: "",
+                  class: this.props.selectedCourse.course_name,
                   
                   faIcon: "fa fa-save",
                   btnLabel: "Save User Data"}
@@ -74,7 +74,7 @@ class UserForm extends React.Component {
           <label>Class:
           <select name="class" value={this.state.class} 
             className="form-control form-center" onChange={this.handleChange}>
-            <option value="1">Cpts 489</option>
+            <option value="1">{this.state.class}</option>
             
           </select> 
           </label>
@@ -82,8 +82,7 @@ class UserForm extends React.Component {
           <label>Role:
           <select name="role" value={this.state.role} 
             className="form-control form-center" onChange={this.handleChange}>
-            <option value="instructor">Instructor</option>
-            <option value="ta">TAs</option>
+            
             <option value="student">Student</option>
           </select> 
           </label>

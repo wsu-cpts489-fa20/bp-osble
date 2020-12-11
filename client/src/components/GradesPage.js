@@ -32,7 +32,7 @@ class GradesPage extends React.Component {
             <div className="feedpage" id="gradePage">
                 <center>
         <h1>Gradebook for {this.props.selectedCourse.course_name}</h1>
-                    <button id="gbOptions" class="btn btn-primary" data-toggle="modal" data-target="#gbOptionsModal">Gradebook Options</button>
+                    
                     {this.props.userObj.is_instructor ?
                     <div>
                         
