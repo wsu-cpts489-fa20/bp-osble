@@ -286,21 +286,6 @@ class App extends React.Component {
           menuOpen={this.state.menuOpen}
           createCourse={this.createCourse}
           toggleMenuOpen={this.toggleMenuOpen} />}
-        {/* <SideMenu
-          menuOpen={this.state.menuOpen}
-          mode={this.state.mode}
-          createCourse = {this.state.createCourse}
-          toggleMenuOpen={this.toggleMenuOpen}
-          displayName={this.state.userObj.displayName}
-          profilePicURL={this.state.userObj.profilePicURL}
-          localAccount={this.state.userObj.authStrategy === "local"}
-          editAccount={this.showEditAccount}
-          logOut={() => this.handleChangeMode(AppMode.LOGIN)}
-          showAbout={() => { this.setState({ showAboutDialog: true }) }} /> */}
-        {/* <ModeBar 
-            mode={this.state.mode} 
-            changeMode={this.handleChangeMode}
-            menuOpen={this.state.menuOpen}/> */}
         <ModePage
           create={false} // this will be set to 
           menuOpen={this.state.menuOpen}

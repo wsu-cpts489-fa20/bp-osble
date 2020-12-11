@@ -1045,7 +1045,7 @@ app.put('/courses/:course_name', /*#__PURE__*/function () {
             return _context15.abrupt("return", res.status(400).send("courses/ PUT request formulated incorrectly." + "It must contain 'userId' as parameter."));
 
           case 3:
-            validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students', 'post_content', 'assignments'];
+            validProps = ['prefix', 'course_number', 'course_name', 'term', 'year', 'start_date', 'end_date', 'instructor', 'students', 'post', 'assignments'];
             _context15.t0 = _regeneratorRuntime["default"].keys(req.body);
 
           case 5:

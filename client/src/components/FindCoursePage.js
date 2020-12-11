@@ -33,30 +33,23 @@ class FindCoursePage extends React.Component {
     addStudent = (index) =>{
         if(this.props.userObj.userid != this.state.courses.instructor_id){
             this.updateEnrolledStudents(this.state.courses[index].coursename);
+            this.props.loadCourses();
         }
 
     }
-    // getCourse = (id) =>{
-    //     let response = await fetch("/courses/"+id);
-    //     response = await response.json();
-    //     return JSON.parse(response);
-    // }
 
-    updateEnrolledStudents = async(id) =>{
-        let response = await fetch("/courses/"+id);
-        response = await response.json();
-        const obj = JSON.parse(response);
-        await obj.students.push({userid:this.props.userObj.userid});
-        console.log(obj.students);
+    updateEnrolledStudents = async(course_name) =>{
 
-        const url = '/courses/' + id
-      const res = await fetch(url, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+        const url = '/courses/' + course_name+'/addUser/'+ this.props.userObj.userid;
+        
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-        method: 'PUT',
-        body: JSON.stringify(obj)}); 
+            method: 'PUT'
+            
+        }); 
         if (res.status == 200) { //successful account creation!
        
         } else { //Unsuccessful account update
