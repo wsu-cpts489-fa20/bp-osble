@@ -39,9 +39,9 @@ export default class UsersList extends React.Component {
                 <tr key={r}>
                     
                     <td>{this.props.data[r].userid}</td>
-                    <td><button onClick={this.props.menuOpen ? null : () =>
-                        this.editUser(r)}>
-                        <span className="fa fa-pencil"></span></button></td>
+                    <td>{this.props.data[r].first_name+ " " + this.props.data[r].last_name}</td>
+                    <td>{this.props.data[r].email}</td>
+                    
                     <td><button onClick={this.props.menuOpen ? null :
                         () => this.confirmDelete(r)}>
                         <span className="fa fa-trash"></span></button></td>
@@ -57,10 +57,10 @@ export default class UsersList extends React.Component {
                 <h2>{this.props.type}</h2>
                 <table className="table table-hover">
                     <thead className="thead-light"><tr>
-                        <th>Name </th>
                         <th>ID </th>
-                        <th></th>
-                        <th></th>
+                        <th>Name </th>
+                        <th>Email</th>
+                        <th>Remove</th>
                     </tr>
                     </thead>
                     <tbody>{this.renderTable()}</tbody>
