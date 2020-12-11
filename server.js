@@ -27,7 +27,7 @@ const app = express();
 //////////////////////////////////////////////////////////////////////////
 import mongoose from 'mongoose';
 
-const connectStr = "mongodb+srv://dbAdmin:6fA6jUxdLrblwpDP@cluster0.pgycn.mongodb.net/bposbledb?authSource=admin&replicaSet=atlas-135vv0-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true";
+const connectStr = process.env.MONGO_STR;
 
 mongoose.connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(
