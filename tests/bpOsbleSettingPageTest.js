@@ -11,7 +11,7 @@ test("TestSettingPage", async t =>{
     await t
         .typeText('#emailInput', 'admin@admin.com')
         .typeText(passwordInput, 'Admin2020')
-        .click('#login')
+        .click('#login-btn')
         .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
         .click('#profile')

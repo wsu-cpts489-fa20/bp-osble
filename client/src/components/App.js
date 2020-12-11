@@ -94,7 +94,7 @@ class App extends React.Component {
         .then((obj) => {
           if (obj.isAuthenticated) {
             console.log("inside didmount ")
-            this.setState({
+             this.setState({
               userObj: obj.user,
               authenticated: true,
               mode: AppMode.FEED //We're authenticated so can get into the app.
@@ -107,7 +107,7 @@ class App extends React.Component {
                 response = await response.json();
                 const obj = JSON.parse(response);
                 if (obj.length != 0) { // if there are courses
-                  this.setState({selectedCourse: obj[0],Enrolledcourses:obj})
+                  await this.setState({selectedCourse: obj[0],Enrolledcourses:obj})
                   console.log(obj);
                 } else {
                   
@@ -121,9 +121,8 @@ class App extends React.Component {
                 let response = await fetch("courses/studentCourses/" + this.state.userObj.userid);
                 response = await response.json();
                 const obj = JSON.parse(response);
-                console.log(obj)
-                if (obj.length != 0) {
-                  this.setState({
+                 if (obj.length != 0) {
+                  await this.setState({
                     selectedCourse: obj[0],Enrolledcourses: obj})
                   console.log(obj);
                 } else {
