@@ -94,13 +94,17 @@ class FeedPage extends React.Component {
 
     componentDidMount = async () => {
         // get most recent list of assignments
-        let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+        await this.props.selectedCourse.course_name;
+        if (this.props.selectedCourse.course_name){
+            let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
         response = await response.json();
         const obj = JSON.parse(response);
         this.setState({
             posts: obj.posts
         }, () => console.log(this.state.posts, obj.posts));
 
+        }
+        
     }
 
     componentDidUpdate = async (prevProps, prevState) => { // updates current assignmentlist
