@@ -21,6 +21,7 @@ test('TestSignUpPage', async t => {
     const schoolID = Selector('input').withAttribute('name', 'id', 'type', 'number');
     const schoolIDComf = Selector('input').withAttribute('name', 'confirm_id', 'type', 'number');
     const registerBtn = Selector('button').withAttribute('class', 'register-btn', 'role', 'submit', 'type', 'submit');
+    const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
         .click(accountBtn)
@@ -35,8 +36,9 @@ test('TestSignUpPage', async t => {
         .typeText(schoolID,'1234567890')
         .typeText(schoolIDComf,'1234567890')
         .click(registerBtn)
+        .expect(Selector('#loginPage').visible).eql(true)
         .typeText('#emailInput', 'hermes_esono@hotmail.com')
         .typeText(passwordInput, 'Password123abc')
+        .click('#login-btn-icon')
         .expect(Selector('#profile').innerText).contains('Tom Stall');
-        //.expect(registerBtn.click).ok();
 });

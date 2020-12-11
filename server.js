@@ -69,11 +69,12 @@ const assignmentSchema = new Schema({
 });
 const replySchema = new Schema({
   userid: String,
-  reply_content: String
+  reply_content: String,
+  key: Date
 });
 const postSchema = new Schema({
   userid: String,
-  createdby: String ,
+  createdby: String,
   post_content: String,
   key: Date,
   replies: [replySchema]
@@ -628,16 +629,50 @@ app.put('/courses/addpost/:course_name', async (req, res, next) => { // updates 
     Course.updateOne(
       {
         "course_name": req.params.course_name
-        
-        }
-    ,
+
+      }
+      ,
       {
         "$push": {
           "posts": req.body
-          
+
         }
       },
-     
+
+      function (error) { console.log(error); }
+    );
+    return res.status(200).send("Post to course " + req.params.course_name + " successful.")
+  } catch (err) {
+    console.log("Critical Error");
+    return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");
+  }
+});
+
+app.put('/courses/addreply/:course_name', async (req, res, next) => { // updates a grade in course_name
+  console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  if (req.body === undefined ||
+    !req.body.hasOwnProperty("createdby") ||
+    !req.body.hasOwnProperty("content") ||
+    !req.body.hasOwnProperty("key")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/courses POST request formulated incorrectly. " +
+      "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body.")
+  }
+  try {
+    Course.updateOne(
+      { "course_name": req.params.course_name, "posts._id": req.body._id },
+      {
+        "$push":
+        {
+          "posts.$.replies":
+          {
+            "userid": req.body.createdby,
+            "reply_content": req.body.content,
+            "key": req.body.key
+          }
+        }
+      },
       function (error) { console.log(error); }
     );
     return res.status(200).send("Post to course " + req.params.course_name + " successful.")
@@ -650,21 +685,21 @@ app.put('/courses/addpost/:course_name', async (req, res, next) => { // updates 
 app.put('/courses/:course_name/addUser/:userid', async (req, res, next) => { // updates a grade in course_name
   console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
     " and body = " + JSON.stringify(req.body));
-  
+
   try {
     Course.updateOne(
       {
         "course_name": req.params.course_name
-        
-        }
-    ,
+
+      }
+      ,
       {
         "$push": {
           "students": req.params.userid
-          
+
         }
       },
-     
+
       function (error) { console.log(error); }
     );
     return res.status(200).send("Post to course " + req.params.course_name + " successful.")
