@@ -169,6 +169,7 @@ class App extends React.Component {
       userObj: obj,
       mode: newMode
     });
+    if (newMode === AppMode.FEED){
     let response2 = await fetch("courses/studentCourses/" + this.state.userObj.userid);
     response2 = await response.json();
     const obj2 = JSON.parse(response);
@@ -185,6 +186,7 @@ class App extends React.Component {
       })
       // student not enrolled in any courses
     }
+  }
   }
 
   loadCourses = async() =>{
@@ -324,6 +326,7 @@ class App extends React.Component {
           changeMode={this.handleChangeMode}
           userObj={this.state.userObj}
           selectedCourse={this.state.selectedCourse}
+          Enrolledcourses = {this.state.Enrolledcourses}
           refreshOnUpdate={this.refreshOnUpdate} />
       </div>
     );

@@ -7,7 +7,7 @@ export default class FeedpostItem extends React.Component {
 
         this.state = {
             showReply: false,
-            replies: [{ createdby: "Leonard", content: "Example Reply", key: Date.now() }],
+            replies: this.props.replies,
             seeReplies: false
         };
 
@@ -33,7 +33,7 @@ export default class FeedpostItem extends React.Component {
         e.preventDefault();
     }
     createntries = (entry) => {
-        return <FeedPostReply content={entry.content} createdby={entry.createdby} key={entry.key}></FeedPostReply>
+        return <FeedPostReply content={entry.post_content} createdby={entry.createdby} key={entry.key}></FeedPostReply>
     }
     seeReplies = (e) => {
         this.setState(prevstate => ({ seeReplies: !prevstate.seeReplies }));

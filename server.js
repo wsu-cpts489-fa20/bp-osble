@@ -611,79 +611,6 @@ app.delete('/courses/:course_name', async (req, res, next) => {
   }
 });
 
-app.get('/grades/:userId', async (req, res, next) => {
-  console.log("in /users route (GET) with userId = " +
-    JSON.stringify(req.params.userId));
-  try {
-    let thisCourse = await Course.find({ students: { $in: [req.params.userId] } });
-    if (!thisCourse) {
-      return res.status(404).send("No user account with id " +
-        req.params.userId + " was found in database.");
-    } else {
-      let grades = []
-      for (let i = 0; i < thisCourse.length; i++) {
-        let course = {};
-        course.coursename = thisCourse[i].course_name + thisCourse[i].course_number;
-        course.assignments = []
-        for (let j = 0; j < thisCourse[i].assignments.length; j++) {
-          let assignment = {}
-
-          assignment.name = thisCourse[i].assignments[j].assignment_name;
-          console.log(assignment);
-          for (let k = 0; k < thisCourse[i].assignments[j].grades.length; k++) {
-            console.log(thisCourse[i].assignments[j].grades[k]);
-            if (thisCourse[i].assignments[j].grades[k].userid === req.params.userId) {
-              assignment.grade = thisCourse[i].assignments[j].grades[k].grade;
-              console.log(assignment);
-            }
-
-          }
-          course.assignments.push(assignment);
-
-        }
-        grades.push(course)
-      }
-      return res.status(200).json(JSON.stringify(grades));
-
-    }
-  } catch (err) {
-    console.log()
-    return res.status(400).send("Unexpected error occurred when looking up user with id " +
-      req.params.userId + " in database: " + err);
-  }
-
-});
-app.get('/posts/:userId', async (req, res, next) => {
-  console.log("in /users route (GET) with userId = " +
-    JSON.stringify(req.params.userId));
-  try {
-    let thisCourse = await Course.find({ students: { $in: [req.params.userId] } });
-    if (!thisCourse) {
-      return res.status(404).send("No user account with id " +
-        req.params.userId + " was found in database.");
-    } else {
-      let posts = []
-      for (let i = 0; i < thisCourse.length; i++) {
-        let course = {};
-        course.coursename = thisCourse[i].prefix + " "  + thisCourse[i].course_number+ " " + thisCourse[i].course_name;
-        course.posts = thisCourse[i].posts
-        
-        posts.push(course)
-      }
-      return res.status(200).json(JSON.stringify(posts));
-
-    }
-  } catch (err) {
-    console.log()
-    return res.status(400).send("Unexpected error occurred when looking up user with id " +
-      req.params.userId + " in database: " + err);
-  }
-
-});
-
-
-
-
 app.put('/courses/addpost/:course_name', async (req, res, next) => { // updates a grade in course_name
   console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
     " and body = " + JSON.stringify(req.body));
@@ -712,6 +639,34 @@ app.put('/courses/addpost/:course_name', async (req, res, next) => { // updates 
      
       function (error) { console.log(error); }
     );
+    return res.status(200).send("Post to course " + req.params.course_name + " successful.")
+  } catch (err) {
+    console.log("Critical Error");
+    return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");
+  }
+});
+
+app.put('/courses/:course_name/addUser/:userid', async (req, res, next) => { // updates a grade in course_name
+  console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));
+  
+  try {
+    Course.updateOne(
+      {
+        "course_name": req.params.course_name
+        
+        }
+    ,
+      {
+        "$push": {
+          "students": req.params.userid
+          
+        }
+      },
+     
+      function (error) { console.log(error); }
+    );
+    return res.status(200).send("Post to course " + req.params.course_name + " successful.")
   } catch (err) {
     console.log("Critical Error");
     return res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err");

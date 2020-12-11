@@ -1,4 +1,6 @@
+import { set } from 'mongoose';
 import React from 'react';
+import AppMode from '../AppMode';
 import '../styles/FeedPage.css';
 import FeedPostItem from './FeedPostItem.js'
 class FeedPage extends React.Component {
@@ -20,8 +22,8 @@ class FeedPage extends React.Component {
     addpost = async (e) => {
         var newpost = {
             userid: this.props.userObj.userid, 
-            createdby: this.props.userObj.first_name+ this.props.userObj.last_name,
-            content: this._inputElement.value,
+            createdby: this.props.userObj.first_name + " " + this.props.userObj.last_name,
+            post_content: this._inputElement.value,
             key: Date.now(),
             replies: []
         }
@@ -31,10 +33,11 @@ class FeedPage extends React.Component {
    
         this._inputElement.value = "";
                
+       
         
-        e.preventDefault();
         console.log(newpost);
-        const url = '/courses/addpost' + this.props.selectedCourse.course_name;
+        e.preventDefault();
+        const url = '/courses/addpost/' + this.props.selectedCourse.course_name;
         let body = newpost;
         let res = await fetch(url, {
             headers: {
@@ -44,14 +47,21 @@ class FeedPage extends React.Component {
             method: 'PUT',
             body: JSON.stringify(body)
         });
-        if (res.status == 200) { //successful account creation!
-            this.setState(prevstate => ({ posts: [newpost].concat(prevstate.posts) }));
+
+        console.log(res.status)
+        if (res.status === 200) { //successful account creation!
+           this.updateEntries();
+           this.props.refreshOnUpdate(AppMode.FEED);
             //this.props.done("New account created! Enter credentials to log in.", false);
+            //this.setState({ posts: newposts });
+            
         } else { //Unsuccessful account creation
             //Grab textual error message
             const resText = await res.text();
             //this.props.done(resText, false);
         }
+        //this.setState({ posts: newposts });
+        
     }
     toggledropdown = (e) => {
         this.setState(prevstate => ({ showdropdown: !prevstate.showdropdown }));
@@ -67,12 +77,50 @@ class FeedPage extends React.Component {
         this.setState(prevstate => ({ isanonymous: !prevstate.isanonymous }));
     }
     createntries = (entry) => {
-        return <FeedPostItem content={entry.content} createdby={entry.createdby} key={entry.key}></FeedPostItem>
+        return <FeedPostItem postid = {entry._id} content={entry.post_content} createdby={entry.createdby} key={entry.key} replies = {entry.replies}></FeedPostItem>
+    }
+    updateEntries = async () => {
+        let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+        response = await response.json();
+        const obj = JSON.parse(response);
+        this.setState({
+            posts: obj.posts
+        });
+    }
+
+    getEntries = async () => {
+
+    }
+
+    componentDidMount = async () => {
+        // get most recent list of assignments
+        let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+        response = await response.json();
+        const obj = JSON.parse(response);
+        this.setState({
+            posts: obj.posts
+        }, () => console.log(this.state.posts, obj.posts));
+
+    }
+
+    componentDidUpdate = async (prevProps, prevState) => { // updates current assignmentlist
+        if (prevProps.selectedCourse.course_name === this.props.selectedCourse.course_name) {
+            //do nothing
+        } else {
+
+            this.setState({
+                posts: this.props.selectedCourse.posts
+            })
+        }
     }
     render() {
-        var JSONposts = [];
-        console.log(this.props.selectedCourse);
-        var JSXposts = JSONposts.map(this.createntries)
+        var JSONposts =this.state.posts;
+        console.log("selected" + this.props.selectedCourse);
+        if (JSONposts)
+        {
+            var JSXposts = JSONposts.map(this.createntries) 
+        }
+        
         return (
             <div className="feedpage" id="feedPage">
                 <div className="flexwrapper">

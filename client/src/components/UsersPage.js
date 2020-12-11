@@ -74,6 +74,46 @@ class UsersPage extends React.Component {
             this.props.refreshOnUpdate(AppMode.ROUNDS);
         }   */
     }
+    addUser = async (e) => {
+        var course_name = this.props.selectedCourse.course_name;
+        userid = this._inputElement.value
+        var newpost = {
+            userid: this.props.userObj.userid, 
+            createdby: this.props.userObj.first_name + " " + this.props.userObj.last_name,
+            post_content: this._inputElement.value,
+            key: Date.now(),
+            replies: []
+        } 
+        this._inputElement.value = "";
+
+        console.log(course_name, userid);
+        e.preventDefault();
+        const url = '/courses/' + this.props.selectedCourse.course_name+'/addUser/'+ userid;
+        
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT'
+            
+        });
+
+        console.log(res.status)
+        if (res.status === 200) { //successful account creation!
+           //this.updateEntries();
+           //this.props.refreshOnUpdate(AppMode.FEED);
+            //this.props.done("New account created! Enter credentials to log in.", false);
+            //this.setState({ posts: newposts });
+            
+        } else { //Unsuccessful account creation
+            //Grab textual error message
+            const resText = await res.text();
+            //this.props.done(resText, false);
+        }
+        //this.setState({ posts: newposts });
+        
+    }
 
 
     getUserLists = function () {
@@ -102,8 +142,8 @@ class UsersPage extends React.Component {
                             Add Single User
                         </h4>
                         <div>
-                            <a href="/Roster/Create">Add By School ID</a>&nbsp;&nbsp;
-                <a href="/Roster/CreateByEmail">Add By Email</a>&nbsp;&nbsp;
+                        <button onClick={this.props.menuOpen ? null : () =>
+                        this.editUser(r)} > Add User</button>
             </div>
                     </div>
                     <UsersList data={this.data["Instructors"]}

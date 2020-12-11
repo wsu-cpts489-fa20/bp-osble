@@ -1321,21 +1321,20 @@ app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
             }, function (error) {
               console.log(error);
             });
-            _context19.next = 11;
-            break;
+            return _context19.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
 
-          case 7:
-            _context19.prev = 7;
+          case 8:
+            _context19.prev = 8;
             _context19.t0 = _context19["catch"](3);
             console.log("Critical Error");
             return _context19.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
 
-          case 11:
+          case 12:
           case "end":
             return _context19.stop();
         }
       }
-    }, _callee19, null, [[3, 7]]);
+    }, _callee19, null, [[3, 8]]);
   }));
 
   return function (_x55, _x56, _x57) {

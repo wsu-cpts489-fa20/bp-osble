@@ -4,9 +4,7 @@ export default class GradeTable extends React.Component {
 
     constructor(props) {
         super(props);
-        this.getHeader = this.getHeader.bind(this);
-        this.getRowsData = this.getRowsData.bind(this);
-        this.getKeys = this.getKeys.bind(this);
+        
     }
 
     getKeys = function () {
@@ -14,19 +12,26 @@ export default class GradeTable extends React.Component {
     }
 
     getHeader = function () {
-        var keys = this.getKeys();
-        return keys.map((key, index) => {
-            return <th key={key}>{key.toUpperCase()}</th>
-        })
+        
+        let headerRow =[<th>Assignment:</th>];
+        for (let i = 0; i < this.props.data.length; i++)
+        {
+            headerRow.push(<th key={i}>{this.props.data[i].assignment_name }</th>)
+        }
+        return headerRow;
+        
 
     }
 
     getRowsData = function () {
-        var items = this.props.data;
-        var keys = this.getKeys();
-        return items.map((row, index) => {
-            return <tr key={index}><RenderRow key={index} data={row} keys={keys} /></tr>
-        })
+        let row = [<th>Grade:</th>];
+        for (let i = 0; i < this.props.data.length; i++)
+        {
+            row.push(<th key={i}>{this.props.data[i].grade }</th>)
+        }
+        
+            return <tr>{row}</tr>
+        
 
     }
 
@@ -47,10 +52,4 @@ export default class GradeTable extends React.Component {
     }
 }
 
-const RenderRow = (props) => {
 
-    return props.keys.map((key, index) => {
-        return <td key={props.data[key]}>{props.data[key]}</td>
-    })
-
-}
