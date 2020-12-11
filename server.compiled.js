@@ -267,7 +267,7 @@ app.get('/users/:userId', /*#__PURE__*/function () {
             _context3.prev = 1;
             _context3.next = 4;
             return User.findOne({
-              id: req.params.userId
+              userid: req.params.userId
             });
 
           case 4:

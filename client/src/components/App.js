@@ -153,11 +153,7 @@ class App extends React.Component {
   //propagate to the child components when they are re-rendered.
   refreshOnUpdate = async (newMode) => {
     //console.log("HERE");
-<<<<<<< HEAD
-    let response = await fetch("/users/" + this.state.userObj.userid);
-=======
     let response = await fetch("/users/" + this.state.userObj.email);
->>>>>>> 69105e062455161b1eb7706d37ce22576b73dbad
     response = await response.json();
     const obj = JSON.parse(response);
     this.setState({
