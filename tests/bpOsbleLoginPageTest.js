@@ -17,9 +17,10 @@ test('TestLoginPage', async t => {
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'joshua.stallworth@wsu.edu')
-        .typeText(passwordInput, '123#abc;')
-        .click('#login-btn-icon');
+        .typeText('#emailInput', 'admin@admin.com')
+        .typeText(passwordInput, 'Admin2020')
+        .click('#login-btn-icon')
+        .expect(Selector('#profile').innerText).contains('Hermes Obiang');
        
         
 });

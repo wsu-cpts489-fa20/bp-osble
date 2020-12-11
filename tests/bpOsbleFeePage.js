@@ -18,8 +18,9 @@ test('TestFeedPage', async t => {
 
     await t
         .typeText('#emailInput', 'hermes_esono@hotmail.es')
-        .typeText(passwordInput, 'MongoDB240')
-        .click('#login-btn-icon')
+        .typeText(passwordInput, 'Galaxy2020')
+        .click('#login-btn')
+        .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
         .typeText('#FeedPostBox', 'Hey Osble Team. Are you testing me?')
         .click('#FeedPostButton')

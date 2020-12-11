@@ -197,6 +197,7 @@ app.get('/users/:userId', async (req, res, next) => {
   }
 });
 
+
 //READ user route: Retrieves the user with the specified userId from users collection (GET)
 app.get('/users/', async (req, res, next) => {
   console.log("in /users route (GET ALL) with userId = " +

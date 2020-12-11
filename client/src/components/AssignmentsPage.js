@@ -140,23 +140,24 @@ export default class AssignmentsPage extends React.Component {
         this.setState(prevstate => ({ createAssignment: !prevstate.createAssignment }))
     }
     getAssignments = async () => {
-        let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
-        response = await response.json();
-        const obj = JSON.parse(response);
-        this.setState({
-            assignments: obj.assignments
-        })
+        if(this.props.selectedCourse != null){
+            let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
+            response = await response.json();
+            const obj = JSON.parse(response);
+            this.setState({assignments: obj.assignments});
+        }
+        
         //return [{ assignment: "Assignment 1", duedate: "11/18/2020 11:59 PM", didsubmit: false, latestactivity: "" },
         //{ assignment: "Assignment 2", duedate: "11/23/2020 11:59 PM", didsubmit: true, latestactivity: "Submitted 11/18/2020 10:43 PM" }]
     }
     componentDidMount = async () => {
         // get most recent list of assignments
+        if(this.props.selectedCourse != null){
         let response = await fetch("/courses/" + this.props.selectedCourse.course_name);
         response = await response.json();
         const obj = JSON.parse(response);
-        this.setState({
-            assignments: obj.assignments
-        }, () => console.log(this.state.assignments, obj.assignments));
+        this.setState({assignments: obj.assignments}, () => console.log(this.state.assignments, obj.assignments));
+        }
 
     }
 
