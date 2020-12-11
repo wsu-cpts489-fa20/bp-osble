@@ -121,11 +121,26 @@ class CourseSettingsPage extends React.Component {
                         <label>
                             {/* Label for CourseMeetingTimes */}
                             Meeting Times
+                            <input
+                            name="Course-Meeting-Times"
+                            id="CourseMeetingTimes"
+                            ></input>
                         </label>
                         <br/>
                         <label>
                             {/* Label for CourseBreaksAndHolidays */}
                             Holidays
+                            <input
+                            name="Semester-Holidays"
+                            id="SemesterHolidays"
+                            ></input>
+                        </label>
+                    </div>
+                    <br/>
+                    <div className="additionalCourseSettingsWrapper">
+                        <label>
+                            {/* Label for CourseSettingCheckBoxes */}
+                            Course Settings
                             <label>
                                 Allow students to reply to threads posted in activity feed
                                 <input
@@ -134,13 +149,6 @@ class CourseSettingsPage extends React.Component {
                                     type="checkbox"
                                 ></input>
                             </label>
-                        </label>
-                    </div>
-                    <br/>
-                    <div className="additionalCourseSettingsWrapper">
-                        <label>
-                            {/* Label for CourseSettingCheckBoxes */}
-                            Course Settings
                             <label>
                                 Allow students to post new threads in activity feed
                                 <input
