@@ -7,7 +7,7 @@ class UserForm extends React.Component {
   //Create date object for today, taking time zone into consideration
   
   //store date as ISO string
-  if (this.props.mode === AppMode.USERS_LOGUSER) {
+  if (this.props.mode === AppMode.USERS_LOGUSER || this.props.mode === AppMode.USERS ) {
     //If logging a new round, the starting state is a default round with
     //today's date.
     this.state = { 
