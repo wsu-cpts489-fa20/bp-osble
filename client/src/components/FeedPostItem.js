@@ -23,7 +23,7 @@ export default class FeedpostItem extends React.Component {
     }
     addreply = async (e) => {
         var newpost = {
-            userid: this.props.createdby,
+            userid: this.props.userObj.first_name + " " + this.props.userObj.last_name,
             reply_content: this._inputElement.value,
             key: Date.now()
         }
