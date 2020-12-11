@@ -15,7 +15,7 @@ class ProfilePage extends React.Component {
                     <img src="osble2.png" height='200' width='200'></img>
                 </div>
                 <div class="right-profile">
-                    <h1 id="userID" className="profile-userID" style={{fontSize:"75px"}}>John Ye
+                    <h1 id="userID" className="profile-userID" style={{fontSize:"75px"}}>{this.props.userObj.first_name} {this.props.userObj.last_name}
                         <table>
                             <tr>
                                 <td style={{fontSize:"20px"}}><strong>0</strong> post(s)</td>
