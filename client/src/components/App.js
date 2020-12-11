@@ -23,6 +23,7 @@ import DeleteCourse from './DeleteCoursePage'
 import FindCourse from './FindCoursePage'
 import UserSettings from './UserSettingsPage'
 import Administrator from './Admin'
+import { async } from 'regenerator-runtime';
 
 
 
@@ -83,10 +84,12 @@ class App extends React.Component {
       authenticated: false,
       userObj: { displayName: "", profilePicURL: "" },
       selectedCourse: {},
+      Enrolledcourses: {},
       editAccount: false,
       showEditAccountDialog: false,
       statusMsg: "",
-      showAboutDialog: false
+      showAboutDialog: false,
+      createCourse: true
     };
   }
 
@@ -99,11 +102,13 @@ class App extends React.Component {
         .then((response) => response.json())
         .then((obj) => {
           if (obj.isAuthenticated) {
+            console.log("inside didmount ")
             this.setState({
               userObj: obj.user,
               authenticated: true,
               mode: AppMode.FEED //We're authenticated so can get into the app.
             }, async function () {
+              console.log("inside didmount ")
 
               if (this.state.userObj.is_instructor === true) {
                 // gets all courses currently logged in proffesor is teaching
@@ -111,11 +116,10 @@ class App extends React.Component {
                 response = await response.json();
                 const obj = JSON.parse(response);
                 if (obj.length != 0) { // if there are courses
-                  this.setState({
-                    selectedCourse: obj[0]
-                  })
+                  this.setState({selectedCourse: obj[0],Enrolledcourses:obj})
                   console.log(obj);
                 } else {
+                  
                   this.setState({
                     mode: AppMode.COURSE_SETTINGS,
                     selectedCourse: null
@@ -129,8 +133,7 @@ class App extends React.Component {
                 console.log(obj)
                 if (obj.length != 0) {
                   this.setState({
-                    selectedCourse: obj[0],
-                  })
+                    selectedCourse: obj[0],Enrolledcourses: obj})
                   console.log(obj);
                 } else {
                   this.setState({
@@ -184,8 +187,33 @@ class App extends React.Component {
     }
   }
 
+  loadCourses = async() =>{
+    if (this.state.userObj.is_instructor === true) {
+      // gets all courses currently logged in proffesor is teaching
+      let response = await fetch("courses/profCourses/" + this.state.userObj.userid);
+      response = await response.json();
+      const obj = JSON.parse(response);
+      this.setState({Enrolledcourses: obj});
+    }
+  }
+
+  updateSelectedCourse = (_id) =>{
+    var index = 0;
+    for(index;index<this.state.Enrolledcourses.length;index++){
+      if(this.state.Enrolledcourses[index]._id == _id){
+          this.setState({selectedCourse:this.state.Enrolledcourses[index]});
+          break;
+      }
+    }
+  }
+
+  createCourse = (arg) => {
+    this.setState( { createCourse: arg });
+  }
+
 
   handleChangeMode = (newMode) => {
+    
     this.setState({ mode: newMode });
   }
 
@@ -257,8 +285,10 @@ class App extends React.Component {
               done={this.editAccountDone} 
               cancel={this.cancelEditAccount}/> : null} */}
         {this.state.mode == AppMode.LOGIN || this.state.mode == AppMode.REGISTER ? null : <NavBar
+          Enrolledcourses={this.state.Enrolledcourses}
           userObj={this.state.userObj}
           selectedCourse={this.state.selectedCourse}
+          updateSelectedCourse={this.updateSelectedCourse}
           dashboard={modeTitle[this.state.mode]}
           grades={modeTitle[AppMode.GRADES]}
           assignments={modeTitle[AppMode.ASSIGNMENTS]}
@@ -269,10 +299,12 @@ class App extends React.Component {
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
           menuOpen={this.state.menuOpen}
+          createCourse={this.createCourse}
           toggleMenuOpen={this.toggleMenuOpen} />}
         <SideMenu
           menuOpen={this.state.menuOpen}
           mode={this.state.mode}
+          createCourse = {this.state.createCourse}
           toggleMenuOpen={this.toggleMenuOpen}
           displayName={this.state.userObj.displayName}
           profilePicURL={this.state.userObj.profilePicURL}
@@ -288,6 +320,7 @@ class App extends React.Component {
           create={false} // this will be set to 
           menuOpen={this.state.menuOpen}
           mode={this.state.mode}
+          loadCourses={this.loadCourses}
           changeMode={this.handleChangeMode}
           userObj={this.state.userObj}
           selectedCourse={this.state.selectedCourse}

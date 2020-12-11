@@ -70,7 +70,7 @@ class FeedPage extends React.Component {
         return <FeedPostItem content={entry.content} createdby={entry.createdby} key={entry.key}></FeedPostItem>
     }
     render() {
-        var JSONposts = this.props.selectedCourse.posts;
+        var JSONposts = [];
         console.log(this.props.selectedCourse);
         var JSXposts = JSONposts.map(this.createntries)
         return (
