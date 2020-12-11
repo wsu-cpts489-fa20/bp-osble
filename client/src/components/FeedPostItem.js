@@ -7,20 +7,24 @@ export default class FeedpostItem extends React.Component {
 
         this.state = {
             showReply: false,
-            replies: this.props.replies,
+            replies: [],
             seeReplies: false
         };
 
 
     }
-
+    componentDidMount(){
+        this.setState({
+            replies: this.props.replies
+        },()=> console.log(this.state.replies))
+    }
     showReply = (e) => {
         this.setState(prevstate => ({ showReply: !prevstate.showReply }));
     }
-    addreply = (e) => {
+    addreply = async(e) => {
         var newpost = {
-            createdby: "Leonard",
-            content: this._inputElement.value,
+            userid: this.props.createdby,
+            reply_content: this._inputElement.value,
             key: Date.now()
         }
 
@@ -31,9 +35,24 @@ export default class FeedpostItem extends React.Component {
         })
         this.showReply();
         e.preventDefault();
+        var newReply = {
+            createdby: this.props.createdby,
+            content: newpost.reply_content,
+            key: Date.now(),
+            _id:this.props.postid
+        }
+        const url = '/courses/addreply/' + this.props.selectedCourse.course_name
+        let res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            body: JSON.stringify(newReply)
+        });
     }
     createntries = (entry) => {
-        return <FeedPostReply content={entry.post_content} createdby={entry.createdby} key={entry.key}></FeedPostReply>
+        return <FeedPostReply content={entry.reply_content} createdby={entry.userid} key={entry.key}></FeedPostReply>
     }
     seeReplies = (e) => {
         this.setState(prevstate => ({ seeReplies: !prevstate.seeReplies }));

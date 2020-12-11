@@ -79,7 +79,8 @@ var assignmentSchema = new Schema({
 });
 var replySchema = new Schema({
   userid: String,
-  reply_content: String
+  reply_content: String,
+  key: Date
 });
 var postSchema = new Schema({
   userid: String,
@@ -1203,7 +1204,7 @@ app.put('/courses/addpost/:course_name', /*#__PURE__*/function () {
     return _ref17.apply(this, arguments);
   };
 }());
-app.put('/courses/:course_name/addUser/:userid', /*#__PURE__*/function () {
+app.put('/courses/addreply/:course_name', /*#__PURE__*/function () {
   var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee18(req, res, next) {
     return _regeneratorRuntime["default"].wrap(function _callee18$(_context18) {
       while (1) {
@@ -1211,7 +1212,59 @@ app.put('/courses/:course_name/addUser/:userid', /*#__PURE__*/function () {
           case 0:
             // updates a grade in course_name
             console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
-            _context18.prev = 1;
+
+            if (!(req.body === undefined || !req.body.hasOwnProperty("createdby") || !req.body.hasOwnProperty("content") || !req.body.hasOwnProperty("key"))) {
+              _context18.next = 3;
+              break;
+            }
+
+            return _context18.abrupt("return", res.status(400).send("/courses POST request formulated incorrectly. " + "It must contain 'course_name','instructor','students','posts' and 'assignments fields in message body."));
+
+          case 3:
+            _context18.prev = 3;
+            Course.updateOne({
+              "course_name": req.params.course_name,
+              "posts._id": req.body._id
+            }, {
+              "$push": {
+                "posts.$.replies": {
+                  "userid": req.body.createdby,
+                  "reply_content": req.body.content,
+                  "key": req.body.key
+                }
+              }
+            }, function (error) {
+              console.log(error);
+            });
+            return _context18.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+
+          case 8:
+            _context18.prev = 8;
+            _context18.t0 = _context18["catch"](3);
+            console.log("Critical Error");
+            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+
+          case 12:
+          case "end":
+            return _context18.stop();
+        }
+      }
+    }, _callee18, null, [[3, 8]]);
+  }));
+
+  return function (_x52, _x53, _x54) {
+    return _ref18.apply(this, arguments);
+  };
+}());
+app.put('/courses/:course_name/addUser/:userid', /*#__PURE__*/function () {
+  var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee19(req, res, next) {
+    return _regeneratorRuntime["default"].wrap(function _callee19$(_context19) {
+      while (1) {
+        switch (_context19.prev = _context19.next) {
+          case 0:
+            // updates a grade in course_name
+            console.log("in /courses/updategrade route (PUT) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            _context19.prev = 1;
             Course.updateOne({
               "course_name": req.params.course_name
             }, {
@@ -1221,24 +1274,24 @@ app.put('/courses/:course_name/addUser/:userid', /*#__PURE__*/function () {
             }, function (error) {
               console.log(error);
             });
-            return _context18.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
+            return _context19.abrupt("return", res.status(200).send("Post to course " + req.params.course_name + " successful."));
 
           case 6:
-            _context18.prev = 6;
-            _context18.t0 = _context18["catch"](1);
+            _context19.prev = 6;
+            _context19.t0 = _context19["catch"](1);
             console.log("Critical Error");
-            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
+            return _context19.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up course in database. " + "err"));
 
           case 10:
           case "end":
-            return _context18.stop();
+            return _context19.stop();
         }
       }
-    }, _callee18, null, [[1, 6]]);
+    }, _callee19, null, [[1, 6]]);
   }));
 
-  return function (_x52, _x53, _x54) {
-    return _ref18.apply(this, arguments);
+  return function (_x55, _x56, _x57) {
+    return _ref19.apply(this, arguments);
   };
 }());
 /*
