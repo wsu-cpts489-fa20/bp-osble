@@ -17,8 +17,8 @@ test('TestNavBar', async t => {
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'hermes_esono@hotmail.es')
-        .typeText(passwordInput, 'Galaxy2020')
+        .typeText('#emailInput', 'joshua@me.com')
+        .typeText(passwordInput, 'Cpts48912')
         .click('#login-btn-icon')
         .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
@@ -26,8 +26,7 @@ test('TestNavBar', async t => {
         .expect(Selector('#assignmentPage').visible).eql(true)
         .click('#NavBarGrades')
         .expect(Selector('#gradePage').visible).eql(true)
-        .click('#NavBarUsers')
-        .expect(Selector('#userPage').visible).eql(true)
+        .expect(Selector('#NavBarUsers').visible).eql(true)
         .click('#NavBarCourseSettings')
         .expect(Selector('#courseSettingPage').visible).eql(true)
         .click('#NavBarAnalytics')

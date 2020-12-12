@@ -28,7 +28,8 @@ mail.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/master/server/mail.js
 
 user.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/leonard/server/user.js. 
 
-Milestone 3 tests: https://drive.google.com/file/d/1YvekurPYVMLVsi5SJ30VBzy8c1w300D-/view?usp=sharing
+Milestone 4 tests:https://www.dropbox.com/s/gzv5lwvjq8xbdi7/milestone4.gif?dl=0
+
 
 # Osble Web App
 

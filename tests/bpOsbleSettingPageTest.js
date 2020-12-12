@@ -9,8 +9,8 @@ test("TestSettingPage", async t =>{
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'admin@admin.com')
-        .typeText(passwordInput, 'Admin2020')
+        .typeText('#emailInput', 'joshua@me.com')
+        .typeText(passwordInput, 'Cpts48912')
         .click('#login-btn')
         .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
