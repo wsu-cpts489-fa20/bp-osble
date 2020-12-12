@@ -17,8 +17,8 @@ test('TestNavBar', async t => {
     const passwordInput = Selector('input').withAttribute('class', 'form-control enterPassword', 'type', 'password', 'placeholder', 'Password');
 
     await t
-        .typeText('#emailInput', 'admin@admin.com')
-        .typeText(passwordInput, 'Admin2020')
+        .typeText('#emailInput', 'hermes_esono@hotmail.es')
+        .typeText(passwordInput, 'Galaxy2020')
         .click('#login-btn-icon')
         .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)

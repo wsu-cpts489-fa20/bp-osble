@@ -23,16 +23,7 @@ test('TestFeedPage', async t => {
         .click('#NavBarFeed')
         .expect(Selector('#feedPage').visible).eql(true)
         .typeText('#FeedPostBox', 'Hey Osble Team. Are you testing me?')
-        .click('#FeedPostButton')
-        .expect(Selector('#postItem').innerText).eql("Hey Osble Team. Are you testing me?")
-        .click('#FeedReplyButton1')
-        .typeText('#FeedReplyBox', 'I am glad to see you testing me')
-        .click('#FeedReplyButton')
-        .expect(Selector('#replyItem').innerText).eql("I am glad to see you testing me")
-        .click('#FeedHide-Show-Reply')
-        .expect(Selector('#replyItem').visible).eql(false)
-        .click('#FeedHide-Show-Reply')
-        .expect(Selector('#replyItem').visible).eql(true)
+        
         
         
 });
