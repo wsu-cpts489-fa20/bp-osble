@@ -46,8 +46,8 @@ test("TestChangeUserRole", async t => {
 
     await t
         // sign in with an existing account as a student
-        .typeText('#emailInput', 'joshua@me.com')
-        .typeText(passwordInput, 'Cpts48912')
+        .typeText('#emailInput', 'hermes_esono@hotmail.es')
+        .typeText(passwordInput, 'Galaxy2020')
         .click('#login-btn')
         //Check that only three buttons are visible which are Dashboard, Assignment and Grades
         .expect(Selector('#NavBarAdmin').visible).eql(false)
@@ -72,13 +72,13 @@ test("TestChangeUserRole", async t => {
         .click('#login-btn')
         .click('#NavBarAdmin')
        // Make the previous user an instructor and logout
-        .click('#changeRoleBtn2')
-        .expect(Selector('#userRole2').innerText).contains('true')
+        .click('#changeRoleBtn1')
+        .expect(Selector('#userRole1').innerText).contains('true')
         .click('#profile')
         .click('#logoutButton')
         // login as instructor and check that instructor pages are visible and accessable
-        .typeText('#emailInput', 'joshua@me.com')
-        .typeText(passwordInput, 'Cpts48912')
+        .typeText('#emailInput', 'hermes_esono@hotmail.es')
+        .typeText(passwordInput, 'Galaxy2020')
         .click('#login-btn')
 
         .expect(Selector('#NavBarFeed').visible).eql(true)

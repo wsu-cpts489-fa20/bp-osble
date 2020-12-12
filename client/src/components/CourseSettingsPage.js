@@ -88,7 +88,7 @@ class CourseSettingsPage extends React.Component {
         return (
         <div className="feedpage" id="courseSettingPage">
             <center>
-            <h1 >{this.props.createCourse?"Create Course":"Update Course"}</h1>
+            <h1 >Create Course</h1>
             </center>
             <label className="form-label-prefix">
                 {/* Label for Prefix */}
@@ -330,7 +330,7 @@ class CourseSettingsPage extends React.Component {
             type="submit"
             color="#191970"
             onClick={this.props.userObj.is_instructor == true? this.updateCourse:null}
-        >{this.props.createCourse ? "Create Course":"Update Course"}</button>
+        >{this.props.createCourse ? "Create Course":"Create Course"}</button>
             
             {/* Button for canceling changes and returning to homepage */}
             <button
