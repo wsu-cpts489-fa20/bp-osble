@@ -88,5 +88,17 @@ test("TestChangeUserRole", async t => {
         .expect(Selector('#NavBarCourseSettings').visible).eql(true)
         .expect(Selector('#NavBarAnalytics').visible).eql(true)
         .expect(Selector('#NavBarAdmin').visible).eql(false)
+        
+        // logout and login as administrator
+        .click('#profile')
+        .click('#logoutButton')
+        .typeText('#emailInput', 'tianhao@cs.com')
+        .typeText(passwordInput, 'Lab509335')
+        .click('#login-btn')
+        .click('#NavBarAdmin')
+        .click('#changeRoleBtn1')
+        .expect(Selector('#userRole1').innerText).contains('false')
+        .click('#profile')
+        .click('#logoutButton')
             
 })
