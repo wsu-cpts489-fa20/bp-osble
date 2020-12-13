@@ -30,7 +30,7 @@ user.js: https://github.com/wsu-cpts489-fa20/bp-osble/blob/leonard/server/user.j
 
 Milestone 4 tests: https://youtu.be/LS0piT3dOpQ
 
-*Gif version of video located here*
+*Gif version of video located here*: 
 https://www.dropbox.com/s/d9mmx94r0nd65m5/milestone4.gif?dl=0
 
 
